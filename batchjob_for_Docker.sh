@@ -18,6 +18,8 @@ cd /data
 CURRDIR=`pwd`
 #mkdir derivatives
 #derivatives is already there? -- will 
+echo "batch processing...1"
+echo $CURRDIR
 echo "1 0  0 1" > ${CURRDIR}/derivatives/acqparams.txt
 echo "1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 echo "1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
@@ -25,7 +27,7 @@ echo "-1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 echo "-1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 echo "-1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 
-
+echo "batch processing...2"
 #bash pd_dockerParralelized.sh ${CURRDIR}/${SUBJ_DIR}
 SUBJ_DIR=$(pwd)/sub-01
 echo $SUBJ_DIR
