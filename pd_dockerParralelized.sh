@@ -163,12 +163,18 @@ ANTS_PID=$!
 
 vrefbrain=${subjectID}_run-01_T1w_bc_ss.nii.gz
 vrefhead=${subjectID}_run-01_T1w_bc.nii.gz
-vepi=${subjectID}_r01_restpre_v0.nii.gz
-evepi=${subIDpath}efunc/${subjectID}_task-rest_run-01_bold.nii.gz
+#vepi=${subjectID}_r01_restpre_v0.nii.gz
+
+#i think think is better : will : the bold is better, we have this data
+vepi=${subjectID}_task-rest_run-01_bold.nii.gz
 vout=${subjectID}_rfMRI_v0_correg
 
+
 #epi_orig=${subIDpath}${subjectID}_r01_restpre.nii.gz
+#less sure about epi_orig: will 
 epi_orig=${subIDpath}/func/${subjectID}_task-rest_run-01_bold.nii.gz
+echo vepi $vepi
+echo epi_orig $epi_orig
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
 
 
