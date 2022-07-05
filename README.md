@@ -16,7 +16,7 @@ Note you may need more resources, but this will process a single patient in abou
 
 Once you have a node with sufficient resources, you may run the following singularity command 
 
-           singularity exec --bind /data/users2/nshor/share/Multiband_with_MEG:/data/,/data/users2/nshor/share:/share/ /data/users2/nshor/Dockerbuild/nshor.sif /data/batchjob_for_Docker.sh
+           singularity exec --bind /data/users2/nshor/share/Multiband_with_MEG:/data/,/data/users2/nshor/share:/share/ /data/users2/nshor/Dockerbuild/nshor.sif /data/pd_dockerParralelized.sh
 
 the bind command maps local paths onto internal container paths. 
 exec runs the command at the end of the string. 
