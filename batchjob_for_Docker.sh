@@ -1,21 +1,25 @@
 #!/bin/bash
 
-ID=${AWS_BATCH_JOB_ARRAY_INDEX}
+ID=${SLURM_ARRAY_TASK_ID}
 
-subjects=( `aws s3  ls s3://pd.tango/pre_only/ | grep s | awk '{print $2}'` )
-
-S3_PATH=s3://pd.tango/pre_only/
+#subjects=( `aws s3  ls s3://data/users2/nshor/Multiband_with_MEG/ | grep s | awk '{print $2}'` )
+#commented above out --will
+#S3_PATH=s3:/data/users2/nshor/Multiband_with_MEG/
 SUBJ_DIR=${subjects[${ID}]}
 
-mkdir /data
+#mkdir /data I will make data a bind point--will
+#data will be MULTI...
 cd /data
-cp /Track_1_Preproc_awsN.sh .
+#cp /pd_dockerParralelized.sh .
 
-echo ${S3_PATH}${SUBJ_DIR}
-aws s3 sync ${S3_PATH}${SUBJ_DIR} ./${SUBJ_DIR}
+#echo ${S3_PATH}${SUBJ_DIR}
+#aws s3 sync ${S3_PATH}${SUBJ_DIR} ./${SUBJ_DIR}
 
 CURRDIR=`pwd`
-mkdir derivatives
+#mkdir derivatives
+#derivatives is already there? -- will 
+echo "batch processing...1"
+echo $CURRDIR
 echo "1 0  0 1" > ${CURRDIR}/derivatives/acqparams.txt
 echo "1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 echo "1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
@@ -23,8 +27,12 @@ echo "-1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 echo "-1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 echo "-1 0  0 1" >> ${CURRDIR}/derivatives/acqparams.txt
 
+echo "batch processing...2"
+#bash pd_dockerParralelized.sh ${CURRDIR}/${SUBJ_DIR}
+SUBJ_DIR=$(pwd)/sub-01
+echo $SUBJ_DIR
+bash pd_dockerParralelized.sh ${SUBJ_DIR}
 
-bash Track_1_Preproc_awsN.sh ${CURRDIR}/${SUBJ_DIR}
+#aws s3 sync ${CURRDIR}/derivatives/${SUBJ_DIR}/processed s3://pd.tango/derivatives/${SUBJ_DIR}
 
-aws s3 sync ${CURRDIR}/derivatives/${SUBJ_DIR}/processed s3://pd.tango/derivatives/${SUBJ_DIR}
 
