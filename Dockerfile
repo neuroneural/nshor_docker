@@ -86,8 +86,8 @@ RUN ln -s /usr/lib/x86_64-linux-gnu/libtiff.so.5 /usr/lib/x86_64-linux-gnu/libti
     ENV AWS_ACCESS_KEY_ID="AKIATU523SCUQEFJWBGW"
     ENV AWS_SECRET_ACCESS_KEY="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"
 
-    COPY batchjob_for_Docker.sh /batchjob.sh
-    COPY pd_dockerParralelized.sh /Track_1_Preproc_awsN.sh
+    #COPY batchjob_for_Docker.sh /batchjob.sh
+    #COPY pd_dockerParralelized.sh /Track_1_Preproc_awsN.sh
 
 RUN echo '{ \
     \n  "pkg_manager": "apt", \
@@ -134,3 +134,25 @@ RUN echo '{ \
     \n    ] \
     \n  ] \
     \n}' > /neurodocker/neurodocker_specs.json
+
+RUN apt-get update -qq && apt-get install -y tcsh xfonts-base python-qt4       \
+                        python-matplotlib                 \
+                        gsl-bin netpbm gnome-tweak-tool   \
+                        libjpeg62 xvfb xterm vim curl     \
+                        gedit evince eog                  \
+                        libglu1-mesa-dev libglw1-mesa     \
+                        libxm4 build-essential            \
+                        libcurl4-openssl-dev libxml2-dev  \
+                        libssl-dev libgfortran3           \
+                        gnome-terminal nautilus           \
+                        gnome-icon-theme-symbolic         \
+                        firefox xfonts-100dpi \
+                        && apt-get clean \
+                        && rm -rf /var/lib/apt/lists/*
+
+
+RUN mkdir /app
+WORKDIR /app
+RUN curl -O https://afni.nimh.nih.gov/pub/dist/bin/misc/@update.afni.binaries
+RUN ln -s /usr/lib/x86_64-linux-gnu/libgsl.so.23 /usr/lib/x86_64-linux-gnu/libgsl.so.19
+RUN tcsh @update.afni.binaries -package linux_ubuntu_16_64 -do_extras -bindir /usr/local/AFNIbin
