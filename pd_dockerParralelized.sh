@@ -4,6 +4,7 @@ set -x
 set -e
 export PATH=$PATH:/usr/lib/afni/bin:/usr/lib/ROBEX:/usr/lib/ants
 export ANTSPATH=/usr/lib/ants
+export AFNIbinPATH=/usr/local/AFNIbin/
 FSLDIR=/usr/share/fsl/5.0 
 . ${FSLDIR}/etc/fslconf/fsl.sh
 PATH=${FSLDIR}/bin:${PATH}
@@ -43,6 +44,11 @@ mkdir -p  ${normdir}
 mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
+#Metadata extraction
+3dtshiftPreproc=abids_json_info.py -field SliceTiming -json sub-01_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' | awk '!x[$0]++' | tr '\n' ' '
+echo "look here"
+echo $3dtshiftPreproc
+ 
 
 function afni_set() {
     subIDpath=$1
