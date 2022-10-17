@@ -2,15 +2,26 @@
 echo "inside pd_..."
 set -x
 set -e
-export PATH=$PATH:/usr/lib/afni/bin:/usr/lib/ROBEX:/usr/lib/ants
+#Sets FSL Paths
+FSLDIR=/usr/share/fsl/5.0
+
+#Sets path for ROBEX (For Skullstripping)
+#export PATH=$PATH:/usr/lib/afni/bin:/usr/lib/ROBEX:/usr/lib/ants
+export PATH=$PATH:/usr/lib/ROBEX:/usr/lib/ants
+
+#Sets path for ANTs tools (for normalization workflow)
 export ANTSPATH=/usr/lib/ants
-export AFNIbinPATH=/usr/local/AFNIbin/
-FSLDIR=/usr/share/fsl/5.0 
-. ${FSLDIR}/etc/fslconf/fsl.sh
+
+#Sets additional paths for AFNI and FSL
+export AFNIbinPATH=/usr/local/AFNIbin
+PATH=${AFNIbinPATH}:${PATH}
 PATH=${FSLDIR}/bin:${PATH}
 export FSLDIR PATH
+. ${FSLDIR}/etc/fslconf/fsl.sh
 subIDpath=/data/sub-01
 #dirname = /data
+
+#Creates subjectIDs
 subPath=`dirname ${subIDpath}`
 subjectID=`basename ${subIDpath}`
 start=`date +%s`
@@ -26,29 +37,28 @@ echo "subjectID: $subjectID"
 #subjectID=`sed -n ${SLURM_ARRAY_TASK_ID}p ${subIDpath}/derivatives/sublist.txt`
 #subPath=${subIDpath}/$subjectID
 #acqparams=${subPath}/derivatives/acqparams.txt
+
+#Marks the template to be used
 template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
 templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
 
 #Bias-Correction SBREF and EPI
 #mkdir -p  ${subPath}/derivatives/$subjectID
 #mkdir -p ${subPath}/derivatives/$subjectID/bias_field
+
+#Generates directory names in the derivatives folders according to BIDS specifications
 mocodir=${subPath}/derivatives/${subjectID}/motion
 coregdir=${subPath}/derivatives/${subjectID}/coregistration
 normdir=${subPath}/derivatives/${subjectID}/normalization
 procdir=${subPath}/derivatives/${subjectID}/processed
 anatdir=${subPath}/derivatives/${subjectID}/anat
 
+#Makes the directories
 mkdir -p  ${coregdir}
 mkdir -p ${mocodir}
 mkdir -p  ${normdir}
 mkdir -p ${procdir}
 mkdir -p ${anatdir}
-
-#Metadata extraction
-3dtshiftPreproc=abids_json_info.py -field SliceTiming -json sub-01_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' | awk '!x[$0]++' | tr '\n' ' '
-echo "look here"
-echo $3dtshiftPreproc
- 
 
 function afni_set() {
     subIDpath=$1
@@ -99,8 +109,8 @@ function skullstrip() {
     subPath=$2
     subjectID=$3
     anatdir=$4
-    #T1 Corrections and Brain Extraction
-
+    
+	#Performs the N3/4 Bias correction on the T1 and Extracts the Brain
     N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/${subjectID}_run-01_T1w.nii.gz -o ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz
     #above is no longer raw so anatdir is better.
     echo "anatdir" ${anatdir}
@@ -142,12 +152,32 @@ function moco_sc() {
         subjectID=$3
         suffix=$4
         
-        cd ${mocodir}
-        3dTshift -tzero 0 -tpattern altplus -quintic -prefix tshift_${suffix} ${epi_in}
+    cd ${mocodir}
+	#Metadata extraction
+	
+		#Pulls the Slice timing info from the json file
+		abids_json_info.py -field SliceTiming -json ${subIDpath}/func/sub-01_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
+		#Finds the number where the slice value is 0 in the slice timing
+		SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
+	
+		#Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
+		TR=`abids_json_info.py -field RepetitionTime -json ${subIDpath}/func/sub-01_task-rest_run-04_bold.json`
+	
+	
+	#'Despikes' the data (removes outliers) prior to image registration
+	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
+	
+	#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, ect
+	3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
+        #3dTshift -tzero 0 -tpattern '${Tshiftparams} ' -quintic -prefix tshift_${suffix} ${epi_in}
         #commented out by will after talking to thomas--rest data probably doesn't need this        
         #3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig        
-        3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig        
-        3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+    
+	#Performs realignment to the reference volume. Some call this "motion correction"
+	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_Despiked_${suffix}.nii.gz
+
+	#Reorients the data
+    3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
 
 }
 
@@ -160,6 +190,8 @@ skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
 SKULL_PID=$!
  
 wait ${SKULL_PID}
+
+#Computes the warping parameters to get the skullstripped data to template space
 antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
@@ -192,8 +224,14 @@ EPI_PID=$!
 
 start=`date +%s`
 
+echo "AA"
 #exit 1
+1deval -num 25 -expr t+10 > t0.1D
+echo "AAA"
 moco_sc ${epi_orig} ${coregdir}/${vepi} ${subjectID} rest &
+echo "AAAA"
+#1dplot -one t0.1D t.shift.1D -jpeg slice_timing_check
+echo "AAAAA"
 SCMOCO_PID=$!
 
 #task_epi1=${subIDpath}/${subjectID}_r01_pre.nii.gz
@@ -215,25 +253,28 @@ SCMOCO_PID=$!
 #MCFLIRT_PID=$!
 
 
-wait $SCMOCO_PID
-wait $EPI_PID
+#wait $SCMOCO_PID
+#wait $EPI_PID
 
 
-
+#Converts the epi_to_T1 registration parameters from FSL to ANTs format
 c3d_affine_tool -ref ${coregdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
+echo "BB"
 wait $ANTS_PID
 #wait $SCMOCO_PID1
 #wait $SCMOCO_PID2
 #wait $SCMOCO_PID3
 #wait $SCMOCO_PID4
 
-
 #antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
 
+
+#Warps the 4d timeseries to template space in order of: EPI-to-T1 affine transformation, affine warp to template, Nonlinear deformation to template
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
 Warp_PID1=$!
 
+echo "BBB"
 #WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_r01.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_r01.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
 #Warp_PID2=$!
 
@@ -246,7 +287,7 @@ Warp_PID1=$!
 #WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_r04.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_r04.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
 #Warp_PID5=$!
 
-
+echo "CC"
 cp ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz ${procdir}
 cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
 cp ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt ${procdir}
@@ -262,7 +303,7 @@ cp ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}
 
 cp ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz  ${procdir}
 
-
+echo "DD"
 
 wait $Warp_PID1
 #wait $Warp_PID2
