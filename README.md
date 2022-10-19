@@ -28,3 +28,63 @@ We need to implement multiple subject processing and test the single subject imp
 we attempted to keep a log of our activities in #docker-projects slack channel
 Thomas deramus also knows more as does nicholas shor
 Also sergey oversaw this project
+
+
+## Code api calls documentation
+AFNI 
+  3dcalc docs
+  https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dcalc.html
+
+  3dwarp
+  https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dWarp.html
+
+  3dAutomask
+  https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dAutomask.html
+  
+  abids_json_info.py
+  
+  3dDespike
+  
+  3dTshift
+  
+  3dvolreg
+  
+  3dresample
+  
+  1deval
+  
+  
+  
+FSL
+  fslmerge
+  https://rdrr.io/cran/fslr/man/fslmerge.html
+    
+  topup
+    https://rdrr.io/github/neuroconductor-devel-releases/fslr/man/topup.html
+
+  applytopup
+    https://rdrr.io/github/neuroconductor/fslr/man/applytopup.html
+
+  fast
+  
+  fslmaths
+  
+  flirt
+  
+  applywarp
+  
+  mcflirt
+
+Ants
+  N4BiasFieldCorrection
+  https://github.com/ANTsX/ANTs/wiki/N4BiasFieldCorrection
+  
+  antsRegistrationSyN.sh
+  
+  WarpTimeSeriesImageMultiTransform
+
+ROBEX
+
+C3D
+   c3d_affine_tool
+   
