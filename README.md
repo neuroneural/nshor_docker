@@ -255,6 +255,10 @@ Ants
 
 ROBEX
 
+                    It's a skull-stripping tool:
+                    https://www.nitrc.org/projects/robex
+                    And it's finicky, you need to be in the directory in which ROBEX.sh exists (otherwise it won't work even if the path is mapped), and THEN call the data you want to skull strip.
+
 C3D
    c3d_affine_tool
    
