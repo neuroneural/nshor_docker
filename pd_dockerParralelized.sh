@@ -78,6 +78,7 @@ function afni_set() {
     3dcalc -float -a $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
 
     3dcalc  -float  -a $subIDpath/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+    echo 'finished afni_set'
 }
 
 
@@ -98,10 +99,14 @@ function topup_set() {
     fi
 
     applytopup --imain=${subPath}/derivatives/${subjectID}/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${subPath}/derivatives/${subjectID}/fieldmap/${subjectID}_TOPUP --out=${subPath}/derivatives/${subjectID}/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_UNWARPED.nii.gz &
-
+    
+    topup1_PID=$!
+ 
     applytopup --imain=${subPath}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${subPath}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP --out=${subPath}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_DEBIAS_UNWARPED.nii.gz &
-
-    wait
+    topup2_PID=$!
+    echo 'finished topup'
+    wait $topup1_PID
+    wait $topup2_PID
 }
 
 function skullstrip() {
@@ -117,7 +122,7 @@ function skullstrip() {
     echo "subjectID" ${subjectID}
     cd /ROBEX
     ./ROBEX ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz
-
+    echo 'finished skullstrip'
 }
 
 # epi_reg SPLIT
@@ -179,13 +184,13 @@ function moco_sc() {
 
 	#Reorients the data
     3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
-
+    echo 'finish moco_sc'
 }
 
 
 #afni_set ${subIDpath} ${subPath} ${subjectID} &
 #AFNI_PID=$!
-#topup_set ${subIDpath} ${subPath} ${subjectID} &
+#topup_set ${subIDpath} ${subPath} ${subjectID} & will--why did we remove this? 
 #TOPUP_PID=$!
 skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
 SKULL_PID=$!
@@ -196,8 +201,8 @@ wait ${SKULL_PID}
 antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
-#wait ${AFNI_PID}
-#wait ${TOPUP_PID}
+wait ${AFNI_PID}
+##wait ${TOPUP_PID}
 
 vrefbrain=${subjectID}_run-01_T1w_bc_ss.nii.gz
 vrefhead=${subjectID}_run-01_T1w_bc.nii.gz
@@ -217,7 +222,7 @@ echo epi_orig $epi_orig
 epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
 
 EPI_PID=$!
-
+ 
 start=`date +%s`
 
 echo "AA"
@@ -225,11 +230,9 @@ echo "AA"
 1deval -num 25 -expr t+10 > t0.1D
 echo "AAA"
 moco_sc ${epi_orig} ${coregdir}/${vepi} ${subjectID} rest &
-echo "AAAA"
 #1dplot -one t0.1D t.shift.1D -jpeg slice_timing_check
-echo "AAAAA"
 SCMOCO_PID=$!
-
+echo "AAAA"
 #task_epi1=${subIDpath}/${subjectID}_r01_pre.nii.gz
 #task_epi2=${subIDpath}/${subjectID}_r02_pre.nii.gz
 #task_epi3=${subIDpath}/${subjectID}_r03_pre.nii.gz
@@ -246,20 +249,21 @@ SCMOCO_PID=$!
 
 #mcflirt -in ${epi_orig} -reffile ${coregdir}/${vepi} -out ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -mats -plots -rmsrel -rmsabs -report &
 #MCFLIRT_PID=$!
-
-#wait $SCMOCO_PID
-#wait $EPI_PID
-
+echo "waiting for moco and epi"
+wait $SCMOCO_PID
+wait $EPI_PID
+echo after epi_pid wait
+#exit 0
 #Converts the epi_to_T1 registration parameters from FSL to ANTs format
 #https://neurostars.org/t/epi-to-t1-registration/2677
 c3d_affine_tool -ref ${coregdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
 echo "BB"
-wait $ANTS_PID
-#wait $SCMOCO_PID1
-#wait $SCMOCO_PID2
-#wait $SCMOCO_PID3
-#wait $SCMOCO_PID4
+##wait $ANTS_PID
+##wait $SCMOCO_PID1
+##wait $SCMOCO_PID2
+##wait $SCMOCO_PID3
+##wait $SCMOCO_PID4
 
 #antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
 
@@ -280,6 +284,7 @@ echo "BBB"
 #WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_r04.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_r04.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
 #Warp_PID5=$!
 
+wait $Warp_PID1
 echo "CC"
 cp ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz ${procdir}
 cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
@@ -297,12 +302,12 @@ cp ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz  ${procdir}
 
 echo "DD"
 
-wait $Warp_PID1
-#wait $Warp_PID2
-#wait $Warp_PID3
-#wait $Warp_PID4
-#wait $Warp_PID5
+#wait $Warp_PID1
+##wait $Warp_PID2
+##wait $Warp_PID3
+##wait $Warp_PID4
+##wait $Warp_PID5
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt
-
+echo 'end of program'
