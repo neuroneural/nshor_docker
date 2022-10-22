@@ -146,6 +146,7 @@ function epireg_set() {
         echo "finished epireg_set"
 }
 
+#MoCo means motion correction 
 function moco_sc() {
         epi_in=$1
         ref_vol=$2
@@ -198,7 +199,6 @@ ANTS_PID=$!
 #wait ${AFNI_PID}
 #wait ${TOPUP_PID}
 
-
 vrefbrain=${subjectID}_run-01_T1w_bc_ss.nii.gz
 vrefhead=${subjectID}_run-01_T1w_bc.nii.gz
 #vepi=${subjectID}_r01_restpre_v0.nii.gz
@@ -207,7 +207,6 @@ vrefhead=${subjectID}_run-01_T1w_bc.nii.gz
 vepi=${subjectID}_task-rest_run-01_bold.nii.gz
 vout=${subjectID}_rfMRI_v0_correg
 
-
 #epi_orig=${subIDpath}${subjectID}_r01_restpre.nii.gz
 #less sure about epi_orig: will 
 epi_orig=${subIDpath}/func/${subjectID}_task-rest_run-01_bold.nii.gz
@@ -215,10 +214,7 @@ echo vepi $vepi
 echo epi_orig $epi_orig
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
 
-
 epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
-
-
 
 EPI_PID=$!
 
@@ -248,16 +244,14 @@ SCMOCO_PID=$!
 #moco_sc ${task_epi4} ${coregdir}/${vepi} ${subjectID} r04 &
 #SCMOCO_PID4=$!
 
-
 #mcflirt -in ${epi_orig} -reffile ${coregdir}/${vepi} -out ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -mats -plots -rmsrel -rmsabs -report &
 #MCFLIRT_PID=$!
-
 
 #wait $SCMOCO_PID
 #wait $EPI_PID
 
-
 #Converts the epi_to_T1 registration parameters from FSL to ANTs format
+#https://neurostars.org/t/epi-to-t1-registration/2677
 c3d_affine_tool -ref ${coregdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
 echo "BB"
@@ -268,7 +262,6 @@ wait $ANTS_PID
 #wait $SCMOCO_PID4
 
 #antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
-
 
 #Warps the 4d timeseries to template space in order of: EPI-to-T1 affine transformation, affine warp to template, Nonlinear deformation to template
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
@@ -294,7 +287,6 @@ cp ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt ${procdir}
 
 cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
 
-
 cp ${template} ${procdir}
 
 cp ${coregdir}/${subjectID}_rfMRI_v0_correg.mat  ${procdir}
@@ -310,8 +302,6 @@ wait $Warp_PID1
 #wait $Warp_PID3
 #wait $Warp_PID4
 #wait $Warp_PID5
-
-
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt
