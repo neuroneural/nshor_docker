@@ -1,4 +1,21 @@
 #!/bin/bash
+echo SLURM ID is $1
+if [ -d /data/sub-0$1 ]
+then
+    echo "the directory exists."
+    sdir="sub-0$1"
+else
+    if [ -d /data/sub-$1 ]
+    then
+       echo "the directory exists."
+       sdir="sub-$1"
+    else
+     echo "the directory does not exist"            
+    fi
+fi
+
+echo $sdir
+
 echo "inside pd_..."
 set -x
 set -e
@@ -18,7 +35,7 @@ PATH=${AFNIbinPATH}:${PATH}
 PATH=${FSLDIR}/bin:${PATH}
 export FSLDIR PATH
 . ${FSLDIR}/etc/fslconf/fsl.sh
-subIDpath=/data/sub-01
+subIDpath=/data/$sdir
 #dirname = /data
 
 #Creates subjectIDs
@@ -162,12 +179,12 @@ function moco_sc() {
 	#Metadata extraction
 	
 		#Pulls the Slice timing info from the json file
-		abids_json_info.py -field SliceTiming -json ${subIDpath}/func/sub-01_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
+		abids_json_info.py -field SliceTiming -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
 		#Finds the number where the slice value is 0 in the slice timing
 		SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
 	
 		#Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
-		TR=`abids_json_info.py -field RepetitionTime -json ${subIDpath}/func/sub-01_task-rest_run-04_bold.json`
+		TR=`abids_json_info.py -field RepetitionTime -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json`
 	
 	
 	#'Despikes' the data (removes outliers) prior to image registration
@@ -289,15 +306,10 @@ echo "CC"
 cp ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz ${procdir}
 cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
 cp ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt ${procdir}
-
 cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
-
 cp ${template} ${procdir}
-
 cp ${coregdir}/${subjectID}_rfMRI_v0_correg.mat  ${procdir}
-
 cp ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}
-
 cp ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz  ${procdir}
 
 echo "DD"
