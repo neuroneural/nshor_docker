@@ -10,6 +10,8 @@ Once you have built the dockerfile into a docker image, you may build the docker
 ## Running the Slurm script
           sbatch --array=1-12 submit.sh
 the array number corresponds to the subject number.
+The output ends up in the derivatives folder of the /data folder mapped inside the submit.sh file.
+The submit.sh file will have the location of the logs, the bound data directory for singularity, etc. 
 
 ## More information
 we attempted to keep a log of our activities in #docker-projects slack channel
