@@ -8,7 +8,7 @@ Once you have built the dockerfile into a docker image, you may build the docker
           singularity build output.sif docker-daemon://yourname/yourproject-latest
 
 ## Running the Slurm script
-sbatch --array=1-12 submit.sh
+          sbatch --array=1-12 submit.sh
 the array number corresponds to the subject number.
 
 ## More information
