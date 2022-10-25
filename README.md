@@ -9,6 +9,7 @@ Once you have built the dockerfile into a docker image, you may build the docker
 
 ## Running the Slurm script
 sbatch --array=1-12 submit.sh
+the array number corresponds to the subject number.
 
 ## More information
 we attempted to keep a log of our activities in #docker-projects slack channel
