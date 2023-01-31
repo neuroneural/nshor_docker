@@ -1,0 +1,52 @@
+subIDpath: /data/000300655084
+subPath: /data
+subjectID: 000300655084
+mocodir: /data/derivatives/000300655084/motion
+coregdir: /data/derivatives/000300655084/coregistration
+normdir: /data/derivatives/000300655084/normalization
+procdir: /data/derivatives/000300655084/processed
+anatdir: /data/derivatives/000300655084/anat
+anatdir /data/derivatives/000300655084/anat
+subjectID 000300655084
+Step 1  of 9: reading in images...ExceptionObject caught !
+
+itk::ImageFileReaderException (0x2ed34c0)
+Location: "unknown" 
+File: /autofs/space/panamint_005/users/iglesias/software/InsightToolkit-4.4.2/src/Modules/IO/ImageBase/include/itkImageFileReader.hxx
+Line: 143
+Description:  Could not create IO object for file /data/derivatives/000300655084/anat/000300655084_run-01_T1w_bc.nii.gz
+The file doesn't exist. 
+Filename = /data/derivatives/000300655084/anat/000300655084_run-01_T1w_bc.nii.gz
+
+
+
+finished skullstrip
+Moving image '/data/derivatives/000300655084/anat/000300655084_run-01_T1w_bc_ss.nii.gz' does not exist.  See usage: '/usr/lib/ants/antsRegistrationSyN.sh -h 1'
+vepi 000300655084_task-rest_run-01_bold.nii.gz
+epi_orig /data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz
+coregdir /data/derivatives/000300655084/coregistration
+vrefbrain 000300655084_run-01_T1w_bc_ss.nii.gz
+vepi 000300655084_task-rest_run-01_bold.nii.gz
+vout 000300655084_rfMRI_v0_correg
+AA
+AAA
+AAAA
+waiting for moco and epi
+FLIRT pre-alignment
+finish moco_sc
+finished epireg_set
+after epi_pid wait
+BB
+BBB
+FIELD: /data/derivatives/000300655084/normalization/000300655084_ANTsReg1Warp.nii.gz
+AFFINE: /data/derivatives/000300655084/normalization/000300655084_ANTsReg0GenericAffine.mat
+AFFINE: /data/derivatives/000300655084/coregistration/000300655084_rfMRI_FSL_to_ANTs_coreg.txt
+moving_image_filename: /data/derivatives/000300655084/motion/000300655084_rfMRI_moco_rest.nii.gz
+output_image_filename: /data/derivatives/000300655084/processed/000300655084_rsfMRI_processed_rest.nii.gz
+reference_image_filename: /usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
+[0/3]: FIELD: /data/derivatives/000300655084/normalization/000300655084_ANTsReg1Warp.nii.gz
+[1/3]: AFFINE: /data/derivatives/000300655084/normalization/000300655084_ANTsReg0GenericAffine.mat
+[2/3]: AFFINE: /data/derivatives/000300655084/coregistration/000300655084_rfMRI_FSL_to_ANTs_coreg.txt
+CC
+DD
+end of program
