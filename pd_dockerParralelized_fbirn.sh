@@ -195,10 +195,10 @@ function moco_sc() {
 }
 
 
-#afni_set ${subIDpath} ${subPath} ${subjectID} &
-#AFNI_PID=$!
-#topup_set ${subIDpath} ${subPath} ${subjectID} & will--why did we remove this? 
-#TOPUP_PID=$!
+afni_set ${subIDpath} ${subPath} ${subjectID} &
+AFNI_PID=$!
+topup_set ${subIDpath} ${subPath} ${subjectID} & will--why did we remove this? 
+TOPUP_PID=$!
 skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
 SKULL_PID=$!
  
