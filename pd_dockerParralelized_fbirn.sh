@@ -68,6 +68,7 @@ mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
 function afni_set() {
+    echo "function anfi_set was called"
     subIDpath=$1
     subPath=$2
     subjectID=$3
@@ -90,6 +91,7 @@ function afni_set() {
 
 
 function topup_set() {
+    echo "function topup_set was called"
     subIDpath=$1
     subPath=$2
     subjectID=$3
@@ -117,6 +119,7 @@ function topup_set() {
 }
 
 function skullstrip() {
+    echo "function skullstrip was called"
     subIDpath=$1
     subPath=$2
     subjectID=$3
@@ -134,6 +137,7 @@ function skullstrip() {
 
 # epi_reg SPLIT
 function epireg_set() {
+	echo "funcion epireg_set was called"
         coregdir=$1
         vrefbrain=$2
         vepi=$3
@@ -160,6 +164,7 @@ function epireg_set() {
 
 #MoCo means motion correction 
 function moco_sc() {
+	echo "function moco_sc was called"
         epi_in=$1
         ref_vol=$2
         subjectID=$3
