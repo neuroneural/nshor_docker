@@ -33,21 +33,21 @@ echo "subIDpath: $subIDpath"
 echo "subPath: $subPath"
 echo "subjectID: $subjectID"
 #Module Loading
-#module load Image_Analysis/AFNI
-#cd /data/mialab/users/tderamus/Track1_HCP_Brainhack
+module load Image_Analysis/AFNI
+cd /data/mialab/users/tderamus/Track1_HCP_Brainhack
 
 #ImageTagging
-#subjectID=`sed -n ${SLURM_ARRAY_TASK_ID}p ${subIDpath}/derivatives/sublist.txt`
-#subPath=${subIDpath}/$subjectID
-#acqparams=${subPath}/derivatives/acqparams.txt
+subjectID=`sed -n ${SLURM_ARRAY_TASK_ID}p ${subIDpath}/derivatives/sublist.txt`
+subPath=${subIDpath}/$subjectID
+acqparams=${subPath}/derivatives/acqparams.txt
 
 #Marks the template to be used
 template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
 templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
 
 #Bias-Correction SBREF and EPI
-#mkdir -p  ${subPath}/derivatives/$subjectID
-#mkdir -p ${subPath}/derivatives/$subjectID/bias_field
+mkdir -p  ${subPath}/derivatives/$subjectID
+mkdir -p ${subPath}/derivatives/$subjectID/bias_field
 
 #Generates directory names in the derivatives folders according to BIDS specifications
 mocodir=${subPath}/derivatives/${subjectID}/motion

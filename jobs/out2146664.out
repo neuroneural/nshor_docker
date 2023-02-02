@@ -1,0 +1,17 @@
+subIDpath: /data/000300655084
+subPath: /data
+subjectID: 000300655084
+mocodir: /data/derivatives/000300655084/motion
+coregdir: /data/derivatives/000300655084/coregistration
+normdir: /data/derivatives/000300655084/normalization
+procdir: /data/derivatives/000300655084/processed
+anatdir: /data/derivatives/000300655084/anat
+function topup_set was called
+function afni_set was called
+function skullstrip was called
+subIDpath inside afni_set is /data/000300655084
+argument 1 is /data/000300655084
+subPath inside afni_set is /data
+argument 2 is /data
+subIDpath inside afni_set is 000300655084
+argument 3 is 000300655084
