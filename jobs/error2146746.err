@@ -1,0 +1,90 @@
++ set -e
++ FSLDIR=/usr/share/fsl/5.0
++ export PATH=/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ PATH=/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ export ANTSPATH=/usr/lib/ants
++ ANTSPATH=/usr/lib/ants
++ export AFNIbinPATH=/usr/local/AFNIbin
++ AFNIbinPATH=/usr/local/AFNIbin
++ PATH=/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ PATH=/usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ export FSLDIR PATH
++ . /usr/share/fsl/5.0/etc/fslconf/fsl.sh
++++ tr : '\n'
++++ sed 's/:$//'
++++ echo /usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++++ tr -s '\n' :
++++ grep -v /usr/lib/fsl/
+++ PATH=/usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++++ grep -v /usr/lib/fsl/
++++ tr -s '\n' :
++++ sed 's/:$//'
++++ tr : '\n'
++++ echo /.singularity.d/libs
+++ LD_LIBRARY_PATH=/.singularity.d/libs
+++ FSLDIR=/usr/share/fsl/5.0
+++ POSSUMDIR=/usr/share/fsl/5.0
+++ PATH=/usr/lib/fsl/5.0:/usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
+++ FSLOUTPUTTYPE=NIFTI_GZ
+++ FSLMULTIFILEQUIT=TRUE
+++ FSLTCLSH=/usr/bin/tclsh
+++ FSLWISH=/usr/bin/wish
+++ FSLBROWSER=/etc/alternatives/x-www-browser
+++ FSLLOCKDIR=
+++ FSLMACHINELIST=
+++ FSLREMOTECALL=
+++ FSLCLUSTER_MAILOPTS=n
+++ export FSLDIR POSSUMDIR PATH FSLMULTIFILEQUIT FSLOUTPUTTYPE FSLTCLSH FSLWISH FSLBROWSER FSLLOCKDIR FSLMACHINELIST FSLREMOTECALL
+++ LD_LIBRARY_PATH=/usr/lib/fsl/5.0:/.singularity.d/libs
+++ export LD_LIBRARY_PATH
+++ '[' -f /home/users/jwardell1/.fslconf/fsl.sh ']'
++ subjectID=000300655084
++ subIDpath=/data/000300655084
+++ dirname /data/000300655084
++ subPath=/data
+++ date +%s
++ start=1675374747
++ echo 'subIDpath: /data/000300655084'
++ echo 'subPath: /data'
++ echo 'subjectID: 000300655084'
++ acqparams=/data/derivatives/acqparams.txt
++ template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
++ templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
++ mkdir -p /data/derivatives/000300655084
++ mkdir -p /data/derivatives/000300655084/bias_field
++ mocodir=/data/derivatives/000300655084/motion
++ coregdir=/data/derivatives/000300655084/coregistration
++ normdir=/data/derivatives/000300655084/normalization
++ procdir=/data/derivatives/000300655084/processed
++ anatdir=/data/derivatives/000300655084/anat
++ echo mocodir: /data/derivatives/000300655084/motion
++ echo coregdir: /data/derivatives/000300655084/coregistration
++ echo normdir: /data/derivatives/000300655084/normalization
++ echo procdir: /data/derivatives/000300655084/processed
++ echo anatdir: /data/derivatives/000300655084/anat
++ mkdir -p /data/derivatives/000300655084/coregistration
++ mkdir -p /data/derivatives/000300655084/motion
++ mkdir -p /data/derivatives/000300655084/normalization
++ mkdir -p /data/derivatives/000300655084/processed
++ mkdir -p /data/derivatives/000300655084/anat
++ AFNI_PID=
++ TOPUP_PID=2067908
++ SKULL_PID=2067909
++ wait 2067909
++ skullstrip /data/000300655084 /data 000300655084 /data/derivatives/000300655084/anat
++ echo 'function skullstrip was called'
++ subIDpath=/data/000300655084
++ topup_set /data/000300655084 /data 000300655084
++ subPath=/data
++ subjectID=000300655084
++ anatdir=/data/derivatives/000300655084/anat
++ N4BiasFieldCorrection -d 3 -i /data/000300655084/anat/000300655084_run-01_T1w.nii.gz -o /data/derivatives/000300655084/anat/000300655084_run-01_T1w_bc.nii.gz
++ echo 'function topup_set was called'
++ subIDpath=/data/000300655084
++ subPath=/data
++ subjectID=000300655084
++ mkdir -p /data/derivatives/000300655084/fieldmap/
++ fslmerge -t /data/derivatives/000300655084/fieldmap/000300655084_3T_Phase_Map.nii.gz /data/000300655084/fieldmaps/000300655084_3T_SpinEchoFieldMap_LR.nii.gz /data/000300655084/fieldmaps/000300655084_3T_SpinEchoFieldMap_RL.nii.gz
+Cannot open volume /data/000300655084/fieldmaps/000300655084_3T_SpinEchoFieldMap_LR for reading!
+ file /data/000300655084/anat/000300655084_run-01_T1w.nii.gz does not exist . 
+/run/pd_dockerParralelized_fbirn.sh: line 146: 2067911 Segmentation fault      (core dumped) N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/${subjectID}_run-01_T1w.nii.gz -o ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz
