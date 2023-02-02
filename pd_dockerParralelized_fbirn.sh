@@ -33,7 +33,7 @@ echo "subIDpath: $subIDpath"
 echo "subPath: $subPath"
 echo "subjectID: $subjectID"
 #Module Loading
-module load Image_Analysis/AFNI
+#module load Image_Analysis/AFNI
 #cd /data/mialab/users/tderamus/Track1_HCP_Brainhack
 
 #ImageTagging
