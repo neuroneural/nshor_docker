@@ -225,7 +225,7 @@ function moco_sc() {
 }
 
 
-afni_set ${subIDpath} ${subPath} ${subjectID} &
+#afni_set ${subIDpath} ${subPath} ${subjectID} &
 AFNI_PID=$!
 topup_set ${subIDpath} ${subPath} ${subjectID} & #will--why did we remove this? 
 TOPUP_PID=$!
