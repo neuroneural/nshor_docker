@@ -37,8 +37,8 @@ echo "subjectID: $subjectID"
 #cd /data/mialab/users/tderamus/Track1_HCP_Brainhack
 
 #ImageTagging
-subjectID=`sed -n ${SLURM_ARRAY_TASK_ID}p ${subIDpath}/derivatives/sublist.txt`
-subPath=${subIDpath}/$subjectID
+#subjectID=`sed -n ${SLURM_ARRAY_TASK_ID}p ${subIDpath}/derivatives/sublist.txt`
+#subPath=${subIDpath}/$subjectID
 acqparams=${subPath}/derivatives/acqparams.txt
 
 #Marks the template to be used
