@@ -34,7 +34,7 @@ echo "subPath: $subPath"
 echo "subjectID: $subjectID"
 #Module Loading
 module load Image_Analysis/AFNI
-cd /data/mialab/users/tderamus/Track1_HCP_Brainhack
+#cd /data/mialab/users/tderamus/Track1_HCP_Brainhack
 
 #ImageTagging
 subjectID=`sed -n ${SLURM_ARRAY_TASK_ID}p ${subIDpath}/derivatives/sublist.txt`
