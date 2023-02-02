@@ -152,13 +152,13 @@ function skullstrip() {
     
 	#Performs the N3/4 Bias correction on the T1 and Extracts the Brain
     #N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/${subjectID}_run-01_T1w.nii.gz -o ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz
-    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/mwc1pT1.nii -o ${anatdir}/mwc1pT1.nii
+    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/Sm6mwc1pT1.nii -o ${anatdir}/Sm6mwc1pT1.nii
     #above is no longer raw so anatdir is better.
     echo "anatdir" ${anatdir}
     echo "subjectID" ${subjectID}
     cd /ROBEX
     #./ROBEX ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz
-    ./ROBEX ${anatdir}/mwc1pT1.nii ${anatdir}/mwc1pT1.nii
+    ./ROBEX ${anatdir}/Sm6mwc1pT1.nii ${anatdir}/Sm6mwc1pT1.nii
     echo 'finished skullstrip'
 }
 
@@ -238,14 +238,14 @@ wait ${SKULL_PID}
 
 #Computes the warping parameters to get the skullstripped data to template space
 #antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
-antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/mwc1pT1.nii -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/Sm6mwc1pT1.nii -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
 wait ${AFNI_PID}
 ##wait ${TOPUP_PID}
 
-vrefbrain=mwc1pT1.nii
-vrefhead=mwc1pT1.nii
+vrefbrain=Sm6mwc1pT1.nii
+vrefhead=Sm6mwc1pT1.nii
 #vepi=${subjectID}_r01_restpre_v0.nii.gz
 
 #i think think is better : will : the bold is better, we have this data
