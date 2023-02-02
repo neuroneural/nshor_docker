@@ -237,14 +237,15 @@ SKULL_PID=$!
 wait ${SKULL_PID}
 
 #Computes the warping parameters to get the skullstripped data to template space
-antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+#antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/GSR.nii -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
 wait ${AFNI_PID}
 ##wait ${TOPUP_PID}
 
-vrefbrain=${subjectID}_run-01_T1w_bc_ss.nii.gz
-vrefhead=${subjectID}_run-01_T1w_bc.nii.gz
+vrefbrain=GSR.nii
+vrefhead=GSR.nii
 #vepi=${subjectID}_r01_restpre_v0.nii.gz
 
 #i think think is better : will : the bold is better, we have this data

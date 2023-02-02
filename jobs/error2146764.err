@@ -1,0 +1,100 @@
++ set -e
++ FSLDIR=/usr/share/fsl/5.0
++ export PATH=/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ PATH=/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ export ANTSPATH=/usr/lib/ants
++ ANTSPATH=/usr/lib/ants
++ export AFNIbinPATH=/usr/local/AFNIbin
++ AFNIbinPATH=/usr/local/AFNIbin
++ PATH=/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ PATH=/usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++ export FSLDIR PATH
++ . /usr/share/fsl/5.0/etc/fslconf/fsl.sh
++++ tr : '\n'
++++ tr -s '\n' :
++++ sed 's/:$//'
++++ grep -v /usr/lib/fsl/
++++ echo /usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
+++ PATH=/usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
++++ tr : '\n'
++++ tr -s '\n' :
++++ grep -v /usr/lib/fsl/
++++ sed 's/:$//'
++++ echo /.singularity.d/libs
+++ LD_LIBRARY_PATH=/.singularity.d/libs
+++ FSLDIR=/usr/share/fsl/5.0
+++ POSSUMDIR=/usr/share/fsl/5.0
+++ PATH=/usr/lib/fsl/5.0:/usr/share/fsl/5.0/bin:/usr/local/AFNIbin:/usr/lib/ants:.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ROBEX:/usr/lib/ants
+++ FSLOUTPUTTYPE=NIFTI_GZ
+++ FSLMULTIFILEQUIT=TRUE
+++ FSLTCLSH=/usr/bin/tclsh
+++ FSLWISH=/usr/bin/wish
+++ FSLBROWSER=/etc/alternatives/x-www-browser
+++ FSLLOCKDIR=
+++ FSLMACHINELIST=
+++ FSLREMOTECALL=
+++ FSLCLUSTER_MAILOPTS=n
+++ export FSLDIR POSSUMDIR PATH FSLMULTIFILEQUIT FSLOUTPUTTYPE FSLTCLSH FSLWISH FSLBROWSER FSLLOCKDIR FSLMACHINELIST FSLREMOTECALL
+++ LD_LIBRARY_PATH=/usr/lib/fsl/5.0:/.singularity.d/libs
+++ export LD_LIBRARY_PATH
+++ '[' -f /home/users/jwardell1/.fslconf/fsl.sh ']'
++ subjectID=000300655084
++ subIDpath=/data/000300655084
+++ dirname /data/000300655084
++ subPath=/data
+++ date +%s
++ start=1675375546
++ echo 'subIDpath: /data/000300655084'
++ echo 'subPath: /data'
++ echo 'subjectID: 000300655084'
++ acqparams=/data/derivatives/acqparams.txt
++ template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
++ templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
++ mkdir -p /data/derivatives/000300655084
++ mkdir -p /data/derivatives/000300655084/bias_field
++ mocodir=/data/derivatives/000300655084/motion
++ coregdir=/data/derivatives/000300655084/coregistration
++ normdir=/data/derivatives/000300655084/normalization
++ procdir=/data/derivatives/000300655084/processed
++ anatdir=/data/derivatives/000300655084/anat
++ echo mocodir: /data/derivatives/000300655084/motion
++ echo coregdir: /data/derivatives/000300655084/coregistration
++ echo normdir: /data/derivatives/000300655084/normalization
++ echo procdir: /data/derivatives/000300655084/processed
++ echo anatdir: /data/derivatives/000300655084/anat
++ mkdir -p /data/derivatives/000300655084/coregistration
++ mkdir -p /data/derivatives/000300655084/motion
++ mkdir -p /data/derivatives/000300655084/normalization
++ mkdir -p /data/derivatives/000300655084/processed
++ mkdir -p /data/derivatives/000300655084/anat
++ AFNI_PID=
++ TOPUP_PID=
++ SKULL_PID=2068804
++ wait 2068804
++ skullstrip /data/000300655084 /data 000300655084 /data/derivatives/000300655084/anat
++ echo 'function skullstrip was called'
++ subIDpath=/data/000300655084
++ subPath=/data
++ subjectID=000300655084
++ anatdir=/data/derivatives/000300655084/anat
++ N4BiasFieldCorrection -d 3 -i /data/000300655084/anat/GSR.nii -o /data/derivatives/000300655084/anat/GSR.nii
++ echo anatdir /data/derivatives/000300655084/anat
++ echo subjectID 000300655084
++ cd /ROBEX
++ ./ROBEX /data/derivatives/000300655084/anat/GSR.nii /data/derivatives/000300655084/anat/GSR.nii
++ echo 'finished skullstrip'
++ ANTS_PID=2164783
++ wait
++ antsRegistrationSyN.sh -d 3 -n 16 -f /usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz -m /data/derivatives/000300655084/anat/000300655084_run-01_T1w_bc_ss.nii.gz -x /usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz -o /data/derivatives/000300655084/normalization/000300655084_ANTsReg
++ vrefbrain=000300655084_run-01_T1w_bc_ss.nii.gz
++ vrefhead=000300655084_run-01_T1w_bc.nii.gz
++ vepi=000300655084_task-rest_run-01_bold.nii.gz
++ vout=000300655084_rfMRI_v0_correg
++ epi_orig=/data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz
++ echo vepi 000300655084_task-rest_run-01_bold.nii.gz
++ echo epi_orig /data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz
++ 3dcalc -a0 /data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz -prefix /data/derivatives/000300655084/coregistration/000300655084_task-rest_run-01_bold.nii.gz -expr 'a*1'
+++ 3dcalc: AFNI version=AFNI_22.1.14 (Jun 24 2022) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset /data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz[0]
+** Program compile date = Jun 24 2022
