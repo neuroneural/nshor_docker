@@ -68,24 +68,49 @@ mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
 function afni_set() {
-    echo "function anfi_set was called"
+    echo "function afni_set was called"
     subIDpath=$1
     subPath=$2
     subjectID=$3
-    
+   
+    echo "subIDpath inside afni_set is $subIDpath"
+    echo "argument 1 is $1"
+
+    echo "subPath inside afni_set is $subPath"
+    echo "argument 2 is $2"
+
+    echo "subIDpath inside afni_set is $subjectID"
+    echo "argument 3 is $3"
+
     3dcalc -a ${subIDpath}/biasmaps/$subjectID\_3T_BIAS_32CH.nii.gz -b ${subIDpath}/biasmaps/$subjectID\_3T_BIAS_BC.nii.gz -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
+
+    echo "made it past 3dcalc-1 in afni_set"
 
     3dWarp -deoblique -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz
     mkdir -p  ${subPath}/derivatives/$subjectID/SBRef
 
+    echo "made it past 3dWarp-1 in afni_set"
+
     3dAutomask -dilate 2 -prefix ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz $subIDpath/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef.nii.gz
+
+    echo "made it past 3dAutomask in afni_set"
+
 
     3dWarp -oblique_parent $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -gridset $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz
     mkdir -p ${subPath}/derivatives/$subjectID/func
 
+    echo "made it past 3dWarp-2 in afni_set"
+
+
     3dcalc -float -a $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
 
+    echo "made it past 3dcalc-2 in afni_set"
+
+
     3dcalc  -float  -a $subIDpath/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+
+    echo "made it past 3dcalc-3 in afni_set"
+
     echo 'finished afni_set'
 }
 
