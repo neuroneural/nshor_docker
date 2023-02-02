@@ -151,12 +151,14 @@ function skullstrip() {
     anatdir=$4
     
 	#Performs the N3/4 Bias correction on the T1 and Extracts the Brain
-    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/${subjectID}_run-01_T1w.nii.gz -o ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz
+    #N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/${subjectID}_run-01_T1w.nii.gz -o ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz
+    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/GSR.nii -o ${anatdir}/GSR.nii
     #above is no longer raw so anatdir is better.
     echo "anatdir" ${anatdir}
     echo "subjectID" ${subjectID}
     cd /ROBEX
-    ./ROBEX ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz
+    #./ROBEX ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz
+    ./ROBEX ${anatdir}/GSR.nii ${anatdir}/GSR.nii
     echo 'finished skullstrip'
 }
 
