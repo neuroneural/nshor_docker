@@ -152,13 +152,13 @@ function skullstrip() {
     
 	#Performs the N3/4 Bias correction on the T1 and Extracts the Brain
     #N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/${subjectID}_run-01_T1w.nii.gz -o ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz
-    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/Sm6mwc1pT1.nii -o ${anatdir}/Sm6mwc1pT1.nii
+    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/T1.nii -o ${anatdir}/T1.nii
     #above is no longer raw so anatdir is better.
     echo "anatdir" ${anatdir}
     echo "subjectID" ${subjectID}
     cd /ROBEX
     #./ROBEX ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz
-    ./ROBEX ${anatdir}/Sm6mwc1pT1.nii ${anatdir}/Sm6mwc1pT1.nii
+    ./ROBEX ${anatdir}/T1.nii ${anatdir}/T1.nii
     echo 'finished skullstrip'
 }
 
@@ -244,17 +244,17 @@ ANTS_PID=$!
 wait ${AFNI_PID}
 ##wait ${TOPUP_PID}
 
-vrefbrain=Sm6mwc1pT1.nii
-vrefhead=Sm6mwc1pT1.nii
+vrefbrain=T1.nii
+vrefhead=T1.nii
 #vepi=${subjectID}_r01_restpre_v0.nii.gz
 
 #i think think is better : will : the bold is better, we have this data
-vepi=${subjectID}_task-rest_run-01_bold.nii.gz
+vepi=rest.nii
 vout=${subjectID}_rfMRI_v0_correg
 
 #epi_orig=${subIDpath}${subjectID}_r01_restpre.nii.gz
 #less sure about epi_orig: will 
-epi_orig=${subIDpath}/func/${subjectID}_task-rest_run-01_bold.nii.gz
+epi_orig=${subIDpath}/func/rest.nii
 echo vepi $vepi
 echo epi_orig $epi_orig
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
