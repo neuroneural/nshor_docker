@@ -91,3 +91,15 @@
  file NULL does not exist . 
  file NULL does not exist . 
  file NULL does not exist . 
++ vrefbrain=mwc1pT1.nii
++ vrefhead=mwc1pT1.nii
++ vepi=000300655084_task-rest_run-01_bold.nii.gz
++ vout=000300655084_rfMRI_v0_correg
++ epi_orig=/data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz
++ echo vepi 000300655084_task-rest_run-01_bold.nii.gz
++ echo epi_orig /data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz
++ 3dcalc -a0 /data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz -prefix /data/derivatives/000300655084/coregistration/000300655084_task-rest_run-01_bold.nii.gz -expr 'a*1'
+++ 3dcalc: AFNI version=AFNI_22.1.14 (Jun 24 2022) [64-bit]
+++ Authored by: A cast of thousands
+[7m** FATAL ERROR:[0m can't open dataset /data/000300655084/func/000300655084_task-rest_run-01_bold.nii.gz[0]
+** Program compile date = Jun 24 2022
