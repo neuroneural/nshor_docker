@@ -208,7 +208,8 @@ function moco_sc() {
 		echo "inside moco fucntion 2"
 	
 		#Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
-		TR=`abids_json_info.py -field RepetitionTime -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json`
+		#TR=`abids_json_info.py -field RepetitionTime -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json`
+		TR=2
 		echo "inside moco fucntion 3"
 	
 	
