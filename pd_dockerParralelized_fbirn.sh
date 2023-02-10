@@ -175,8 +175,8 @@ function epireg_set() {
         echo "vepi $vepi"
         echo "vout $vout"
         cd ${coregdir}
-        ln -s ../anat/${vrefbrain} .
-	ln -s ../anat/${vrefhead} .
+        #ln -s ../anat/${vrefbrain} .
+	#ln -s ../anat/${vrefhead} .
         #  ln -s ../SBRef/${vepi} .
         
         $FSLDIR/bin/fast -N -o ${vout}_fast ${vrefbrain}
@@ -238,7 +238,7 @@ wait ${SKULL_PID}
 
 #Computes the warping parameters to get the skullstripped data to template space
 #antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
-antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/Sm6mwc1pT1.nii -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1.nii -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
 wait ${AFNI_PID}

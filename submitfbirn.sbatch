@@ -4,7 +4,7 @@
 #SBATCH --mem=5g
 #SBATCH -p qTRD
 #SBATCH -t 2-00:00
-#SBATCH -J 000300655084
+#SBATCH -J fbirn-test
 #SBATCH -e /data/users2/jwardell1/fbirn-project/jobs/error%A.err
 #SBATCH -o /data/users2/jwardell1/fbirn-project/jobs/out%A.out
 #SBATCH -A psy53c17
