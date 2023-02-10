@@ -201,10 +201,11 @@ function moco_sc() {
 	#Metadata extraction
 	
 		#Pulls the Slice timing info from the json file
-		abids_json_info.py -field SliceTiming -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
+		#abids_json_info.py -field SliceTiming -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
 		echo "inside moco fucntion 1"
 		#Finds the number where the slice value is 0 in the slice timing
-		SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
+		#SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
+		SliceRef=`cat ${subIDpath}/func/dataseries.txt | grep -m1 -n -- "0$" | cut -d ":" -f1`
 		echo "inside moco fucntion 2"
 	
 		#Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
@@ -219,7 +220,9 @@ function moco_sc() {
 	
 	#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, ect
 	3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
+
 		echo "inside moco fucntion 5"
+
         #3dTshift -tzero 0 -tpattern '${Tshiftparams} ' -quintic -prefix tshift_${suffix} ${epi_in}
         #commented out by will after talking to thomas--rest data probably doesn't need this        
         #3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig        
