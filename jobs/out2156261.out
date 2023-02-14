@@ -1,0 +1,48 @@
+subIDpath: /data/000300655084
+subPath: /data
+subjectID: 000300655084
+mocodir: /data/derivatives/000300655084/motion
+coregdir: /data/derivatives/000300655084/coregistration
+normdir: /data/derivatives/000300655084/normalization
+procdir: /data/derivatives/000300655084/processed
+anatdir: /data/derivatives/000300655084/anat
+function skullstrip was called
+anatdir /data/derivatives/000300655084/anat
+subjectID 000300655084
+Step 1  of 9: reading in images...Done! It took roughly 0 seconds
+Step 2 of 9: registration...
+  2a) Similarity transform...
+  2b) Affine transform...
+  2c) Resampling volume...
+  Registration done! It took roughly 13 seconds
+Step 3 of 9: rough bias field correction...Done! It took roughly 7 seconds
+Step 4 of 9: calculating features...Done! It took roughly 22 seconds
+Step 5 of 9: voxel classification...Done! It took roughly 13 seconds
+Step 6 of 9: fitting the shape model...Done! It took roughly 6 seconds
+Step 7 of 9: free deformation...Done! It took roughly 0 seconds
+Step 8 of 9: building volume from mesh...Done! It took roughly 3 seconds
+Step 9 of 9: warping back to original space...Done! It took roughly 0 seconds
+
+ Output ready 
+
+ The whole process took roughly 64 seconds
+
+ Freeing memory and deleting temporary files...
+
+
+finished skullstrip
+vepi rest.nii
+epi_orig /data/000300655084/func/rest.nii
+funcion epireg_set was called
+coregdir /data/derivatives/000300655084/coregistration
+vrefbrain T1.nii
+vepi rest.nii
+vout 000300655084_rfMRI_v0_correg
+AA
+AAA
+AAAA
+waiting for moco and epi
+function moco_sc was called
+inside moco fucntion 1
+inside moco fucntion 2
+inside moco fucntion 3
