@@ -197,44 +197,45 @@ function moco_sc() {
         subjectID=$3
         suffix=$4
         
-    cd ${mocodir}
+    	cd ${mocodir}
 	#Metadata extraction
-	
-		#Pulls the Slice timing info from the json file
-		#abids_json_info.py -field SliceTiming -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
-		echo "inside moco fucntion 1"
-		#Finds the number where the slice value is 0 in the slice timing
-		#SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
-		SliceRef=`cat ${subIDpath}/func/dataseries.txt | grep -m1 -n -- "0$" | cut -d ":" -f1`
-		echo "inside moco fucntion 2"
-	
-		#Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
-		#TR=`abids_json_info.py -field RepetitionTime -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json`
-		TR=2
-		echo "inside moco fucntion 3"
+
+	#Pulls the Slice timing info from the json file
+	#abids_json_info.py -field SliceTiming -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
+	echo "inside moco function 1 - don't need to pull slice timing from json file, use dataseries.txt"
+
+	#Finds the number where the slice value is 0 in the slice timing
+	#SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
+	#SliceRef=`cat ${subIDpath}/func/dataseries.txt | grep -m1 -n -- "0$" | cut -d ":" -f1`
+	echo "inside moco fucntion 2 - no need to find place where 0 occurs out of order, FBIRN fine"
+
+	#Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
+	#TR=`abids_json_info.py -field RepetitionTime -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json`
+	TR=2
+	echo "inside moco fucntion 3 - FBIRN I already know the slice timing should be TR=2"
 	
 	
 	#'Despikes' the data (removes outliers) prior to image registration
 	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
-		echo "inside moco fucntion 4"
+	echo "inside moco fucntion 4 - removed outliers with despike sucessfully"
 	
 	#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, ect
 	#3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
-	3dTshift -tzero $(($SliceRef-1)) -tpattern @${subIDpath}/func/dataseries.txt -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
+	#3dTshift -tzero $(($SliceRef-1)) -tpattern @${subIDpath}/func/dataseries.txt -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
+	echo "inside moco fucntion 5 - no need to timshift"
 
-		echo "inside moco fucntion 5"
-
-        #3dTshift -tzero 0 -tpattern '${Tshiftparams} ' -quintic -prefix tshift_${suffix} ${epi_in}
-        #commented out by will after talking to thomas--rest data probably doesn't need this        
-        #3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig        
+       	#3dTshift -tzero 0 -tpattern '${Tshiftparams} ' -quintic -prefix tshift_${suffix} ${epi_in}
+       	#commented out by will after talking to thomas--rest data probably doesn't need this        
+       	#3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig        
     
 	#Performs realignment to the reference volume. Some call this "motion correction"
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_Despiked_${suffix}.nii.gz
-		echo "inside moco fucntion 6"
+	echo "inside moco fucntion 6 - motion corrected using 3dvolreg successful"
 
 	#Reorients the data
-    3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
-    echo 'finish moco_sc'
+    	3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+	echo "inside moco function 7 - data reorientation using 3dresample successful"
+    	echo 'finish moco_sc'
 }
 
 
