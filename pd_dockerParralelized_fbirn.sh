@@ -229,7 +229,8 @@ function moco_sc() {
        	#3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig        
     
 	#Performs realignment to the reference volume. Some call this "motion correction"
-	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_Despiked_${suffix}.nii.gz
+	#3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_Despiked_${suffix}.nii.gz
+	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D Despiked_${suffix}.nii.gz
 	echo "inside moco fucntion 6 - motion corrected using 3dvolreg successful"
 
 	#Reorients the data
