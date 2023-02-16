@@ -67,6 +67,7 @@ mkdir -p  ${normdir}
 mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
+#I think this function works for the case when the data was acquired from an EPI or PRISMA scanner. (these are different than MRI)
 function afni_set() {
     echo "function afni_set was called"
     subIDpath=$1
@@ -114,7 +115,7 @@ function afni_set() {
     echo 'finished afni_set'
 }
 
-
+#I believe this function addresses 1-distortions caused by multiband imaging 2-magnetic field distortions(could be wrong about this part) don't need this to work for FBIRN?
 function topup_set() {
     echo "function topup_set was called"
     subIDpath=$1
@@ -143,6 +144,8 @@ function topup_set() {
     wait $topup2_PID
 }
 
+
+
 function skullstrip() {
     echo "function skullstrip was called"
     subIDpath=$1
@@ -152,13 +155,13 @@ function skullstrip() {
     
 	#Performs the N3/4 Bias correction on the T1 and Extracts the Brain
     #N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/${subjectID}_run-01_T1w.nii.gz -o ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz
-    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/T1.nii -o ${anatdir}/T1.nii
+    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/T1.nii -o ${anatdir}/T1_bc.nii
     #above is no longer raw so anatdir is better.
     echo "anatdir" ${anatdir}
     echo "subjectID" ${subjectID}
     cd /ROBEX
     #./ROBEX ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz
-    ./ROBEX ${anatdir}/T1.nii ${anatdir}/T1.nii
+    ./ROBEX ${anatdir}/T1_bc.nii ${anatdir}/T1_bc_ss.nii
     echo 'finished skullstrip'
 }
 
@@ -258,8 +261,8 @@ ANTS_PID=$!
 wait ${AFNI_PID}
 ##wait ${TOPUP_PID}
 
-vrefbrain=T1.nii
-vrefhead=T1.nii
+vrefbrain=T1_bc_ss.nii
+vrefhead=T1_bc.nii
 #vepi=${subjectID}_r01_restpre_v0.nii.gz
 
 #i think think is better : will : the bold is better, we have this data
