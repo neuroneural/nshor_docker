@@ -234,7 +234,8 @@ function moco_sc() {
 	echo "inside moco fucntion 6 - motion corrected using 3dvolreg successful"
 
 	#Reorients the data
-    	3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+    	#3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+    	3dresample -orient RPI -inset moco_${suffix}+tlrc.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
 	echo "inside moco function 7 - data reorientation using 3dresample successful"
     	echo 'finish moco_sc'
 }
