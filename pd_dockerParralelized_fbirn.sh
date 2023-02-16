@@ -313,33 +313,26 @@ echo after epi_pid wait
 #exit 0
 #Converts the epi_to_T1 registration parameters from FSL to ANTs format
 #https://neurostars.org/t/epi-to-t1-registration/2677
-c3d_affine_tool -ref ${coregdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
-echo "BB"
-##wait $ANTS_PID
-##wait $SCMOCO_PID1
-##wait $SCMOCO_PID2
-##wait $SCMOCO_PID3
-##wait $SCMOCO_PID4
 
-#antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
+echo "now using c3d_affine_tool"
+#c3d_affine_tool -ref ${coregdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+echo "c3d_affine_tool complete"
 
+
+echo "now using antsApplyTransforms tool"
+antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
+echo "antsApplyTransforms complete"
+
+
+
+echo "now using WarpTimeSeriesMultiTransform tool"
 #Warps the 4d timeseries to template space in order of: EPI-to-T1 affine transformation, affine warp to template, Nonlinear deformation to template
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
 Warp_PID1=$!
+echo "antsApplyTransforms complete"
 
-echo "BBB"
-#WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_r01.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_r01.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
-#Warp_PID2=$!
-
-#WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_r02.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_r02.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
-#Warp_PID3=$!
-
-#WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_r03.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_r03.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
-#Warp_PID4=$!
-
-#WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_r04.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_r04.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
-#Warp_PID5=$!
 
 wait $Warp_PID1
 echo "CC"
