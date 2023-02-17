@@ -278,7 +278,7 @@ echo epi_orig $epi_orig
 
 epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
 
-EPI_PID=$!
+#EPI_PID=$!
  
 start=`date +%s`
 
@@ -306,10 +306,10 @@ echo "AAAA"
 
 #mcflirt -in ${epi_orig} -reffile ${coregdir}/${vepi} -out ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -mats -plots -rmsrel -rmsabs -report &
 #MCFLIRT_PID=$!
-echo "waiting for moco and epi"
+echo "waiting for moco"
 wait $SCMOCO_PID
-wait $EPI_PID
-echo after epi_pid wait
+#wait $EPI_PID
+#echo after epi_pid wait
 #exit 0
 #Converts the epi_to_T1 registration parameters from FSL to ANTs format
 #https://neurostars.org/t/epi-to-t1-registration/2677
