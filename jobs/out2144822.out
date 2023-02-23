@@ -1,8 +1,0 @@
-subIDpath: /data/000300655084
-subPath: /data
-subjectID: 000300655084
-mocodir: /data/derivatives/000300655084/motion
-coregdir: /data/derivatives/000300655084/coregistration
-normdir: /data/derivatives/000300655084/normalization
-procdir: /data/derivatives/000300655084/processed
-anatdir: /data/derivatives/000300655084/anat
