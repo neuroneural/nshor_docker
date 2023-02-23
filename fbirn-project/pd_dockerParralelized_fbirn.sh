@@ -203,6 +203,11 @@ function moco_sc() {
     	cd ${mocodir}
 	#Metadata extraction
 
+
+	#TODO: I should just use an if statement to check if these .json files exist, if they don't, skip all the commented functions for timeslicing
+	#TODO: I should let Dr. Plis know that this is how I am handling these json files missing
+
+
 	#Pulls the Slice timing info from the json file
 	#abids_json_info.py -field SliceTiming -json ${subIDpath}/func/${sdir}_task-rest_run-04_bold.json | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
 	echo "inside moco function 1 - don't need to pull slice timing from json file, use dataseries.txt"
