@@ -1,8 +1,7 @@
 Variables legend for `pd_dockerParralelized_fbirn.sh`
 
-
-|Variable / Function Name|Value|Meaning|
-| --- | --- | --- |
+|  Variable / Function Name |  Value |    Meaning |
+| --------- |:---|:---------|:-----|
 |`FSLDIR`  |  `/usr/share/fsl/5.0`| directory where FLS is installed on the docker container|
 | `AFNIbinPATH` | `/usr/local/AFNIbin` | directory of AFNI binary executable files  |
 | `subjectID` | `000300655084` | ID of the subject being processed at this thread in the current instance of the script |
