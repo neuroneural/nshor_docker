@@ -129,7 +129,7 @@ wait $SCMOCO_PID
 
 
 echo "now using c3d_affine_tool"
-c3d_affine_tool -ref ${anatdir}/T1_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+c3d_affine_tool -ref ${anatdir}/T1_bc_ss.nii.gz -src ${coregdir}/${vepi} -o ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 echo "c3d_affine_tool complete"
 
 
