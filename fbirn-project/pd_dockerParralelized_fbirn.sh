@@ -114,8 +114,6 @@ epi_orig=${subIDpath}/func/rest.nii
 
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
 
-epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
-
 start=`date +%s`
 
 1deval -num 25 -expr t+10 > t0.1D
