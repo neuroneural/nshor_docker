@@ -64,12 +64,11 @@ function skullstrip() {
     anatdir=$4
 
     #Performs the N3/4 Bias correction on the T1 and Extracts the Brain
-    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/T1.nii -o ${anatdir}/T1_bc.nii
+    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/T1.nii -o ${anatdir}/T1_bc.nii.gz
 
     cd /ROBEX
 
-    #./ROBEX ${anatdir}/${subjectID}_run-01_T1w_bc.nii.gz ${anatdir}/${subjectID}_run-01_T1w_bc_ss.nii.gz
-    ./ROBEX ${anatdir}/T1_bc.nii ${anatdir}/T1_bc_ss.nii
+    ./ROBEX ${anatdir}/T1_bc.nii.gz ${anatdir}/T1_bc_ss.nii.gz
     echo 'finished skullstrip'
 }
 
@@ -105,8 +104,8 @@ SKULL_PID=$!
  
 wait ${SKULL_PID}
 
-vrefbrain=T1_bc_ss.nii
-vrefhead=T1_bc.nii
+vrefbrain=T1_bc_ss.nii.gz
+vrefhead=T1_bc.nii.gz
 
 vepi=rest.nii
 vout=${subjectID}_rfMRI_v0_correg
@@ -130,7 +129,7 @@ wait $SCMOCO_PID
 
 
 echo "now using c3d_affine_tool"
-c3d_affine_tool -ref ${anatdir}/T1_bc_ss.nii -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+c3d_affine_tool -ref ${anatdir}/T1_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 echo "c3d_affine_tool complete"
 
 
