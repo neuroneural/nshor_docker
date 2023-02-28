@@ -136,12 +136,15 @@ start=`date +%s`
 1deval -num 25 -expr t+10 > t0.1D
 
 epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
+echo "waiting for epireg_set"
 EPI_PID=$!
- 
+echo "done waiting for epireg_set"
 
 skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
 SKULL_PID=$!
+echo "waiting for skull strip"
 wait ${SKULL_PID}
+echo "done waiting for skull strip"
 
 
 echo "now using WarpTimeSeriesMultiTransform tool"
@@ -159,7 +162,7 @@ SCMOCO_PID=$!
 echo "waiting for moco"
 wait $SCMOCO_PID
 wait $EPI_PID
-echo finished epi_pid wait
+echo finished moco and epi_pid wait
 
 
 
