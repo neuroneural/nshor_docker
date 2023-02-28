@@ -55,42 +55,30 @@ mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
 
-#I don't think this function will work unless we have these bias_map and bias_field files
-# need $subjectID\_3T_BIAS_32CH.nii.gz
-# need $subjectID\_3T_BIAS_BC.nii.gz
-# what/where are these for FBIRN dataset
-function afni_set() {
-    subIDpath=$1
-    subPath=$2
-    subjectID=$3
- 
-    echo "inside function afni_set 1: 3dcalc bias correction using division"   
-    3dcalc -a ${subIDpath}/biasmaps/$subjectID\_3T_BIAS_32CH.nii.gz -b ${subIDpath}/biasmaps/$subjectID\_3T_BIAS_BC.nii.gz -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
+function epireg_set() {
+        coregdir=$1
+        vrefbrain=$2
+        vepi=$3
+        vout=$4
+        vrefhead=$5
+        echo "coregdir $coregdir"
+        echo "vrefbrain $vrefbrain"
+        echo "vepi $vepi"
+        echo "vout $vout"
+        cd ${coregdir}
+        ln -s ../anat/${vrefbrain} .
+	ln -s ../anat/${vrefhead} .
+        #  ln -s ../SBRef/${vepi} .
+        
+        $FSLDIR/bin/fast -N -o ${vout}_fast ${vrefbrain}
+        $FSLDIR/bin/fslmaths ${vout}_fast_pve_2 -thr 0.5 -bin ${vout}_fast_wmseg
 
-
-    echo "inside function afni_set 2: 3dWarp1"
-    3dWarp -deoblique -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz
-    mkdir -p  ${subPath}/derivatives/$subjectID/SBRef
-
-
-    echo "inside function afni_set 3: 3dAutomask"
-    3dAutomask -dilate 2 -prefix ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz $subIDpath/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef.nii.gz
-
-
-    echo "inside function afni_set 4: 3dWarp2"
-    3dWarp -oblique_parent $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -gridset $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz
-    mkdir -p ${subPath}/derivatives/$subjectID/func
-
-
-    echo "inside function afni_set 5: 3dcalc biascorrection multiplication"
-    3dcalc -float -a $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
-
-
-    echo "inside function afni_set 6: 3dcalc more multiplication"
-    3dcalc  -float  -a $subIDpath/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
-    echo 'finished afni_set'
+        echo "FLIRT pre-alignment"
+        $FSLDIR/bin/flirt -ref ${vrefbrain} -in ${vepi} -dof 6 -omat ${vout}_init.mat
+        $FSLDIR/bin/flirt -ref ${vrefhead} -in ${vepi} -dof 6 -cost bbr -wmseg ${vout}_fast_wmseg -init ${vout}_init.mat -omat ${vout}.mat -out ${vout} -schedule ${FSLDIR}/etc/flirtsch/bbr.sch
+        $FSLDIR/bin/applywarp -i ${vepi} -r ${vrefhead} -o ${vout} --premat=${vout}.mat --interp=spline
+        echo "finished epireg_set"
 }
-
 
 function skullstrip() {
     echo "function skullstrip was called"
@@ -143,16 +131,13 @@ vepi=rest.nii
 vout=${subjectID}_rfMRI_v0_correg
 
 epi_orig=${subIDpath}/func/rest.nii
-
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
-
 start=`date +%s`
-
 1deval -num 25 -expr t+10 > t0.1D
 
-
-afni_set ${subIDpath} ${subPath} ${subjectID} &
-AFNI_PID=$!
+epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
+EPI_PID=$!
+ 
 
 skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
 SKULL_PID=$!
@@ -174,6 +159,8 @@ SCMOCO_PID=$!
 
 echo "waiting for moco"
 wait $SCMOCO_PID
+wait $EPI_PID
+echo finished epi_pid wait
 
 
 
