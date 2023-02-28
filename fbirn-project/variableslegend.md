@@ -24,23 +24,20 @@ Variables legend for `pd_dockerParralelized_fbirn.sh`
 |`ref_vol`|||
 |`suffix`|`rest`|this is suffix that should be placed in the file names associated with fMRI intermediate processing files (?)|
 |`TR`|2|variable containing repetition time for the time sequence, TR is the length of time between corresponding consecutive points on a repeating series of pulses and echoes|
-|`3dDespike`|N/A|removes 'spikes' from the 3D+time input dataset and writes
-a new dataset with the spike values replaced by something
-more pleasing to the eye.|
+|`3dDespike`|N/A|removes 'spikes' from the 3D+time input dataset and writes a new dataset with the spike values replaced by something more pleasing to the eye.|
 |`3dvolreg`|N/A|registers each 3D sub-brick from the input dataset to the base brick|
 |`3dresample`|-orient RPI|an AFNI function used to reorient the axes to a new order, with `OR_CODE=RPI` this means orient the x axis as right to left, posterior to anterior for the y axis, and inferior to superior for the z axis |
 |`vrefbrain`|`T1_bc_ss.nii.gz`|anatomical brain obtained from sMRI after performing bias corection and skull strip used to construct future images (?2)|
 |`vrefhead`|`T1_bc.nii.gz`|anatomical head obtainted from sMRI scan of patient before skull stripping, used to construct future files involving head (?1)|
 |`vepi`|`rest.nii`|file containing bold signal for one run of the current subject being processed at this thread in the current instance of the script|
 |`vout`|`${subjectID}_rfMRI_v0_correg`|suffix used to name the output files associated with corregistration|
-|`epi_orig`|||
-|`3dcalc`|||
-|`1deval`|||
-|`SCMOCO_PID`|||
-|`c3d_affine_tool`|||
-|`antsApplyTransforms`|||
-|`WarpTimeSeriesImageMultiTransform`|||
-|`Warp_PID1`|||
+|`3dcalc`|N/A|This program does voxel-by-voxel arithmetic on 3D datasets|
+|`1deval`|N/A|Evaluates an expression that may include columns of data from one or more text files and writes the result to stdout.|
+|`SCMOCO_PID`|$!|captures the process id of the `moco_sc` right after it is called|
+|`c3d_affine_tool`| N/A| special complementary tool built to work with ITK-Snap and convert3d to manipulate the transform file. The transform file contains a matrix representing a transform from the physical space of the reference image to the physical space of the moving image, (convert between FSL and ANTs transform matrix files) |
+|`antsApplyTransforms`|N/A|applied to an input image, transforms it according to a reference image and a transform (or a set of transforms)|
+|`WarpTimeSeriesImageMultiTransform`|N/A|warps fMRI data to the MNI template|
+|`Warp_PID1`| $! | catches the process id of the `WarpTimeSeriesImageMultiTransform` function call so it can be passed to a wait function later|
 
 
 
