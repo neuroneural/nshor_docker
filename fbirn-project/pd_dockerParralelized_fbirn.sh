@@ -66,12 +66,18 @@ function epireg_set() {
         echo "vepi $vepi"
         echo "vout $vout"
         cd ${coregdir}
-        ln -s ../anat/${vrefbrain} .
-	ln -s ../anat/${vrefhead} .
-        #  ln -s ../SBRef/${vepi} .
-        
+        #ln -s ../anat/${vrefbrain} .
+	#ln -s ../anat/${vrefhead} .
+        cp ../anat/${vrefbrain} .
+        cp ../anat/${vrefhead} .
+       
+	echo "doing FSL fast"
         $FSLDIR/bin/fast -N -o ${vout}_fast ${vrefbrain}
+	echo "done doing FSL fast"
+
+	echo "doing FSLmaths"
         $FSLDIR/bin/fslmaths ${vout}_fast_pve_2 -thr 0.5 -bin ${vout}_fast_wmseg
+	echo " done doing FSLmaths"
 
         echo "FLIRT pre-alignment"
         $FSLDIR/bin/flirt -ref ${vrefbrain} -in ${vepi} -dof 6 -omat ${vout}_init.mat
@@ -108,15 +114,12 @@ function moco_sc() {
 
 	TR=2
 	
-	#'Despikes' the data (removes outliers) prior to image registration
 	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
 	echo "inside moco fucntion 4 - removed outliers with despike sucessfully"
     
-	#Performs realignment to the reference volume. Some call this "motion correction"
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz
 	echo "inside moco fucntion 6 - motion corrected using 3dvolreg successful"
 
-	#Reorients the data
     	3dresample -orient RPI -inset moco_${suffix}+tlrc.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
 	echo "inside moco function 7 - data reorientation using 3dresample successful"
     	echo 'finish moco_sc'
@@ -133,12 +136,7 @@ vout=${subjectID}_rfMRI_v0_correg
 epi_orig=${subIDpath}/func/rest.nii
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
 start=`date +%s`
-1deval -num 25 -expr t+10 > t0.1D
 
-epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
-echo "waiting for epireg_set"
-EPI_PID=$!
-echo "done waiting for epireg_set"
 
 skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
 SKULL_PID=$!
@@ -147,38 +145,62 @@ wait ${SKULL_PID}
 echo "done waiting for skull strip"
 
 
-echo "now using WarpTimeSeriesMultiTransform tool"
-#Warps the 4d timeseries to template space in order of: EPI-to-T1 affine transformation, affine warp to template, Nonlinear deformation to template
-WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
-Warp_PID1=$!
-echo "antsApplyTransforms complete"
+echo "now checking to see if script can find mask and template brain"
+echo "checking for template MASK"
+FILE=${templatemask}
+if test -f "$FILE"; then
+    echo "$FILE exists."
+fi
+
+echo "checking for template brain"
+FILE=${template}
+if test -f "$FILE"; then
+    echo "$FILE exists."
+else
+    echo "$FILE is not there"
+fi
 
 
+echo "doing antsRegistration"
+antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+ANTS_PID=$! 
+wait ${ANTS_PID}
+echo "done doing antsRegistration"
+
+epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
+EPI_PID=$!
+wait ${EPI_PID}
 
 
 moco_sc ${epi_orig} ${coregdir}/${vepi} ${subjectID} rest &
 SCMOCO_PID=$!
-
 echo "waiting for moco"
 wait $SCMOCO_PID
-wait $EPI_PID
-echo finished moco and epi_pid wait
+echo "done waiting for moco"
 
-
-
-
+echo "trying mcflirt"
+mcflirt -in ${epi_orig} -reffile ${coregdir}/${vepi} -out ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -mats -plots -rmsrel -rmsabs -report &
+MCFLIRT_PID=$!
+wait ${MCFLIRT_PID}
+echo "done trying mcflirt"
 
 echo "now using c3d_affine_tool"
-c3d_affine_tool -ref ${anatdir}/T1_bc_ss.nii.gz -src ${coregdir}/${vepi} -o ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 echo "c3d_affine_tool complete"
 
 
-echo "now using antsApplyTransforms tool"
+
+echo "try antsApplyTransforms"
 antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
-echo "antsApplyTransforms complete"
+ANTS_APPID=$!
+wait ${ANTS_APPID}
+echo "antsApplyTransformsComplete"
 
 
-
+echo "now using WarpTimeSeriesMultiTransform tool"
+WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
+Warp_PID1=$!
+echo "WarpTimeSeriesMultiTransform complete"
 
 
 wait $Warp_PID1
