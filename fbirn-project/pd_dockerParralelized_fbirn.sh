@@ -55,6 +55,42 @@ mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
 
+#I don't think this function will work unless we have these bias_map and bias_field files
+# need $subjectID\_3T_BIAS_32CH.nii.gz
+# need $subjectID\_3T_BIAS_BC.nii.gz
+# what/where are these for FBIRN dataset
+function afni_set() {
+    subIDpath=$1
+    subPath=$2
+    subjectID=$3
+ 
+    echo "inside function afni_set 1: 3dcalc bias correction using division"   
+    3dcalc -a ${subIDpath}/biasmaps/$subjectID\_3T_BIAS_32CH.nii.gz -b ${subIDpath}/biasmaps/$subjectID\_3T_BIAS_BC.nii.gz -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
+
+
+    echo "inside function afni_set 2: 3dWarp1"
+    3dWarp -deoblique -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz
+    mkdir -p  ${subPath}/derivatives/$subjectID/SBRef
+
+
+    echo "inside function afni_set 3: 3dAutomask"
+    3dAutomask -dilate 2 -prefix ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz $subIDpath/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef.nii.gz
+
+
+    echo "inside function afni_set 4: 3dWarp2"
+    3dWarp -oblique_parent $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -gridset $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz
+    mkdir -p ${subPath}/derivatives/$subjectID/func
+
+
+    echo "inside function afni_set 5: 3dcalc biascorrection multiplication"
+    3dcalc -float -a $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
+
+
+    echo "inside function afni_set 6: 3dcalc more multiplication"
+    3dcalc  -float  -a $subIDpath/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef.nii.gz -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+    echo 'finished afni_set'
+}
+
 
 function skullstrip() {
     echo "function skullstrip was called"
@@ -99,10 +135,6 @@ function moco_sc() {
 }
 
 
-skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
-SKULL_PID=$!
- 
-wait ${SKULL_PID}
 
 vrefbrain=T1_bc_ss.nii.gz
 vrefhead=T1_bc.nii.gz
@@ -118,12 +150,33 @@ start=`date +%s`
 
 1deval -num 25 -expr t+10 > t0.1D
 
-moco_sc ${epi_orig} ${coregdir}/${vepi} ${subjectID} rest &
 
+afni_set ${subIDpath} ${subPath} ${subjectID} &
+AFNI_PID=$!
+
+skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
+SKULL_PID=$!
+wait ${SKULL_PID}
+
+
+echo "now using WarpTimeSeriesMultiTransform tool"
+#Warps the 4d timeseries to template space in order of: EPI-to-T1 affine transformation, affine warp to template, Nonlinear deformation to template
+WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
+Warp_PID1=$!
+echo "antsApplyTransforms complete"
+
+
+wait ${AFNI_PID}
+
+
+moco_sc ${epi_orig} ${coregdir}/${vepi} ${subjectID} rest &
 SCMOCO_PID=$!
 
 echo "waiting for moco"
 wait $SCMOCO_PID
+
+
+
 
 
 echo "now using c3d_affine_tool"
@@ -137,11 +190,6 @@ echo "antsApplyTransforms complete"
 
 
 
-echo "now using WarpTimeSeriesMultiTransform tool"
-#Warps the 4d timeseries to template space in order of: EPI-to-T1 affine transformation, affine warp to template, Nonlinear deformation to template
-WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt &
-Warp_PID1=$!
-echo "antsApplyTransforms complete"
 
 
 wait $Warp_PID1
