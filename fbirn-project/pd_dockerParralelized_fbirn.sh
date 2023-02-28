@@ -151,7 +151,6 @@ Warp_PID1=$!
 echo "antsApplyTransforms complete"
 
 
-wait ${AFNI_PID}
 
 
 moco_sc ${epi_orig} ${coregdir}/${vepi} ${subjectID} rest &
