@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=00:15:00
 #SBATCH --mem=200M
-#SBATCH --array=0-$NUMFILES
+#SBATCH --array=0-$1
 #SBATCH -n 1
 #SBATCH -c 5
 #SBATCH -p qTRD
@@ -10,7 +10,7 @@
 #SBATCH -o /data/users2/jwardell1/fbirn-project/jobs/out%A.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=jwardell1@student.gsu.edu
+#SBATCH --mail-user=jwardell1@gsu.edu
 #SBATCH --oversubscribe
 
 

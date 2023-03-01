@@ -4,6 +4,7 @@
 #SBATCH --mem=5g
 #SBATCH -p qTRD
 #SBATCH -t 2-00:00
+##SBATCH --array=0-368
 #SBATCH -J fbirn-test
 #SBATCH -e /data/users2/jwardell1/nshor_docker/fbirn-project/jobs/error%A.err
 #SBATCH -o /data/users2/jwardell1/nshor_docker/fbirn-project/jobs/out%A.out
@@ -16,7 +17,14 @@ sleep 5s
 
 module load singularity/3.10.2
 
-singularity exec --bind .:/run/,/data/users2/jwardell1/nshor_docker/fbirn-project/000300655084-download/:/data /data/users2/washbee/tdassist/Dockerbuild/nshor2.sif /run/pd_dockerParralelized_fbirn.sh &
+DATA_LOCATION=/data/users2/jwardell1/nshor_docker/fbirn-project/000300655084-download/
+DATA_BIND_POINT=/data
+SIF_FILE=/data/users2/washbee/tdassist/Dockerbuild/nshor2.sif
+RUN_BIND_POINT=/run/
+SCRIPT_NAME=pd_dockerParralelized_fbirn.sh
+OUTPUT_DIRECTORY=/data/users2/jwardell1/nshor_docker/fbirn-project/
+
+singularity exec --bind .:${RUN_BIND_POINT},${DATA_LOCATION}:${DATA_BIND_POINT} ${SIF_FILE} ${RUN_BIND_POINT}${SCRIPT_NAME} ${SLURM_ARRAY_TASK_ID} ${OUTPUT_DIRECTORY} &
 
 wait
 
