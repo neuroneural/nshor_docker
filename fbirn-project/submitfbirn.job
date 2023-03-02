@@ -22,7 +22,7 @@ DATA_BIND_POINT=/data
 SIF_FILE=/data/users2/washbee/tdassist/Dockerbuild/nshor2.sif
 RUN_BIND_POINT=/run/
 SCRIPT_NAME=pd_dockerParralelized_fbirn.sh
-OUTPUT_DIRECTORY=/data/users2/jwardell1/nshor_docker/fbirn-project/
+OUTPUT_DIRECTORY=/data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/
 OUTPUT_BINDING=/out
 SUBJECTS_FILE=/data/users2/jwardell1/nshor_docker/fbirn-project/subjects.txt
 
