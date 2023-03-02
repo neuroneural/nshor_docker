@@ -17,7 +17,7 @@ sleep 5s
 
 module load singularity/3.10.2
 
-DATA_LOCATION=/data/users2/jwardell1/nshor_docker/fbirn-project/000300655084-download/
+DATA_LOCATION=/data/qneuromark/Data/FBIRN/Data_BIDS/Raw_Data/
 DATA_BIND_POINT=/data
 SIF_FILE=/data/users2/washbee/tdassist/Dockerbuild/nshor2.sif
 RUN_BIND_POINT=/run/

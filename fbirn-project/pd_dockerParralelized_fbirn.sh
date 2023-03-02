@@ -13,7 +13,7 @@ done
 
 #Creates subjectIDs
 subjectID=${a[${SLURM_TASK_ID}]}
-subDataRead=/data/$subjectID
+subDataRead=/data/$subjectID/ses_01/
 outputUniverse=/out
 start=`date +%s`
 
