@@ -3,7 +3,7 @@
 set -x
 set -e
 
-SLURM_ARRAY_TASK_ID=$1
+SLURM_TASK_ID=$1
 SUBJECTS_FILE=$2
 
 IFS=$'\n' a=($(cat ${SUBJECTS_FILE}))
@@ -13,8 +13,8 @@ done
 
 #Creates subjectIDs
 subjectID=${a[${SLURM_TASK_ID}]}
-subIDpath=/data/$subjectID
-subPath=`dirname ${subIDpath}`
+subDataRead=/data/$subjectID
+outputUniverse=/out
 start=`date +%s`
 
 #Sets FSL Paths
@@ -33,26 +33,20 @@ PATH=${FSLDIR}/bin:${PATH}
 export FSLDIR PATH
 . ${FSLDIR}/etc/fslconf/fsl.sh
 
-
-
-
-#ImageTagging
-acqparams=${subPath}/derivatives/acqparams.txt
-
 #Marks the template to be used
 template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
 templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
 
 #Bias-Correction SBREF and EPI
-mkdir -p  ${subPath}/derivatives/$subjectID
-mkdir -p ${subPath}/derivatives/$subjectID/bias_field
+mkdir -p  ${outputUniverse}/derivatives/$subjectID
+mkdir -p ${outputUniverse}/derivatives/$subjectID/bias_field
 
 #Generates directory names in the derivatives folders according to BIDS specifications
-mocodir=${subPath}/derivatives/${subjectID}/motion
-coregdir=${subPath}/derivatives/${subjectID}/coregistration
-normdir=${subPath}/derivatives/${subjectID}/normalization
-procdir=${subPath}/derivatives/${subjectID}/processed
-anatdir=${subPath}/derivatives/${subjectID}/anat
+mocodir=${outputUniverse}/derivatives/${subjectID}/motion
+coregdir=${outputUniverse}/derivatives/${subjectID}/coregistration
+normdir=${outputUniverse}/derivatives/${subjectID}/normalization
+procdir=${outputUniverse}/derivatives/${subjectID}/processed
+anatdir=${outputUniverse}/derivatives/${subjectID}/anat
 
 #Makes the directories
 mkdir -p  ${coregdir}
@@ -73,8 +67,6 @@ function epireg_set() {
         echo "vepi $vepi"
         echo "vout $vout"
         cd ${coregdir}
-        #ln -s ../anat/${vrefbrain} .
-	#ln -s ../anat/${vrefhead} .
         cp ../anat/${vrefbrain} .
         cp ../anat/${vrefhead} .
        
@@ -95,13 +87,12 @@ function epireg_set() {
 
 function skullstrip() {
     echo "function skullstrip was called"
-    subIDpath=$1
-    subPath=$2
-    subjectID=$3
-    anatdir=$4
+    subDataRead=$1
+    subjectID=$2
+    anatdir=$3
 
     #Performs the N3/4 Bias correction on the T1 and Extracts the Brain
-    N4BiasFieldCorrection -d 3 -i ${subIDpath}/anat/T1.nii -o ${anatdir}/T1_bc.nii.gz
+    N4BiasFieldCorrection -d 3 -i ${subDataRead}/anat/T1.nii -o ${anatdir}/T1_bc.nii.gz
 
     cd /ROBEX
 
@@ -140,12 +131,12 @@ vrefhead=T1_bc.nii.gz
 vepi=rest.nii
 vout=${subjectID}_rfMRI_v0_correg
 
-epi_orig=${subIDpath}/func/rest.nii
+epi_orig=${subDataRead}/func/rest.nii
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
 start=`date +%s`
 
 
-skullstrip ${subIDpath} ${subPath} ${subjectID} ${anatdir}&
+skullstrip ${subDataRead} ${subjectID} ${anatdir}&
 SKULL_PID=$!
 echo "waiting for skull strip"
 wait ${SKULL_PID}
