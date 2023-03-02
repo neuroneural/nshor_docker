@@ -23,8 +23,10 @@ SIF_FILE=/data/users2/washbee/tdassist/Dockerbuild/nshor2.sif
 RUN_BIND_POINT=/run/
 SCRIPT_NAME=pd_dockerParralelized_fbirn.sh
 OUTPUT_DIRECTORY=/data/users2/jwardell1/nshor_docker/fbirn-project/
+OUTPUT_BINDING=/out
+SUBJECTS_FILE=/data/users2/jwardell1/nshor_docker/fbirn-project/subjects.txt
 
-singularity exec --bind .:${RUN_BIND_POINT},${DATA_LOCATION}:${DATA_BIND_POINT} ${SIF_FILE} ${RUN_BIND_POINT}${SCRIPT_NAME} ${SLURM_ARRAY_TASK_ID} ${OUTPUT_DIRECTORY} &
+singularity exec --bind .:${RUN_BIND_POINT},${DATA_LOCATION}:${DATA_BIND_POINT},${OUTPUT_DIRECTORY}:${OUTPUT_BINDING} ${SIF_FILE} ${RUN_BIND_POINT}${SCRIPT_NAME} ${SLURM_ARRAY_TASK_ID} ${SUBJECTS_FILE} &
 
 wait
 

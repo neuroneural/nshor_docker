@@ -3,6 +3,20 @@
 set -x
 set -e
 
+SLURM_ARRAY_TASK_ID=$1
+SUBJECTS_FILE=$2
+
+IFS=$'\n' a=($(cat ${SUBJECTS_FILE}))
+for i in $(seq ${#a[*]}); do
+    [[ ${a[$i-1]} = $name ]] && echo "${a[$i]}"
+done
+
+#Creates subjectIDs
+subjectID=${a[${SLURM_TASK_ID}]}
+subIDpath=/data/$subjectID
+subPath=`dirname ${subIDpath}`
+start=`date +%s`
+
 #Sets FSL Paths
 FSLDIR=/usr/share/fsl/5.0
 
@@ -21,13 +35,6 @@ export FSLDIR PATH
 
 
 
-#dirname = /data
-
-#Creates subjectIDs
-subjectID="000300655084"
-subIDpath=/data/$subjectID
-subPath=`dirname ${subIDpath}`
-start=`date +%s`
 
 #ImageTagging
 acqparams=${subPath}/derivatives/acqparams.txt
