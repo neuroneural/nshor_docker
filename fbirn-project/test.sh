@@ -7,7 +7,8 @@ echo "1 is $1"
 
 IFS=$'\n' a=($(cat ${SUBJECTS_FILE}))
 for i in $(seq ${#a[*]}); do
-    [[ ${a[$i-1]} = $name ]] && echo "${a[$i]}"
+    [[ ${a[$i-1]} = $name ]]
+    echo "${a[$i]}"
 done
 
 #RANDOM=$$$(date +%s)

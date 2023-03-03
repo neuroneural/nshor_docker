@@ -6,14 +6,19 @@ set -e
 SLURM_TASK_ID=$1
 SUBJECTS_FILE=$2
 
+echo "SLURM_TASK_ID is ${SLURM_TASK_ID}"
+echo "1 is $1"
+echo "2 is $2"
+
 IFS=$'\n' a=($(cat ${SUBJECTS_FILE}))
 for i in $(seq ${#a[*]}); do
-    [[ ${a[$i-1]} = $name ]] && echo "${a[$i]}"
+    [[ ${a[$i-1]} = $name ]]
 done
 
 #Creates subjectIDs
 subjectID=${a[${SLURM_TASK_ID}]}
-subDataRead=/data/$subjectID/ses_01/
+echo "subject ID is ${subjectID}"
+subDataRead=/data/${subjectID}/ses_01
 outputUniverse=/out
 start=`date +%s`
 
