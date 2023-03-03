@@ -11,9 +11,9 @@ echo "1 is $1"
 echo "2 is $2"
 
 IFS=$'\n' a=($(cat ${SUBJECTS_FILE}))
-for i in $(seq ${#a[*]}); do
-    [[ ${a[$i-1]} = $name ]]
-done
+#for i in $(seq ${#a[*]}); do
+#    [[ ${a[$i-1]} = $name ]]
+#done
 
 #Creates subjectIDs
 subjectID=${a[${SLURM_TASK_ID}]}

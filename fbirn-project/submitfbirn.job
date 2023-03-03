@@ -4,7 +4,7 @@
 #SBATCH --mem=5g
 #SBATCH -p qTRD
 #SBATCH -t 2-00:00
-##SBATCH --array=368
+##SBATCH --array=0-368
 #SBATCH -J fbirn-test
 #SBATCH -e /data/users2/jwardell1/nshor_docker/fbirn-project/jobs/error%A.err
 #SBATCH -o /data/users2/jwardell1/nshor_docker/fbirn-project/jobs/out%A.out
@@ -21,7 +21,7 @@ DATA_LOCATION=/data/qneuromark/Data/FBIRN/Data_BIDS/Raw_Data/
 DATA_BIND_POINT=/data
 SIF_FILE=/data/users2/washbee/tdassist/Dockerbuild/nshor2.sif
 RUN_BIND_POINT=/run
-SCRIPT_NAME=pd_dockerParralelized_fbirn.sh
+SCRIPT_NAME=pd_dockerParallelized_fbirn.sh
 OUTPUT_DIRECTORY=/data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/
 OUTPUT_BINDING=/out
 SUBJECTS_FILE=/data/users2/jwardell1/nshor_docker/fbirn-project/subjects.txt
