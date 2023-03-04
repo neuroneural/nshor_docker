@@ -1,5 +1,6 @@
 #!/bin/bash
-  
+# The script expects the user to prepare a text file with a list of paths one line per subject. The list will be indexed by job number and is meant to be run on the entire list in slurm from start to end. If the jobs in slurm crash and restarted every subject needs to be re-processed.
+
 set -x
 set -e
 
@@ -136,15 +137,13 @@ vrefhead=T1_bc.nii.gz
 vepi=rest.nii
 vout=${subjectID}_rfMRI_v0_correg
 
-epi_orig=${subDataRead}/func/rest.nii
+epi_orig=${subDataRead}/func/rest.nii # should not be hardcoded
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
 start=`date +%s`
 
 
-skullstrip ${subDataRead} ${subjectID} ${anatdir}&
-SKULL_PID=$!
 echo "waiting for skull strip"
-wait ${SKULL_PID}
+skullstrip ${subDataRead} ${subjectID} ${anatdir}
 echo "done waiting for skull strip"
 
 
