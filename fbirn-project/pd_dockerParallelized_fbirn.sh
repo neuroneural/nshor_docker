@@ -5,18 +5,22 @@ set -x
 set -e
 
 SLURM_TASK_ID=$1
-SUBJECTS_FILE=$2
+SUB_PATHS=$2
+OUTPUT_DIRECTORY=$3
+subjectID=$4
 
 
-IFS=$'\n' a=($(cat ${SUBJECTS_FILE}))
-#for i in $(seq ${#a[*]}); do
-#    [[ ${a[$i-1]} = $name ]]
-#done
+IFS=$'\n'
+paths_array=($(cat ${SUB_PATH}))
+func_ix=$(( 2*$SLURM_TASK_ID ))
+anat_ix=$(( 2*$SLURM_TASK_ID + 1 ))
+func_filepath=${paths_array[${func_ix}]}
+anat_filepath=${paths_array[${anat_ix}]}
 
-#Creates subjectIDs
-subjectID=${a[${SLURM_TASK_ID}]}
-subDataRead=/data/${subjectID}/ses_01
-outputUniverse=/out
+outputUniverse=. #change to use pwd
+clusterHostname=arctrdgndev101.rs.gsu.edu 
+clusterUsername=jwardell1 #how to generalize? should ask for these settings from user in text file.
+clusterOutPath=/data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/resSCP/ #how to generalize? should ask for in txt file
 start=`date +%s`
 
 #Sets FSL Paths
@@ -43,7 +47,7 @@ templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
 mkdir -p  ${outputUniverse}/derivatives/$subjectID
 mkdir -p ${outputUniverse}/derivatives/$subjectID/bias_field
 
-#Generates directory names in the derivatives folders according to BIDS specifications
+#make output directories
 mocodir=${outputUniverse}/derivatives/${subjectID}/motion
 coregdir=${outputUniverse}/derivatives/${subjectID}/coregistration
 normdir=${outputUniverse}/derivatives/${subjectID}/normalization
@@ -78,12 +82,10 @@ function epireg_set() {
 }
 
 function skullstrip() {
-    subDataRead=$1
-    subjectID=$2
-    anatdir=$3
+    anatdir=$1
 
     #Performs the N3/4 Bias correction on the T1 and Extracts the Brain
-    N4BiasFieldCorrection -d 3 -i ${subDataRead}/anat/T1.nii -o ${anatdir}/T1_bc.nii.gz
+    N4BiasFieldCorrection -d 3 -i $anat_filepath -o ${anatdir}/T1_bc.nii.gz
 
     cd /ROBEX
 
@@ -94,7 +96,7 @@ function skullstrip() {
 function moco_sc() {
         epi_in=$1
         ref_vol=$2
-        subjectID=$3
+	subjectID=$3
         suffix=$4
         
     	cd ${mocodir}
@@ -113,13 +115,13 @@ function moco_sc() {
 vrefbrain=T1_bc_ss.nii.gz
 vrefhead=T1_bc.nii.gz
 
-vepi=rest.nii
+vepi=$func_filepath
 vout=${subjectID}_rfMRI_v0_correg
 
-epi_orig=${subDataRead}/func/rest.nii # should not be hardcoded
+epi_orig=$func_filepath
 
 
-skullstrip ${subDataRead} ${subjectID} ${anatdir}
+skullstrip ${anatdir}
 
 antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
@@ -150,15 +152,9 @@ antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $t
 
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
-
-cp ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz ${procdir}
-cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
-cp ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt ${procdir}
-cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
-cp ${template} ${procdir}
-cp ${coregdir}/${subjectID}_rfMRI_v0_correg.mat  ${procdir}
-cp ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}
-cp ${anatdir}/T1_bc_ss.nii.gz  ${procdir}
+echo "try scp from container"
+scp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${clusterUsername}@${clusterHostname}:$OUTPUT_DIRECTORY
+echo "done trying scp from container"
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt
