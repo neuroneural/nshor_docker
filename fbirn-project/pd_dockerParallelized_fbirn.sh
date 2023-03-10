@@ -4,18 +4,10 @@
 set -x
 set -e
 
-SLURM_TASK_ID=$1
-SUB_PATHS=$2
-OUTPUT_DIRECTORY=$3
-subjectID=$4
-
-
-IFS=$'\n'
-paths_array=($(cat ${SUB_PATH}))
-func_ix=$(( 2*$SLURM_TASK_ID ))
-anat_ix=$(( 2*$SLURM_TASK_ID + 1 ))
-func_filepath=${paths_array[${func_ix}]}
-anat_filepath=${paths_array[${anat_ix}]}
+func_filepath=$1
+anat_filepath=$2
+out_filepath=$3
+subjectID=`basename $out_filepath`
 
 outputUniverse=. #change to use pwd
 clusterHostname=arctrdgndev101.rs.gsu.edu 

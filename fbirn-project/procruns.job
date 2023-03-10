@@ -1,0 +1,39 @@
+#!/bin/bash
+#SBATCH -n 1
+#SBATCH -c 4
+#SBATCH --mem=5g
+#SBATCH -p qTRD
+#SBATCH --time=00:20:00
+#SBATCH -J fbirn-test
+#SBATCH -e /data/users2/jwardell1/nshor_docker/fbirn-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/fbirn-project/jobs/out%A.out
+#SBATCH -A psy53c17
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jwardell1@student.gsu.edu
+#SBATCH --oversubscribe
+
+sleep 5s
+
+module load singularity/3.10.2
+
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/paths
+
+SIF_FILE=/data/users2/washbee/tdassist/Dockerbuild/nshor2.sif
+RUN_BIND_POINT=/run
+SCRIPT_NAME=pd_dockerParallelized_fbirn.sh
+
+IFS=$'\n'
+paths_array=($(cat ${SUB_PATHS_FILE}))
+func_ix=$(( 3*$SLURM_ARRAY_TASK_ID ))
+anat_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
+out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))
+
+func_filepath=${paths_array[${func_ix}]}
+anat_filepath=${paths_array[${anat_ix}]}
+out_filepath=${paths_array[${out_ix}]}
+
+singularity exec --bind .:$RUN_BIND_POINT $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} $func_filepath $anat_filepath $out_filepath &
+
+wait
+
+sleep 10s
