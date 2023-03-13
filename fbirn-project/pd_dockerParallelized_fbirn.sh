@@ -9,10 +9,11 @@ anat_filepath=$2
 out_filepath=$3
 subjectID=`basename $out_filepath`
 
-outputUniverse=. #change to use pwd
+outputUniverse=. #changed to use pwd
 clusterHostname=arctrdgndev101.rs.gsu.edu 
 clusterUsername=jwardell1 #how to generalize? should ask for these settings from user in text file.
-clusterOutPath=/data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/resSCP/ #how to generalize? should ask for in txt file
+scp_string="${clusterUsername}@${clusterHostname}:${out_filepath}"
+
 start=`date +%s`
 
 #Sets FSL Paths
@@ -145,7 +146,7 @@ antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $t
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
 echo "try scp from container"
-scp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${clusterUsername}@${clusterHostname}:$OUTPUT_DIRECTORY
+scp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz $scp_string
 echo "done trying scp from container"
 
 end=`date +%s`
