@@ -137,6 +137,7 @@ RUN echo '{ \
 
 RUN apt-get update -qq && apt-get install -y tcsh xfonts-base python-qt4       \
                         python-matplotlib                 \
+                        openssh-client                    \
                         gsl-bin netpbm gnome-tweak-tool   \
                         libjpeg62 xvfb xterm vim curl     \
                         gedit evince eog                  \
@@ -150,7 +151,9 @@ RUN apt-get update -qq && apt-get install -y tcsh xfonts-base python-qt4       \
                         && apt-get clean \
                         && rm -rf /var/lib/apt/lists/*
 
-
+RUN useradd -m jwardell1
+RUN mkdir -p /home/jwardell1/.ssh
+RUN echo "host arctrdgndev101 \n HostName arctrdgndev101.rs.gsu.edu \n user jwardell1"
 RUN mkdir /app
 WORKDIR /app
 RUN curl -O https://afni.nimh.nih.gov/pub/dist/bin/misc/@update.afni.binaries

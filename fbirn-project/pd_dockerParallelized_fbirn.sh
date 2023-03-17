@@ -4,12 +4,22 @@
 set -x
 set -e
 
-func_filepath=$1
-anat_filepath=$2
-out_filepath=$3
-subjectID=`basename $out_filepath`
+func_file=`basename $1`
+func_filepath=/func/${func_file}
+echo "func_filepath is $func_filepath"
 
-outputUniverse=. #changed to use pwd
+anat_file=`basename $2`
+anat_filepath=/anat/${anat_file}
+echo "anat_filepath is $anat_filepath"
+
+out_filepath=$3
+echo "out_filepath is $out_filepath"
+
+path_ending_in_ID=`dirname $out_filepath`
+subjectID=`basename $path_ending_in_ID`
+echo "subjectID is $subjectID"
+
+outputUniverse=/out #changed to use pwd
 clusterHostname=arctrdgndev101.rs.gsu.edu 
 clusterUsername=jwardell1 #how to generalize? should ask for these settings from user in text file.
 scp_string="${clusterUsername}@${clusterHostname}:${out_filepath}"
@@ -119,23 +129,23 @@ skullstrip ${anatdir}
 antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
-3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${vepi} -expr 'a*1'
+3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
 
 epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
 EPI_PID=$!
 
 
-moco_sc ${epi_orig} ${coregdir}/${vepi} ${subjectID} rest &
+moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest &
 SCMOCO_PID=$!
 
-mcflirt -in ${epi_orig} -reffile ${coregdir}/${vepi} -out ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -mats -plots -rmsrel -rmsabs -report &
+mcflirt -in ${epi_orig} -reffile ${coregdir}/${func_file} -out ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -mats -plots -rmsrel -rmsabs -report &
 MCFLIRT_PID=$!
 
 wait $SCMOCO_PID
 wait $EPI_PID
 
 
-c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${vepi} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${func_file} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
 wait $ANTS_PID
 
@@ -145,9 +155,14 @@ antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $t
 
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
-echo "try scp from container"
-scp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz $scp_string
-echo "done trying scp from container"
+cp ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz ${procdir}
+cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
+cp ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt ${procdir}
+cp ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${procdir}
+cp ${template} ${procdir}
+cp ${coregdir}/${subjectID}_rfMRI_v0_correg.mat  ${procdir}
+cp ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}
+cp ${anatdir}/T1_bc_ss.nii.gz  ${procdir}
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt
