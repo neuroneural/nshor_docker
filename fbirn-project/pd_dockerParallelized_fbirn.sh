@@ -6,18 +6,14 @@ set -e
 
 func_file=`basename $1`
 func_filepath=/func/${func_file}
-echo "func_filepath is $func_filepath"
 
 anat_file=`basename $2`
 anat_filepath=/anat/${anat_file}
-echo "anat_filepath is $anat_filepath"
 
 out_filepath=$3
-echo "out_filepath is $out_filepath"
 
 path_ending_in_ID=`dirname $out_filepath`
 subjectID=`basename $path_ending_in_ID`
-echo "subjectID is $subjectID"
 
 outputUniverse=/out #changed to use pwd
 clusterHostname=arctrdgndev101.rs.gsu.edu 
@@ -144,14 +140,11 @@ MCFLIRT_PID=$!
 wait $SCMOCO_PID
 wait $EPI_PID
 
-
 c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${func_file} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
 wait $ANTS_PID
 
-
 antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
-
 
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
