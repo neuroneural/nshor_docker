@@ -4,10 +4,10 @@
 set -x
 set -e
 
-func_file=`basename $1`
+func_file=$1
 func_filepath=/func/${func_file}
 
-anat_file=`basename $2`
+anat_file=$2
 anat_filepath=/anat/${anat_file}
 
 out_filepath=$3
@@ -59,6 +59,7 @@ mkdir -p ${mocodir}
 mkdir -p  ${normdir}
 mkdir -p ${procdir}
 mkdir -p ${anatdir}
+
 
 
 function epireg_set() {
