@@ -1,0 +1,48 @@
+#!/bin/bash
+#SBATCH -n 1
+#SBATCH -c 4
+#SBATCH --mem=20g
+#SBATCH -p qTRD
+#SBATCH --time=01:00:00
+#SBATCH -J ds004078-test
+#SBATCH -e /data/users2/jwardell1/nshor_docker/ds004078-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/ds004078-project/jobs/out%A.out
+#SBATCH -A psy53c17
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jwardell1@student.gsu.edu
+#SBATCH --oversubscribe
+
+sleep 5s
+
+module load singularity/3.10.2
+
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/ds004078-project/ds004078/paths
+
+SIF_FILE=/data/users2/washbee/tdassist/Dockerbuild/nshor2.sif
+RUN_BIND_POINT=/run
+SCRIPT_NAME=pd_dockerParallelized_ds004078.sh
+
+IFS=$'\n'
+paths_array=($(cat ${SUB_PATHS_FILE}))
+echo "slurm array task id is $SLURM_ARRAY_TASK_ID"
+func_ix=$(( 3*$SLURM_ARRAY_TASK_ID ))
+anat_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
+out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))
+
+func_filepath=${paths_array[${func_ix}]}
+anat_filepath=${paths_array[${anat_ix}]}
+
+out_bind=${paths_array[${out_ix}]}
+func_bind=`dirname $func_filepath`
+anat_bind=`dirname $anat_filepath`
+
+func_file=`basename $func_filepath`
+anat_file=`basename $anat_filepath`
+
+#get rid of all binding
+#should have pd script connected with container entry point
+singularity exec --bind .:$RUN_BIND_POINT,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} $func_file $anat_file $out_bind &
+
+wait
+
+sleep 10s
