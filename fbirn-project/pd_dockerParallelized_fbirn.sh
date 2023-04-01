@@ -1,5 +1,7 @@
 #!/bin/bash
 # The script expects the user to prepare a text file with a list of paths one line per subject. The list will be indexed by job number and is meant to be run on the entire list in slurm from start to end. If the jobs in slurm crash and restarted every subject needs to be re-processed.
+#TODO: make script only write intermediate files to docker container
+#TODO: make script write out processed file to output mount, this is the only file that should be written out to the output mount, no intermediate files
 
 set -x
 set -e
