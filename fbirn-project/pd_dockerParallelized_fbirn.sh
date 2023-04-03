@@ -17,10 +17,8 @@ out_filepath=$3
 path_ending_in_ID=`dirname $out_filepath`
 subjectID=`basename $path_ending_in_ID`
 
-outputUniverse=/out #changed to use pwd
-clusterHostname=arctrdgndev101.rs.gsu.edu 
-clusterUsername=jwardell1 #how to generalize? should ask for these settings from user in text file.
-scp_string="${clusterUsername}@${clusterHostname}:${out_filepath}"
+outputUniverse=. #changed to use pwd
+outputMount=/out
 
 start=`date +%s`
 
@@ -159,6 +157,11 @@ cp ${template} ${procdir}
 cp ${coregdir}/${subjectID}_rfMRI_v0_correg.mat  ${procdir}
 cp ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}
 cp ${anatdir}/T1_bc_ss.nii.gz  ${procdir}
+
+mkdir -p ${outputMount}/processed
+mtdPrcDir=${outputMount}/processed
+
+cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt
