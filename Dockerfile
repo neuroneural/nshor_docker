@@ -152,10 +152,12 @@ RUN apt-get update -qq && apt-get install -y tcsh xfonts-base python-qt4       \
                         && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m jwardell1
-RUN mkdir -p /home/jwardell1/.ssh
-RUN echo "host arctrdgndev101 \n HostName arctrdgndev101.rs.gsu.edu \n user jwardell1"
 RUN mkdir /app
 WORKDIR /app
+RUN dd if=/dev/zero of=/new-disk bs=1M count=102400 \
+&& mkfs.ext4 /new-disk \
+&& echo "/new-disk /app ext4 defaults 0 0" >> /etc/fstab \
+&& mount /new-disk
 RUN curl -O https://afni.nimh.nih.gov/pub/dist/bin/misc/@update.afni.binaries
 RUN ln -s /usr/lib/x86_64-linux-gnu/libgsl.so.23 /usr/lib/x86_64-linux-gnu/libgsl.so.19
 RUN tcsh @update.afni.binaries -package linux_ubuntu_16_64 -do_extras -bindir /usr/local/AFNIbin

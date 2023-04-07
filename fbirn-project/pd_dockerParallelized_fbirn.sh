@@ -17,7 +17,7 @@ out_filepath=$3
 path_ending_in_ID=`dirname $out_filepath`
 subjectID=`basename $path_ending_in_ID`
 
-outputUniverse=. #changed to use pwd
+outputUniverse=`pwd` #changed to use pwd
 outputMount=/out
 
 start=`date +%s`
