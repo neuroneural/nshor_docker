@@ -151,7 +151,6 @@ RUN apt-get update -qq && apt-get install -y tcsh xfonts-base python-qt4       \
                         && apt-get clean \
                         && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -m jwardell1
 RUN mkdir /app
 WORKDIR /app
 RUN dd if=/dev/zero of=/new-disk bs=1M count=102400 \
