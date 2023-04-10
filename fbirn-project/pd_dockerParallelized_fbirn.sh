@@ -101,7 +101,23 @@ function moco_sc() {
         
     	cd ${mocodir}
 
-	TR=2
+
+	#########################
+	# slice timing correction
+	#########################
+	#determine if data is multiband or not
+	if [[ $(fslval $func_file dim4) -gt 1 && $(fslval <path_to_nifti_file> pixdim4) -lt 0 ]]; then
+		#multi-band data
+		TR=$(fslhd -x $func_file | grep "pixdim4" | awk '{print $2}')
+		
+	else
+		#single-band data
+		touch slice_timing_file.txt
+		slice_timing_file=slice_timing_file.txt
+		fslhd $func_file | grep "slice_timing" | cut -f 2- -d " " > slice_timing_file.txt
+		slicetimer -i $func_file -o ${subjectID}_func_stc -r $tr --tcustom=$slice_timing_file
+	fi
+
 	
 	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
     
