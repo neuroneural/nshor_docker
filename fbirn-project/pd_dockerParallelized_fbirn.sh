@@ -105,17 +105,46 @@ function moco_sc() {
 	#########################
 	# slice timing correction
 	#########################
+
+	# Get the TR from the NIfTI header
+	TR=$(fslval $func_file pixdim4)
+
+	# Get the number of slices from the NIfTI header
+	num_slices=$(fslval $func_file dim3)
+
+	# Get the slice timing order from the NIfTI header
+	slice_order=$(fslval $func_file slice_order)
+
+	# If the slice order is "unknown", assume it is interleaved (ascending)
+	if [ "$slice_order" == "unknown" ]; then
+		slice_order="ascending"
+	fi
+
+	# Calculate the time at which each slice was acquired
+	case $slice_order in
+		"ascending")
+			slice_times=$(seq 0 $((TR / num_slices)) $((TR - TR / num_slices)))
+			;;
+		"descending")
+			slice_times=$(seq $((TR - TR / num_slices)) -$((TR / num_slices)) 0)
+			;;
+		*)
+			echo "Error: Unsupported slice order '$slice_order'" >&2
+			exit 1
+	esac
+
+	# Save the slice times to a file
+	echo "${slice_times[@]}" | tr ' ' '\n' > slice_timing_file.txt
+
 	#determine if data is multiband or not
-	if [[ $(fslval $func_file dim4) -gt 1 && $(fslval <path_to_nifti_file> pixdim4) -lt 0 ]]; then
+	if [[ $(fslval $func_file dim4) -gt 1 && $(fslval $func_file pixdim4) -lt 0 ]]; then
 		#multi-band data
-		TR=$(fslhd -x $func_file | grep "pixdim4" | awk '{print $2}')
+		slice_timing_file=slice_timing_file.txt
+		slicetimer -i $func_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --tcustom=$slice_timing_file
 		
 	else
 		#single-band data
-		touch slice_timing_file.txt
-		slice_timing_file=slice_timing_file.txt
-		fslhd $func_file | grep "slice_timing" | cut -f 2- -d " " > slice_timing_file.txt
-		slicetimer -i $func_file -o ${subjectID}_func_stc -r $tr --tcustom=$slice_timing_file
+		slicetimer -i $input_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --${slice_order}
 	fi
 
 	
