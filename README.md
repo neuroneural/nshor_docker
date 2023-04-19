@@ -1,17 +1,36 @@
 # nshor_docker
 ## Dockerfile
 The docker file may be built using the following example command from inside the directory containing the dockerfile and the robex tar
+
+```
           docker build -t yourname/yourproject .
+```
 
 ## Singularity sif file
 Once you have built the dockerfile into a docker image, you may build the docker image into a sif file using singularity commands 
-          singularity build output.sif docker-daemon://yourname/yourproject-latest
+
+```
+          singularity build --writable-tmpfs output.sif docker-daemon://yourname/yourproject-latest
+```
 
 ## Running the Slurm script
-          sbatch --array=1-12 submit.sh
-the array number corresponds to the subject number.
-The output ends up in the derivatives folder of the /data folder mapped inside the submit.sh file.
-The submit.sh file will have the location of the logs, the bound data directory for singularity, etc. 
+
+```
+          bash submit.sh
+```
+
+This creates executes a bash script which calls the `procruns.job` slurm job.  The size of the array is calculated each time this script  is ran and provided as input to the slurm job call.
+
+
+## Singularity `exec` call using `--writable-tmpfs` flag
+Since the `.sif` singularity  container  was built using the `--writable-tmpfs` flag, use the `--writable-tmpfs` flag when using  `exec` to execute a script in the contatiner. For example, your exec function call should look something like this:
+
+```
+singularity exec --writable-tmpfs --bind .:$RUN_BIND_POINT,$func_bind:/func,$anat_bind:/anat,$out_bin    d:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} $func_file $anat_file $out_bind 
+```
+
+This provides a temporary file system that your sif container uses for the script, which is deleted after the exec instance. If you would like your script to write to the tmpfs, you need to inspect the singularity container using singularity shell, use the `df -h` command to view the filesystem, and find out what directory the tmpfs is mounted to. From there you should have your script to be ran using sinuglarity exec to write out to this filesystem. For example, in singularity shell, you might find via the `df -h` command that the tmpfs is mounted on `/dev/shm`. In this case, you script should make directories in `/dev/shm` such that they would be deleted after the script is executed in the sif exec instance.
+
 
 ## More information
 we attempted to keep a log of our activities in #docker-projects slack channel

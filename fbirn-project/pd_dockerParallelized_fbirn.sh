@@ -17,7 +17,9 @@ out_filepath=$3
 path_ending_in_ID=`dirname $out_filepath`
 subjectID=`basename $path_ending_in_ID`
 
-outputUniverse=`pwd` #changed to use pwd
+#if can make writable filesystem, use the /temp directory to write intermediate files
+outputUniverse=/dev/shm
+#outputUniverse=/out
 outputMount=/out
 
 start=`date +%s`
@@ -106,11 +108,34 @@ function moco_sc() {
 	# slice timing correction
 	#########################
 
-	# Get the TR from the NIfTI header
-	TR=$(fslval $func_file pixdim4)
+	if [ $(fslval $func_file dim4) -eq 1 ]; then
+		echo "File is 3D"
+		pixdim4=$(fslhd "$func_file" | grep pixdim4 | awk '{print $2}')
+		if (( $(echo "$pixdim4 > 0" |bc -l) )); then
+			  echo "TR = $pixdim4 seconds"
+		else
+			  echo "TR information is not available for 3D NIfTI files."
+		fi
+	else
+    		echo "File is 4D"
+		# Get the TR from the NIfTI header
+		TR=$(fslval $func_file pixdim4)
+		echo "TR is $TR"
 
-	# Get the number of slices from the NIfTI header
-	num_slices=$(fslval $func_file dim3)
+		# Get the number of slices from the NIfTI header
+		num_slices=$(fslval $func_file dim3)
+		
+		# get number of volumes
+		num_vols=$(fslval $func_file dim4)
+
+		# loop over volumes and get number of slices
+		for (( i=0; i<$num_vols; i++ )); do
+		  	num_slices=$(fslval $func_file dim3)
+  			echo "Volume $i has $num_slices slices"
+		done
+		echo "numslices is $numslices"
+	fi
+
 
 	# Get the slice timing order from the NIfTI header
 	slice_order=$(fslval $func_file slice_order)
