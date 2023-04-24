@@ -1,7 +1,7 @@
 #!/bin/bash
-#TODO: make script write out processed file to output mount, this is the only file that should be written out to the output mount, no intermediate files - NOT WORKING
-# The script expects the user to prepare a text file with a list of paths one line per subject. The list will be indexed by job number and is meant to be run on the entire list in slurm from start to end. If the jobs in slurm crash and restarted every subject needs to be re-processed. - DONE
-#TODO: make script only write intermediate files to docker container - DONE
+# The script expects the user to prepare a text file with a list of paths one line per subject. The list will be indexed by job number and is meant to be run on the entire list in slurm from start to end. If the jobs in slurm crash and restarted every subject needs to be re-processed.
+#TODO: make script only write intermediate files to docker container
+#TODO: make script write out processed file to output mount, this is the only file that should be written out to the output mount, no intermediate files
 
 set -x
 set -e
@@ -12,7 +12,23 @@ func_filepath=/func/${func_file}
 anat_file=$2
 anat_filepath=/anat/${anat_file}
 
-out_filepath=$3
+spinlr_file=$3
+spinlr_filepath=/func/${spinlr_file}
+
+spinrl_file=$4
+spinrl_filepath=/func/${spinrl_file}
+
+biasch_file=$5
+biasch_filepath=/func/${biasch_file}
+
+biasbc_file=$6
+biasbc_filepath=/func/${biasbc_file}
+
+#should be refactored to sbref_file and sbref_filepath, also this should live in its own directory called sbref
+sbrefmask_file=$7 #this file is not actually a mask but its used to create mask, update variable names to reflect this and make sure not trying to use mask file
+sbrefmask_filepath=/func/${sbrefmask_file}
+
+out_filepath=$8
 
 path_ending_in_ID=`dirname $out_filepath`
 subjectID=`basename $path_ending_in_ID`
@@ -61,6 +77,29 @@ mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
 
+function afni_set() {
+    subIDpath=$1
+    subPath=$2
+    subjectID=$3
+
+   # need to get rid of subpath .. and subIDpath.. just need to make a variable at the beginning to use for SBref
+    3dcalc -a ${subIDpath}/biasmaps/${biasch_filepath} -b ${subIDpath}/biasmaps/${biasbc_filepath} -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
+
+    3dWarp -deoblique -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz
+
+    3dAutomask -dilate 2 -prefix ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz $subIDpath/SBRef/${sbrefmask_file}
+
+    3dWarp -oblique_parent $subIDpath/func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -gridset $subIDpath/func/${func_filepath} -prefix ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz
+
+	    3dcalc -float -a $subIDpath/func/${func_filepath} -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
+
+    3dcalc  -float  -a $subIDpath/SBRef/${sbrefmask_file} -b ${subPath}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${subPath}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${subPath}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+    echo 'finished afni_set'
+}
+
+
+
+
 
 function epireg_set() {
         coregdir=$1
@@ -106,71 +145,71 @@ function moco_sc() {
 	# slice timing correction
 	#########################
 
-#	if [ $(fslval $func_file dim4) -eq 1 ]; then
-#		echo "File is 3D"
-#		pixdim4=$(fslhd "$func_file" | grep pixdim4 | awk '{print $2}')
-#		if (( $(echo "$pixdim4 > 0" |bc -l) )); then
-#			  echo "TR = $pixdim4 seconds"
-#		else
-#			  echo "TR information is not available for 3D NIfTI files."
-#		fi
-#	else
- #   		echo "File is 4D"
-#		# Get the TR from the NIfTI header
-#		TR=$(fslval $func_file pixdim4)
-#		echo "TR is $TR"
-#
-#		# Get the number of slices from the NIfTI header
-#		num_slices=$(fslval $func_file dim3)
-#		
-#		# get number of volumes
-#		num_vols=$(fslval $func_file dim4)
-#
-#		# loop over volumes and get number of slices
-#		for (( i=0; i<$num_vols; i++ )); do
-#		  	num_slices=$(fslval $func_file dim3)
- # 			echo "Volume $i has $num_slices slices"
-#		done
-#		echo "numslices is $numslices"
-#	fi
-#
-#
-#	# Get the slice timing order from the NIfTI header
-#	slice_order=$(fslval $func_file slice_order)
-#
-#	# If the slice order is "unknown", assume it is interleaved (ascending)
-#	if [ "$slice_order" == "unknown" ]; then
-#		slice_order="ascending"
-#	fi
-#
-#	# Calculate the time at which each slice was acquired
-#	case $slice_order in
-#		"ascending")
-#			slice_times=$(seq 0 $((TR / num_slices)) $((TR - TR / num_slices)))
-#			;;
-#		"descending")
-#			slice_times=$(seq $((TR - TR / num_slices)) -$((TR / num_slices)) 0)
-#			;;
-#		*)
-#			echo "Error: Unsupported slice order '$slice_order'" >&2
-#			exit 1
-#	esac
-#
-#	# Save the slice times to a file
-#	echo "${slice_times[@]}" | tr ' ' '\n' > slice_timing_file.txt
-#
-#	#determine if data is multiband or not
-#	if [[ $(fslval $func_file dim4) -gt 1 && $(fslval $func_file pixdim4) -lt 0 ]]; then
-#		#multi-band data
-#		slice_timing_file=slice_timing_file.txt
-#		slicetimer -i $func_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --tcustom=$slice_timing_file
-#		
-#	else
-#		#single-band data
-#		slicetimer -i $input_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --${slice_order}
-#	fi
-#
-#	
+	if [ $(fslval $func_file dim4) -eq 1 ]; then
+		echo "File is 3D"
+		pixdim4=$(fslhd "$func_file" | grep pixdim4 | awk '{print $2}')
+		if (( $(echo "$pixdim4 > 0" |bc -l) )); then
+			  echo "TR = $pixdim4 seconds"
+		else
+			  echo "TR information is not available for 3D NIfTI files."
+		fi
+	else
+    		echo "File is 4D"
+		# Get the TR from the NIfTI header
+		TR=$(fslval $func_file pixdim4)
+		echo "TR is $TR"
+
+		# Get the number of slices from the NIfTI header
+		num_slices=$(fslval $func_file dim3)
+		
+		# get number of volumes
+		num_vols=$(fslval $func_file dim4)
+
+		# loop over volumes and get number of slices
+		for (( i=0; i<$num_vols; i++ )); do
+		  	num_slices=$(fslval $func_file dim3)
+  			echo "Volume $i has $num_slices slices"
+		done
+		echo "numslices is $numslices"
+	fi
+
+
+	# Get the slice timing order from the NIfTI header
+	slice_order=$(fslval $func_file slice_order)
+
+	# If the slice order is "unknown", assume it is interleaved (ascending)
+	if [ "$slice_order" == "unknown" ]; then
+		slice_order="ascending"
+	fi
+
+	# Calculate the time at which each slice was acquired
+	case $slice_order in
+		"ascending")
+			slice_times=$(seq 0 $((TR / num_slices)) $((TR - TR / num_slices)))
+			;;
+		"descending")
+			slice_times=$(seq $((TR - TR / num_slices)) -$((TR / num_slices)) 0)
+			;;
+		*)
+			echo "Error: Unsupported slice order '$slice_order'" >&2
+			exit 1
+	esac
+
+	# Save the slice times to a file
+	echo "${slice_times[@]}" | tr ' ' '\n' > slice_timing_file.txt
+
+	#determine if data is multiband or not
+	if [[ $(fslval $func_file dim4) -gt 1 && $(fslval $func_file pixdim4) -lt 0 ]]; then
+		#multi-band data
+		slice_timing_file=slice_timing_file.txt
+		slicetimer -i $func_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --tcustom=$slice_timing_file
+		
+	else
+		#single-band data
+		slicetimer -i $input_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --${slice_order}
+	fi
+
+	
 	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
     
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz

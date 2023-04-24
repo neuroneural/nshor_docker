@@ -1,0 +1,61 @@
+#!/bin/bash
+#SBATCH -n 1
+#SBATCH -c 4
+#SBATCH --mem=20g
+#SBATCH -p qTRD
+#SBATCH --time=01:00:00
+#SBATCH -J hpc-test
+#SBATCH -e /data/users2/jwardell1/nshor_docker/hpc-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/hpc-project/jobs/out%A.out
+#SBATCH -A psy53c17
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jwardell1@student.gsu.edu
+#SBATCH --oversubscribe
+
+sleep 5s
+
+module load singularity/3.10.2
+
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/hpc-project/HPC/paths
+
+SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
+RUN_BIND_POINT=/run
+SCRIPT_NAME=pd_dockerParallelized_hpc.sh
+
+IFS=$'\n'
+paths_array=($(cat ${SUB_PATHS_FILE}))
+echo "slurm array task id is $SLURM_ARRAY_TASK_ID"
+func_ix=$(( 8*$SLURM_ARRAY_TASK_ID ))
+anat_ix=$(( 8*$SLURM_ARRAY_TASK_ID + 1 ))
+spinlr_ix=$(( 8*$SLURM_ARRAY_TASK_ID + 2 ))
+spinrl_ix=$(( 8*$SLURM_ARRAY_TASK_ID + 3 ))
+biasch_ix=$(( 8*$SLURM_ARRAY_TASK_ID + 4 ))
+biasbc_ix=$(( 8*$SLURM_ARRAY_TASK_ID + 5 ))
+sbrefmask_ix=$(( 8*$SLURM_ARRAY_TASK_ID + 6 ))
+out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 7 ))
+
+func_filepath=${paths_array[${func_ix}]}
+anat_filepath=${paths_array[${anat_ix}]}
+spinlr_filepath=${paths_array[${spinlr_ix}]}
+spinrl_filepath=${paths_array[${spinrl_ix}]}
+biasch_filepath=${paths_array[${biasch_ix}]}
+biasbc_filepath=${paths_array[${biasbc_ix}]}
+sbrefmask_filepath=${paths_array[${sbrefmask_ix}]}
+
+out_bind=${paths_array[${out_ix}]}
+func_bind=`dirname $func_filepath`
+anat_bind=`dirname $anat_filepath`
+
+func_file=`basename $func_filepath`
+anat_file=`basename $anat_filepath`
+spinlr_file=`basename $spinlr_filepath`
+spinrl_file=`basename $spinrl_filepath`
+biasch_file=`basename $biasch_filepath`
+biasbc_file=`basename $biasbc_filepath`
+sbrefmask_file=`basename $sbrefmask_filepath`
+
+singularity exec --writable-tmpfs --bind .:$RUN_BIND_POINT,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} $func_file $anat_file $spinlr_file $spinrl_file $biasch_file $biasbc_file $sbrefmask_file  $out_bind &
+
+wait
+
+sleep 10s
