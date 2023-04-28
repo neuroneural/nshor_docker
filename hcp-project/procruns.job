@@ -44,7 +44,9 @@ sbref_filepath=${paths_array[${sbref_ix}]}
 
 out_bind=${paths_array[${out_ix}]}
 func_bind=`dirname $func_filepath`
+echo "func_filepath is ${func_filepath} and func_bind is ${func_bind}"
 anat_bind=`dirname $anat_filepath`
+echo "anat_filepath is ${anat_filepath} and anat_bind is ${anat_bind}"
 
 
 func_file=`basename $func_filepath`

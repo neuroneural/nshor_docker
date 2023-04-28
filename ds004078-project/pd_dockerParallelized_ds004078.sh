@@ -1,5 +1,7 @@
 #!/bin/bash
-# The script expects the user to prepare a text file with a list of paths one line per subject. The list will be indexed by job number and is meant to be run on the entire list in slurm from start to end. If the jobs in slurm crash and restarted every subject needs to be re-processed.
+#TODO: make script write out processed file to output mount, this is the only file that should be written out to the output mount, no intermediate files - NOT WORKING
+# The script expects the user to prepare a text file with a list of paths one line per subject. The list will be indexed by job number and is meant to be run on the entire list in slurm from start to end. If the jobs in slurm crash and restarted every subject needs to be re-processed. - DONE
+#TODO: make script only write intermediate files to docker container - DONE
 
 set -x
 set -e
@@ -15,10 +17,8 @@ out_filepath=$3
 path_ending_in_ID=`dirname $out_filepath`
 subjectID=`basename $path_ending_in_ID`
 
-outputUniverse=/out #changed to use pwd
-clusterHostname=arctrdgndev101.rs.gsu.edu 
-clusterUsername=jwardell1 #how to generalize? should ask for these settings from user in text file.
-scp_string="${clusterUsername}@${clusterHostname}:${out_filepath}"
+outputUniverse=/dev/shm
+outputMount=/out
 
 start=`date +%s`
 
@@ -101,8 +101,76 @@ function moco_sc() {
         
     	cd ${mocodir}
 
-	TR=2
-	
+
+	#########################
+	# slice timing correction
+	#########################
+
+#	if [ $(fslval $func_file dim4) -eq 1 ]; then
+#		echo "File is 3D"
+#		pixdim4=$(fslhd "$func_file" | grep pixdim4 | awk '{print $2}')
+#		if (( $(echo "$pixdim4 > 0" |bc -l) )); then
+#			  echo "TR = $pixdim4 seconds"
+#		else
+#			  echo "TR information is not available for 3D NIfTI files."
+#		fi
+#	else
+ #   		echo "File is 4D"
+#		# Get the TR from the NIfTI header
+#		TR=$(fslval $func_file pixdim4)
+#		echo "TR is $TR"
+#
+#		# Get the number of slices from the NIfTI header
+#		num_slices=$(fslval $func_file dim3)
+#		
+#		# get number of volumes
+#		num_vols=$(fslval $func_file dim4)
+#
+#		# loop over volumes and get number of slices
+#		for (( i=0; i<$num_vols; i++ )); do
+#		  	num_slices=$(fslval $func_file dim3)
+ # 			echo "Volume $i has $num_slices slices"
+#		done
+#		echo "numslices is $numslices"
+#	fi
+#
+#
+#	# Get the slice timing order from the NIfTI header
+#	slice_order=$(fslval $func_file slice_order)
+#
+#	# If the slice order is "unknown", assume it is interleaved (ascending)
+#	if [ "$slice_order" == "unknown" ]; then
+#		slice_order="ascending"
+#	fi
+#
+#	# Calculate the time at which each slice was acquired
+#	case $slice_order in
+#		"ascending")
+#			slice_times=$(seq 0 $((TR / num_slices)) $((TR - TR / num_slices)))
+#			;;
+#		"descending")
+#			slice_times=$(seq $((TR - TR / num_slices)) -$((TR / num_slices)) 0)
+#			;;
+#		*)
+#			echo "Error: Unsupported slice order '$slice_order'" >&2
+#			exit 1
+#	esac
+#
+#	# Save the slice times to a file
+#	echo "${slice_times[@]}" | tr ' ' '\n' > slice_timing_file.txt
+#
+#	#determine if data is multiband or not
+#	if [[ $(fslval $func_file dim4) -gt 1 && $(fslval $func_file pixdim4) -lt 0 ]]; then
+#		#multi-band data
+#		slice_timing_file=slice_timing_file.txt
+#		slicetimer -i $func_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --tcustom=$slice_timing_file
+#		
+#	else
+#		#single-band data
+#		slicetimer -i $input_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --${slice_order}
+#	fi
+#
+#	
 	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
     
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz
@@ -157,6 +225,11 @@ cp ${template} ${procdir}
 cp ${coregdir}/${subjectID}_rfMRI_v0_correg.mat  ${procdir}
 cp ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}
 cp ${anatdir}/T1_bc_ss.nii.gz  ${procdir}
+
+mkdir -p ${outputMount}/processed
+mtdPrcDir=${outputMount}/processed
+
+cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt
