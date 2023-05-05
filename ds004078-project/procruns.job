@@ -20,7 +20,7 @@ SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/ds004078-project/ds004078/pat
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
 RUN_BIND_POINT=/run
-SCRIPT_NAME=pd_dockerParallelized_ds004078.sh
+SCRIPT_NAME=/data/users2/jwardell1/nshor_docker/pd_dockerParallelized.sh
 
 IFS=$'\n'
 paths_array=($(cat ${SUB_PATHS_FILE}))
@@ -42,7 +42,7 @@ func_file=`basename $func_filepath`
 anat_file=`basename $anat_filepath`
 json_file=`basename $json_filepath`
 
-singularity exec --writable-tmpfs --bind .:$RUN_BIND_POINT,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} $func_file $anat_file $json_file $out_bind &
+singularity exec --writable-tmpfs --bind .:$RUN_BIND_POINT,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} -f $func_file -a $anat_file -j $json_file -o $out_bind &
 
 wait
 
