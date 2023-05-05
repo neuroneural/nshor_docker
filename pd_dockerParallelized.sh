@@ -229,7 +229,7 @@ function moco_sc() {
                 TR=`abids_json_info.py -field RepetitionTime -json ${json_filepath}`
         fi
 
-	3dDespik -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
+	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
     
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz
 
