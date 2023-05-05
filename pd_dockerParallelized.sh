@@ -264,9 +264,9 @@ then
         echo "LR or RL spin echo field maps were not included for topup correction."
 else
         topup_set &
-        #TOPUP_PID=$!
-        # not sure where to wait for this later on since waits are already in function definition?
+        TOPUP_PID=$!
 fi
+
 
 
 
@@ -279,6 +279,13 @@ then
         echo
 else
         wait ${AFNI_PID}
+fi
+
+if [[ -z $spinlr_file || -z $spinrl_file]];
+then
+	echo
+else
+	wait ${TOPUP_PID}
 fi
 
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
