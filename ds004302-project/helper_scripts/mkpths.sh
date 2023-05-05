@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#DATA_DIRECTORY=/data/users2/nshor/Multiband_with_MEG
-DATA_DIRECTORY=/home/users/jwardell1/ds004302-download
+DATA_DIRECTORY=/data/users2/jwardell1/ds004302-download
 num_subs=`cat subjects.txt | wc -l`
 IFS=$'\n' sub_ids=($(cat subjects.txt))
 PATH_FILE=/data/users2/jwardell1/nshor_docker/ds004302-project/ds004302/paths

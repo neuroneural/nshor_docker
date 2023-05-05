@@ -12,7 +12,11 @@ func_filepath=/func/${func_file}
 anat_file=$2
 anat_filepath=/anat/${anat_file}
 
-out_filepath=$3
+
+json_file=$3
+json_filepath=/func/${json_file}
+
+out_filepath=$4
 
 path_ending_in_ID=`dirname $out_filepath`
 subjectID=`basename $path_ending_in_ID`
@@ -62,7 +66,53 @@ mkdir -p ${anatdir}
 
 
 
-function epireg_set() {
+function afni_set() {
+	3dcalc -a ${biasch_filepath} -b ${biasbc_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
+
+	3dWarp -deoblique -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz
+
+	3dAutomask -dilate 2 -prefix ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ${sbref_filepath}
+
+	3dWarp -oblique_parent /func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -gridset ${func_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz
+
+	3dcalc -float -a ${func_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
+
+	3dcalc  -float  -a ${sbref_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+}
+
+function topup_set {	
+	#sets the acquisition parameters to use for topup, this file should exist in the subject's func directory
+	touch ${outputUniverse}/derivatives/$subjectID/bias_field/acqparams.txt
+	acqparams=${outputUniverse}/derivatives/$subjectID/bias_field/acqparams.txt
+	echo -e "1 0 0 1\n-1 0 0 1" > $acqparams
+
+	
+    	#Field Distortion Correction
+    	mkdir -p ${outputUniverse}/derivatives/$subjectID/fieldmap/
+	
+	fslmerge -t ${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_3T_Phase_Map.nii.gz ${spinlr_filepath} ${spinrl_filepath}
+
+    	topup --imain=${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_3T_Phase_Map.nii.gz --datain=$acqparams --out=${outputUniverse}/derivatives/$subjectID/fieldmap/$subjectID\_TOPUP --fout=${outputUniverse}/derivatives/$subjectID/fieldmap/$subjectID\_TOPUP_FIELDMAP.nii.gz --iout=${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP_CORRECTION.nii.gz
+
+    	if [ -f ${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP_FIELDMAP.nii.gz ]; then
+        	echo   "TOPUP SUCCESS"
+    	fi
+
+    	applytopup --imain=${outputUniverse}/derivatives/${subjectID}/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/${subjectID}/fieldmap/${subjectID}_TOPUP --out=${outputUniverse}/derivatives/${subjectID}/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_UNWARPED.nii.gz &
+
+    	topup1_PID=$!
+
+    	applytopup --imain=${outputUniverse}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP --out=${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_DEBIAS_UNWARPED.nii.gz &
+    	topup2_PID=$!
+    	echo 'finished topup'
+    	wait $topup1_PID
+    	wait $topup2_PID
+}
+
+
+
+
+function
         coregdir=$1
         vrefbrain=$2
         vepi=$3
@@ -92,7 +142,6 @@ function skullstrip() {
     ./ROBEX ${anatdir}/T1_bc.nii.gz ${anatdir}/T1_bc_ss.nii.gz
 }
 
-#MoCo means motion correction 
 function moco_sc() {
         epi_in=$1
         ref_vol=$2
@@ -100,78 +149,25 @@ function moco_sc() {
         suffix=$4
         
     	cd ${mocodir}
+	
+	#slice timing correction
+	if [ -z "$json_filename" ]
+	then
+		echo "no json file was included in input text file"
+	else 
+		#Metadata extraction
+                #Pulls the Slice timing info from the json file
+                abids_json_info.py -field SliceTiming -json ${json_filepath} | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
+                #Finds the number where the slice value is 0 in the slice timing
+                SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
 
+                #Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
+                TR=`abids_json_info.py -field RepetitionTime -json ${json_filepath}`
+	fi
 
-	#########################
-	# slice timing correction
-	#########################
-
-#	if [ $(fslval $func_file dim4) -eq 1 ]; then
-#		echo "File is 3D"
-#		pixdim4=$(fslhd "$func_file" | grep pixdim4 | awk '{print $2}')
-#		if (( $(echo "$pixdim4 > 0" |bc -l) )); then
-#			  echo "TR = $pixdim4 seconds"
-#		else
-#			  echo "TR information is not available for 3D NIfTI files."
-#		fi
-#	else
- #   		echo "File is 4D"
-#		# Get the TR from the NIfTI header
-#		TR=$(fslval $func_file pixdim4)
-#		echo "TR is $TR"
-#
-#		# Get the number of slices from the NIfTI header
-#		num_slices=$(fslval $func_file dim3)
-#		
-#		# get number of volumes
-#		num_vols=$(fslval $func_file dim4)
-#
-#		# loop over volumes and get number of slices
-#		for (( i=0; i<$num_vols; i++ )); do
-#		  	num_slices=$(fslval $func_file dim3)
- # 			echo "Volume $i has $num_slices slices"
-#		done
-#		echo "numslices is $numslices"
-#	fi
-#
-#
-#	# Get the slice timing order from the NIfTI header
-#	slice_order=$(fslval $func_file slice_order)
-#
-#	# If the slice order is "unknown", assume it is interleaved (ascending)
-#	if [ "$slice_order" == "unknown" ]; then
-#		slice_order="ascending"
-#	fi
-#
-#	# Calculate the time at which each slice was acquired
-#	case $slice_order in
-#		"ascending")
-#			slice_times=$(seq 0 $((TR / num_slices)) $((TR - TR / num_slices)))
-#			;;
-#		"descending")
-#			slice_times=$(seq $((TR - TR / num_slices)) -$((TR / num_slices)) 0)
-#			;;
-#		*)
-#			echo "Error: Unsupported slice order '$slice_order'" >&2
-#			exit 1
-#	esac
-#
-#	# Save the slice times to a file
-#	echo "${slice_times[@]}" | tr ' ' '\n' > slice_timing_file.txt
-#
-#	#determine if data is multiband or not
-#	if [[ $(fslval $func_file dim4) -gt 1 && $(fslval $func_file pixdim4) -lt 0 ]]; then
-#		#multi-band data
-#		slice_timing_file=slice_timing_file.txt
-#		slicetimer -i $func_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --tcustom=$slice_timing_file
-#		
-#	else
-#		#single-band data
-#		slicetimer -i $input_file -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --${slice_order}
-#	fi
-#
-#	
 	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
+
+	3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
     
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz
 
@@ -191,8 +187,37 @@ epi_orig=$func_filepath
 
 skullstrip ${anatdir}
 
+if [[ -z $biasch_filepath || -z $biasbc_filepath || -z $sbref_filepath]];
+then
+	echo "bias channel and sbref field maps were not included for bias correction."
+else
+	afni_set &
+	AFNI_PID=$!
+fi
+
+
+
+if [[ -z $spinlr_file || -z $spinrl_file]];
+then
+	echo "LR or RL spin echo field maps were not included for topup correction."
+else
+	topup_set &
+	#TOPUP_PID=$!
+	# not sure where to wait for this later on since waits are already in function definition?
+fi
+
+
+
+
 antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
+
+if [[ -z $biasch_filepath || -z $sbref_filepath]];
+then
+	echo
+else
+	wait ${AFNI_PID}
+fi
 
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
 

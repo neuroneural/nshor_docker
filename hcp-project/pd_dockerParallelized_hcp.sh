@@ -102,16 +102,39 @@ echo -e "1 0 0 1\n-1 0 0 1" > $acqparams
 
 function afni_set() {
     3dcalc -a ${biasch_filepath} -b ${biasbc_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
+    echo "function afni_set debug 1"
 
     3dWarp -deoblique -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz
+	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ]; then
+		echo "$subjectID\_bias_field_deobl.nii.gz file exists"
+	else 
+		echo "$subjectID\_bias_field_deobl.nii.gz file DOES NOT exist"
+	fi
+	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz ]; then
+		echo "$subjectID\_bias_field.nii.gz file exists"
+	else 
+		echo "$subjectID\_bias_field.nii.gz file DOES NOT exist"
+	fi
+    echo "function afni_set debug 2"
 
     3dAutomask -dilate 2 -prefix ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ${sbref_filepath}
 
+    if [ -f ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ]; then
+	    echo "Brain mask created successfully."
+    else
+	    echo "Error: Brain mask creation failed."
+    fi
+    echo "function afni_set debug 3"
+
+
     3dWarp -oblique_parent /func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -gridset ${func_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz
+    echo "function afni_set debug 4"
 
     3dcalc -float -a ${func_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
+    echo "function afni_set debug 5"
 
     3dcalc  -float  -a ${sbref_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+    echo "function afni_set debug 6"
 }
 
 function epireg_set() {
