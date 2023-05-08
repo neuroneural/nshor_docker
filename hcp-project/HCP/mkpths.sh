@@ -2,7 +2,7 @@
 
 DATA_DIRECTORY=/data/hcp-plis/drive01
 num_subs=`ls $DATA_DIRECTORY | wc -l`
-IFS=$'\n' sub_ids=($(cat subjects.txt))
+IFS=$'\n' sub_ids=($(cat /data/users2/jwardell1/nshor_docker/hcp-project/HCP/subjects.txt))
 PATH_FILE=/data/users2/jwardell1/nshor_docker/hcp-project/HCP/paths
 touch ${PATH_FILE}
 

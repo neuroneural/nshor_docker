@@ -19,8 +19,8 @@ module load singularity/3.10.2
 SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/hcp-project/HCP/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
-RUN_BIND_POINT=/run
-SCRIPT_NAME=/data/users2/jwardell1/nshor_docker/pd_dockerParallelized.sh
+RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
+SCRIPT_NAME=pd_dockerParallelized.sh
 
 IFS=$'\n'
 paths_array=($(cat ${SUB_PATHS_FILE}))
@@ -57,7 +57,7 @@ biasch_file=`basename $biasch_filepath`
 biasbc_file=`basename $biasbc_filepath`
 sbref_file=`basename $sbref_filepath`
 
-singularity exec --writable-tmpfs --bind .:$RUN_BIND_POINT,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} -f $func_file -a $anat_file -l $spinlr_file -r $spinrl_file -c $biasch_file -b $biasbc_file -s $sbref_file -o  $out_bind &
+singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} -f $func_file -a $anat_file -l $spinlr_file -r $spinrl_file -c $biasch_file -b $biasbc_file -s $sbref_file -o  $out_bind &
 
 wait
 
