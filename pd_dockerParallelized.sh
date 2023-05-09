@@ -48,7 +48,7 @@ spinrl_filepath=/func/${spinrl_file}
 #this assumes subject ID is either at the end of the output filepath
 #or that it is right before the ses-01 directory (assuming there can be multiple sessions)
 run_dir=`basename $out_filepath`
-if [[ $run_dir == *"ses"* ]];
+if [[ $out_filepath == *"ses"* ]];
 then
 	path_ending_in_ID=`dirname $out_filepath`
 else
@@ -102,7 +102,7 @@ mkdir -p ${normdir}
 mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
-
+#performs bias field correction using bias channel and body coil fieldmaps
 function afni_set() {
     3dcalc -a ${biasch_filepath} -b ${biasbc_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
     echo "function afni_set debug 1"
@@ -140,7 +140,7 @@ function afni_set() {
     echo "function afni_set debug 6"
 }
 
-
+#performs topup correction using acquisition parameters, LR/RL spin echo and sbref fieldmaps 
 function topup_set {
         #sets the acquisition parameters to use for topup, this file should exist in the subject's func directory
         touch ${outputUniverse}/derivatives/$subjectID/bias_field/acqparams.txt
@@ -218,6 +218,44 @@ function moco_sc() {
         if [ -z "$json_file" ]
         then
                 echo "no json file was included in input text file"
+		# Get the TR value from the nii header
+		TR=$(fsval $func_filepath pixdim4)
+
+		#Get the number of slices from the nii header
+		num_slices=$(fslval $func_filepath dim3)
+
+		#Try to extract the slice order from nii header
+		slice_order=$(fslval $func_filepath slice_order)
+		if [ -z "$slice_order" ]
+		then
+			slice_order="ascending"
+		fi
+		
+		# Calcuate the time at which each slice was acquired
+		increment=$(echo "scale=6; $TR / $num_slices" | bc)
+		case $slice_order in
+			"ascending")
+				slice_times=($(seq -f "%.4f" 0 $increment $(echo "$TR - $increment" | bc)))
+				;;
+			"descending")
+				slice_times=($(seq 0 $((num_slices-1)) | xargs -I{} echo "scale=6; $increment * {}" | bc))
+				;;
+			*)
+				echo "Error: Unsupported slice order '$slice_order'" >&2
+		esac
+		
+		echo "${slice_times[@]}" | tr ' ' '\n' > slice_timing_file.txt
+
+		slice_duration=$(fslval $func_filepath slice_duration)
+		if (( $(echo "$slice_duration < $TR" | bc -l) )); then
+    			echo "multiband data detected"
+			slicetimer -i $func_filepath -o ${mocodir}/func_stc.nii.gz -r $TR --tcustom=$slice_timing_file
+		else
+    			echo "singleband data detected"
+			slicetimer -i $func_filepath -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --${slice_order} #doesn't work, how to use the output file in the remaining steps
+			
+		fi
+
         else
                 #Metadata extraction
                 #Pulls the Slice timing info from the json file
@@ -228,6 +266,7 @@ function moco_sc() {
                 #Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
                 TR=`abids_json_info.py -field RepetitionTime -json ${json_filepath}`
         fi
+
 
 	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
     
