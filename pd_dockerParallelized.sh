@@ -48,7 +48,7 @@ spinrl_filepath=/func/${spinrl_file}
 #this assumes subject ID is either at the end of the output filepath
 #or that it is right before the ses-01 directory (assuming there can be multiple sessions)
 run_dir=`basename $out_filepath`
-if [[ $out_filepath == *"ses"* ]];
+if [[ $out_filepath == *"ses"* ]]
 then
 	path_ending_in_ID=`dirname $out_filepath`
 else
@@ -219,7 +219,8 @@ function moco_sc() {
         then
                 echo "no json file was included in input text file"
 		# Get the TR value from the nii header
-		TR=$(fsval $func_filepath pixdim4)
+		TR=$(fslval $func_filepath pixdim4)
+		TR=$(echo "scale=0; $TR/1000" | bc)
 
 		#Get the number of slices from the nii header
 		num_slices=$(fslval $func_filepath dim3)
@@ -245,34 +246,55 @@ function moco_sc() {
 		esac
 		
 		echo "${slice_times[@]}" | tr ' ' '\n' > slice_timing_file.txt
-
+		slice_timing_file=slice_timing_file.txt
 		slice_duration=$(fslval $func_filepath slice_duration)
-		if (( $(echo "$slice_duration < $TR" | bc -l) )); then
-    			echo "multiband data detected"
-			slicetimer -i $func_filepath -o ${mocodir}/func_stc.nii.gz -r $TR --tcustom=$slice_timing_file
-		else
-    			echo "singleband data detected"
-			slicetimer -i $func_filepath -o ${mocodir}/${subjectID}_func_stc.nii.gz -r $TR --${slice_order} #doesn't work, how to use the output file in the remaining steps
-			
+
+		if [ -f Despike_${suffix}.nii.gz ]
+		then
+			rm Despike_${suffix}.nii.gz
 		fi
 
+		3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
+
+		if (( $(echo "$slice_duration < $TR" | bc -l) )); then
+    			echo "multiband data detected"
+			echo $slice_timing_file
+			slicetimer -i Despike_${suffix}.nii.gz -o ${mocodir}/tshift_Despiked_${suffix}.nii.gz --tcustom=$slice_timing_file
+		else
+    			echo "singleband data detected"
+			slicetimer -i Despike_${suffix}.nii.gz -o ${mocodir}/tshift_Despiked_${suffix}.nii.gz -r $TR
+			
+		fi
+	
+		
+
         else
-                #Metadata extraction
-                #Pulls the Slice timing info from the json file
+                #Metadata extraction from BIDS compliant json sidecar file
                 abids_json_info.py -field SliceTiming -json ${json_filepath} | sed 's/[][]//g' | tr , '\n' | sed 's/ //g' > tshiftparams.1D
                 #Finds the number where the slice value is 0 in the slice timing
                 SliceRef=`cat tshiftparams.1D | grep -m1 -n -- "0$" | cut -d ":" -f1`
 
                 #Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
                 TR=`abids_json_info.py -field RepetitionTime -json ${json_filepath}`
+
+		3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
+
+		#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, ect
+		3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
+       		3dTshift -tzero 0 -tpattern '${Tshiftparams} ' -quintic -prefix tshift_${suffix} ${epi_in}
+      		3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig  
         fi
 
-
-	3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
     
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz
 
+	if [ -f ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz  ]
+	then
+		rm ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+	fi
+
     	3dresample -orient RPI -inset moco_${suffix}+tlrc.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+
 }
 
 
@@ -288,20 +310,24 @@ epi_orig=$func_filepath
 
 skullstrip ${anatdir}
 
-if [[ -z $biasch_filepath || -z $biasbc_filepath || -z $sbref_filepath]];
-then
-        echo "bias channel and sbref field maps were not included for bias correction."
-else
-        afni_set &
-        AFNI_PID=$!
+if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
+	echo "bias channel and sbref field maps were not included for bias correction."
+fi
+
+if [[ (-n "${biasch_file}") || (-n "${biasbc_file}") || (-n "${sbref_file}") ]]; then 
+	afni_set &
+	AFNI_PID=$!
 fi
 
 
 
-if [[ -z $spinlr_file || -z $spinrl_file]];
+if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
         echo "LR or RL spin echo field maps were not included for topup correction."
-else
+fi
+
+if [[ (-n "${spinlr_file}") || (-n "${spinrl_file}")  ]]
+then
         topup_set &
         TOPUP_PID=$!
 fi
@@ -313,14 +339,14 @@ fi
 antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
-if [[ -z $biasch_filepath || -z $sbref_filepath]];
+if [[ (-z "${biasch_file}") || (-z "${sbref_file}") ]]
 then
         echo
 else
         wait ${AFNI_PID}
 fi
 
-if [[ -z $spinlr_file || -z $spinrl_file]];
+if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
 	echo
 else
@@ -331,7 +357,6 @@ fi
 
 epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
 EPI_PID=$!
-
 
 moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest &
 SCMOCO_PID=$!

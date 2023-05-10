@@ -19,8 +19,7 @@ module load singularity/3.10.2
 SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP/Boston/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
-cp ../pd_dockerParallelized.sh .
-RUN_BIND_POINT=.
+RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
 SCRIPT_NAME=pd_dockerParallelized.sh
 
 IFS=$'\n'
@@ -31,24 +30,17 @@ anat_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
 out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))
 
 func_filepath=${paths_array[${func_ix}]}
-echo "func_filepath is ${func_filepath}"
 anat_filepath=${paths_array[${anat_ix}]}
-echo "anat_filepath is ${anat_filepath}"
 
 out_bind=${paths_array[${out_ix}]}
 func_bind=`dirname $func_filepath`
-echo "func_bind is ${func_bind}"
 anat_bind=`dirname $anat_filepath`
-echo "anat_bind is ${anat_bind}"
 
 func_file=`basename $func_filepath`
 anat_file=`basename $anat_filepath`
 
-#get rid of all binding
-#should have pd script connected with container entry point
-singularity exec --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} -f $func_file -a $anat_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -o $out_bind &
 
-rm pd_dockerParallelized.sh
 
 wait
 
