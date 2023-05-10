@@ -19,8 +19,7 @@ module load singularity/3.10.2
 SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
-RUN_BIND_POINT=.
-cp /data/users2/jwardell1/nshor_docker/pd_dockerParallelized.sh /data/users2/jwardell1/nshor_docker/fbirn-project/
+RUN_BIND_POINT=..
 SCRIPT_NAME=pd_dockerParallelized.sh
 
 IFS=$'\n'
@@ -40,9 +39,9 @@ anat_bind=`dirname $anat_filepath`
 func_file=`basename $func_filepath`
 anat_file=`basename $anat_filepath`
 
-singularity exec --writable-tmpfs --bind ${RUN_BIND_POINT}:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -o $out_bind &
-
-rm pd_dockerParallelized.sh
+#get rid of all binding
+#should have pd script connected with container entry point
+singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} -f $func_file -a $anat_file -o $out_bind &
 
 wait
 
