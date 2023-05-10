@@ -9,18 +9,44 @@ set -x
 set -e
 
 #get data provided as input from user input file
-while getopts f:a:j:c:b:l:r:o: flag
+while getopts f:a:j:c:b:s:l:r:o: flag
 do
         case "${flag}" in
-                f) func_file=${OPTARG};;
-                a) anat_file=${OPTARG};;
-                j) json_file=${OPTARG};;
-                c) biasch_file=${OPTARG};;
-                b) biasbc_file=${OPTARG};;
-                s) sbref_file=${OPTARG};;
-                l) spinlr_file=${OPTARG};;
-                r) spinrl_file=${OPTARG};;
-                o) out_filepath=${OPTARG};;
+                f) 
+			func_file=${OPTARG}
+			func_filepath=/func/${func_file}
+			;;
+                a) 
+			anat_file=${OPTARG}
+			anat_filepath=/anat/${anat_file}
+			;;
+                j) 
+			json_file=${OPTARG}
+			json_filepath=/func/${json_file}
+			;;
+                c) 
+			biasch_file=${OPTARG}
+			biasch_filepath=/func/${biasch_file}
+			;;
+                b) 
+			biasbc_file=${OPTARG}
+			biasbc_filepath=/func/${biasbc_file}
+			;;
+                s) 
+			sbref_file=${OPTARG}
+			sbref_filepath=/func/${sbref_file}
+			;;
+                l) 
+			spinlr_file=${OPTARG}
+			spinlr_filepath=/func/${spinlr_file}
+			;;
+                r) 
+			spinrl_file=${OPTARG}
+			spinrl_filepath=/func/${spinrl_file}
+			;;
+                o) 
+			out_filepath=${OPTARG}
+			;;
         esac
 done
 
@@ -32,17 +58,10 @@ echo "biasch_file : ${biasch_file}"
 echo "biasbc_file : ${biasbc_file}"
 echo "sbref_file : ${sbref_file}"
 echo "spinlr_file : ${spinlr_file}"
+echo "out_filepath : ${out_filepath}"
 
 
 #reassign filepaths using singularity bind points
-func_filepath=/func/${func_file}
-anat_filepath=/anat/${anat_file}
-json_filepath=/func/${json_file}
-biasch_filepath=/func/${biasch_file}
-biasbc_filepath=/func/${biasbc_file}
-sbref_filepath=/func/${sbref_file}
-spinlr_filepath=/func/${spinlr_file}
-spinrl_filepath=/func/${spinrl_file}
 
 #extract subject ID from out filepath, 
 #this assumes subject ID is either at the end of the output filepath
@@ -103,26 +122,47 @@ mkdir -p ${procdir}
 mkdir -p ${anatdir}
 
 #performs bias field correction using bias channel and body coil fieldmaps
+###NOTE: for any of the data that has LR or RL, we need to infer what that is before running these, these methods are not generalized to the RL/LR (can probably use the filename)
 function afni_set() {
-    3dcalc -a ${biasch_filepath} -b ${biasbc_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz -expr 'b/a'
+	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz  ]
+	then
+		rm ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz
+	fi
+
+
+    3dcalc -a ${biasch_filepath} -b ${biasbc_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz -expr 'b/a'
     echo "function afni_set debug 1"
 
-    3dWarp -deoblique -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz
-	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz ]; then
-		echo "$subjectID\_bias_field_deobl.nii.gz file exists"
-	else 
-		echo "$subjectID\_bias_field_deobl.nii.gz file DOES NOT exist"
+
+	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz  ]
+	then
+		rm ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz
 	fi
-	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field.nii.gz ]; then
-		echo "$subjectID\_bias_field.nii.gz file exists"
+ 
+
+    3dWarp -deoblique -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz
+
+	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz ]; then
+		echo "${subjectID}_bias_field_deobl.nii.gz file exists"
 	else 
-		echo "$subjectID\_bias_field.nii.gz file DOES NOT exist"
+		echo "${subjectID}_bias_field_deobl.nii.gz file DOES NOT exist"
+	fi
+	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz ]; then
+		echo "${subjectID}_bias_field.nii.gz file exists"
+	else 
+		echo "${subjectID}_bias_field.nii.gz file DOES NOT exist"
 	fi
     echo "function afni_set debug 2"
 
-    3dAutomask -dilate 2 -prefix ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ${sbref_filepath}
 
-    if [ -f ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ]; then
+	if [ -f ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz  ]
+	then
+		rm ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz
+	fi
+
+    3dAutomask -dilate 2 -prefix ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ${sbref_filepath}
+
+    if [ -f ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ]; then
 	    echo "Brain mask created successfully."
     else
 	    echo "Error: Brain mask creation failed."
@@ -130,13 +170,24 @@ function afni_set() {
     echo "function afni_set debug 3"
 
 
-    3dWarp -oblique_parent /func/$subjectID\_3T_rfMRI_REST1_LR.nii.gz -gridset ${func_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_bias_field_deobl.nii.gz
+    3dWarp -oblique_parent ${func_filepath} -gridset ${func_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz
+   
+ 
+	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz ]
+	then
+		echo "${outputUniverse}/derivatives/${subjectID}_biasfield_card2EPIoblN.nii.gz file created successfully"
+	else
+		echo "${outputUniverse}/derivatives/${subjectID}_biasfield_card2EPIoblN.nii.gz creation failed"
+	fi
+
     echo "function afni_set debug 4"
 
-    3dcalc -float -a ${func_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS.nii.gz -expr 'a*b*c'
+
+#output file is not created
+    3dcalc -float -a ${func_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS.nii.gz -expr 'a*b*c'
     echo "function afni_set debug 5"
 
-    3dcalc  -float  -a ${sbref_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/$subjectID\_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/$subjectID\_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/$subjectID\_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+    3dcalc  -float  -a ${sbref_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
     echo "function afni_set debug 6"
 }
 
@@ -308,7 +359,7 @@ vout=${subjectID}_rfMRI_v0_correg
 epi_orig=$func_filepath
 
 
-skullstrip ${anatdir}
+#skullstrip ${anatdir}
 
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
 	echo "bias channel and sbref field maps were not included for bias correction."
@@ -317,6 +368,9 @@ fi
 if [[ (-n "${biasch_file}") || (-n "${biasbc_file}") || (-n "${sbref_file}") ]]; then 
 	afni_set &
 	AFNI_PID=$!
+#DEBUGGING REMOVE THIS WHEN DONE
+wait ${AFNI_PID}
+exit
 fi
 
 
