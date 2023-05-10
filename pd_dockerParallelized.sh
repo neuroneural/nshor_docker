@@ -342,14 +342,20 @@ ANTS_PID=$!
 if [[ (-z "${biasch_file}") || (-z "${sbref_file}") ]]
 then
         echo
-else
+fi
+
+if [[ (-n "${biasch_file}") || (-n "${sbref_file}")  ]]
+then
         wait ${AFNI_PID}
 fi
 
 if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
 	echo
-else
+fi
+
+if [[ (-n "${spinlr_file}") || (-n "${spinrl_file}") ]]
+then
 	wait ${TOPUP_PID}
 fi
 
