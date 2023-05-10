@@ -19,7 +19,8 @@ module load singularity/3.10.2
 SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/ds004078-project/ds004078/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
-RUN_BIND_POINT=..
+cp ../pd_dockerParallelized.sh .
+RUN_BIND_POINT=.
 SCRIPT_NAME=pd_dockerParallelized.sh
 
 IFS=$'\n'
@@ -43,6 +44,8 @@ anat_file=`basename $anat_filepath`
 json_file=`basename $json_filepath`
 
 singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE ${RUN_BIND_POINT}/${SCRIPT_NAME} -f $func_file -a $anat_file -j $json_file -o $out_bind &
+
+rm pd_dockerParallelized.sh
 
 wait
 
