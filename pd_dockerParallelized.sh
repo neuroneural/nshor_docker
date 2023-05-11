@@ -107,12 +107,13 @@ mkdir -p  ${outputUniverse}/derivatives/$subjectID
 mkdir -p ${outputUniverse}/derivatives/$subjectID/bias_field
 mkdir -p ${outputUniverse}/derivatives/$subjectID/SBRef
 
-#make output directories
+#make output directories for intermediate files
 mocodir=${outputUniverse}/derivatives/${subjectID}/motion
 coregdir=${outputUniverse}/derivatives/${subjectID}/coregistration
 normdir=${outputUniverse}/derivatives/${subjectID}/normalization
 procdir=${outputUniverse}/derivatives/${subjectID}/processed
 anatdir=${outputUniverse}/derivatives/${subjectID}/anat
+funcdir=${outputUniverse}/derivatives/${subjectID}/func
 
 #Makes the directories
 mkdir -p ${coregdir}
@@ -120,6 +121,7 @@ mkdir -p ${mocodir}
 mkdir -p ${normdir}
 mkdir -p ${procdir}
 mkdir -p ${anatdir}
+mkdir -p ${funcdir}
 
 #performs bias field correction using bias channel and body coil fieldmaps
 ###NOTE: for any of the data that has LR or RL, we need to infer what that is before running these, these methods are not generalized to the RL/LR (can probably use the filename)
@@ -184,10 +186,10 @@ function afni_set() {
 
 
 #output file is not created
-    3dcalc -float -a ${func_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS.nii.gz -expr 'a*b*c'
+    3dcalc -float -a ${func_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS.nii.gz -expr 'a*b*c'
     echo "function afni_set debug 5"
 
-    3dcalc  -float  -a ${sbref_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${outputUniverse}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
+    3dcalc  -float  -a ${sbref_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
     echo "function afni_set debug 6"
 }
 
@@ -359,7 +361,7 @@ vout=${subjectID}_rfMRI_v0_correg
 epi_orig=$func_filepath
 
 
-#skullstrip ${anatdir}
+skullstrip ${anatdir}
 
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
 	echo "bias channel and sbref field maps were not included for bias correction."
@@ -368,9 +370,6 @@ fi
 if [[ (-n "${biasch_file}") || (-n "${biasbc_file}") || (-n "${sbref_file}") ]]; then 
 	afni_set &
 	AFNI_PID=$!
-#DEBUGGING REMOVE THIS WHEN DONE
-wait ${AFNI_PID}
-exit
 fi
 
 
