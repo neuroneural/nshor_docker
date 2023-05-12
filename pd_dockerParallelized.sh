@@ -9,7 +9,8 @@ set -x
 set -e
 
 #get data provided as input from user input file
-while getopts f:a:j:c:b:s:l:r:o: flag
+#reassign filepaths using singularity bind points
+while getopts f:a:j:c:b:s:l:r:p:o: flag
 do
         case "${flag}" in
                 f) 
@@ -44,6 +45,10 @@ do
 			spinrl_file=${OPTARG}
 			spinrl_filepath=/func/${spinrl_file}
 			;;
+                p) 
+			params_file=${OPTARG}
+			params_filepath=/func/${params_file}
+			;;
                 o) 
 			out_filepath=${OPTARG}
 			;;
@@ -58,10 +63,10 @@ echo "biasch_file : ${biasch_file}"
 echo "biasbc_file : ${biasbc_file}"
 echo "sbref_file : ${sbref_file}"
 echo "spinlr_file : ${spinlr_file}"
+echo "params_file : ${params_file}" #what if this needs to be pulled from another dataset or metadata directory?
 echo "out_filepath : ${out_filepath}"
 
 
-#reassign filepaths using singularity bind points
 
 #extract subject ID from out filepath, 
 #this assumes subject ID is either at the end of the output filepath
@@ -102,10 +107,14 @@ export FSLDIR PATH
 template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
 templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
 
-#Bias-Correction SBREF and EPI
+#Create directory for subject intermediate derivative files
 mkdir -p  ${outputUniverse}/derivatives/$subjectID
-mkdir -p ${outputUniverse}/derivatives/$subjectID/bias_field
-mkdir -p ${outputUniverse}/derivatives/$subjectID/SBRef
+
+
+#Bias-Correction SBREF and EPI
+fmapdir=${outputUniverse}/derivatives/$subjectID/fieldmap
+biasdir=${outputUniverse}/derivatives/$subjectID/bias_field
+sbrefdir=${outputUniverse}/derivatives/$subjectID/SBRef
 
 #make output directories for intermediate files
 mocodir=${outputUniverse}/derivatives/${subjectID}/motion
@@ -122,6 +131,11 @@ mkdir -p ${normdir}
 mkdir -p ${procdir}
 mkdir -p ${anatdir}
 mkdir -p ${funcdir}
+
+#Makes directores for bias/topup correction (probably should conditionally create these)
+mkdir -p ${fmapdir}
+mkdir -p ${biasdir}
+mkdir -p ${sbrefdir}
 
 #performs bias field correction using bias channel and body coil fieldmaps
 ###NOTE: for any of the data that has LR or RL, we need to infer what that is before running these, these methods are not generalized to the RL/LR (can probably use the filename)
@@ -196,23 +210,38 @@ function afni_set() {
 #performs topup correction using acquisition parameters, LR/RL spin echo and sbref fieldmaps 
 function topup_set {
         #sets the acquisition parameters to use for topup, this file should exist in the subject's func directory
-        touch ${outputUniverse}/derivatives/$subjectID/bias_field/acqparams.txt
-        acqparams=${outputUniverse}/derivatives/$subjectID/bias_field/acqparams.txt
-        echo -e "1 0 0 1\n-1 0 0 1" > $acqparams
+        #touch ${fmapdir}/acqparams.txt
+        #acqparams=${fmapdir}/acqparams.txt
+        #echo -e "1 0 0 1\n-1 0 0 1" > $acqparams
+        #echo -e "0 -1 0 0.059741\n0 1 0 0.059741" > $acqparams
 
 
         #Field Distortion Correction
-        mkdir -p ${outputUniverse}/derivatives/$subjectID/fieldmap/
 
-        fslmerge -t ${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_3T_Phase_Map.nii.gz ${spinlr_filepath} ${spinrl_filepath}
+        fslmerge -t ${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz ${spinlr_filepath} ${spinrl_filepath}
 
-        topup --imain=${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_3T_Phase_Map.nii.gz --datain=$acqparams --out=${outputUniverse}/derivatives/$subjectID/fieldmap/$subjectID\_TOPUP --fout=${outputUniverse}/derivatives/$subjectID/fieldmap/$subjectID\_TOPUP_FIELDMAP.nii.gz --iout=${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP_CORRECTION.nii.gz
 
-        if [ -f ${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP_FIELDMAP.nii.gz ]; then
+
+#################
+# START DEBUG	
+#################
+
+	cp ${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz ./imgfile3T.nii.gz
+	fslchfiletype NIFTI imgfile3T.nii.gz imgfile.nii
+
+        #topup --imain=${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz --datain=$acqparams --out=${fmapdir}/${subjectID}_TOPUP --fout=${fmapdir}/${subjectID}_TOPUP_FIELDMAP.nii.gz --iout=${fmapdir}/${subjectID}_TOPUP_CORRECTION.nii.gz
+	topup --imain=imgfile.nii --datain=$acqparams
+exit
+
+#################
+# END DEBUG	
+#################
+
+        if [ -f ${fmapdir}/${subjectID}_TOPUP_FIELDMAP.nii.gz ]; then
                 echo   "TOPUP SUCCESS"
         fi
 
-        applytopup --imain=${outputUniverse}/derivatives/${subjectID}/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/${subjectID}/fieldmap/${subjectID}_TOPUP --out=${outputUniverse}/derivatives/${subjectID}/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_UNWARPED.nii.gz &
+        applytopup --imain=${funcdir}/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/${subjectID}/fieldmap/${subjectID}_TOPUP --out=${funcdir}/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_UNWARPED.nii.gz &
 
         topup1_PID=$!
 
@@ -361,15 +390,16 @@ vout=${subjectID}_rfMRI_v0_correg
 epi_orig=$func_filepath
 
 
-skullstrip ${anatdir}
+#skullstrip ${anatdir}
 
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
 	echo "bias channel and sbref field maps were not included for bias correction."
 fi
 
 if [[ (-n "${biasch_file}") || (-n "${biasbc_file}") || (-n "${sbref_file}") ]]; then 
-	afni_set &
-	AFNI_PID=$!
+	echo #DEBUGGING REMOVE
+	#afni_set &
+	#AFNI_PID=$!
 fi
 
 
@@ -382,6 +412,8 @@ fi
 if [[ (-n "${spinlr_file}") || (-n "${spinrl_file}")  ]]
 then
         topup_set &
+#DEBUGGING REMOVE WHEN DONE
+exit
         TOPUP_PID=$!
 fi
 
