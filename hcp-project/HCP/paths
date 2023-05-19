@@ -5,6 +5,7 @@
 /data/hcp-plis/drive01/377451/unprocessed/3T/rfMRI_REST1_RL/377451_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/377451/unprocessed/3T/rfMRI_REST1_RL/377451_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/377451/unprocessed/3T/rfMRI_REST1_RL/377451_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/377451
 /data/hcp-plis/drive01/378857/unprocessed/3T/rfMRI_REST1_RL/378857_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/378857/unprocessed/3T/T1w_MPR1/378857_3T_T1w_MPR1.nii.gz
@@ -13,6 +14,7 @@
 /data/hcp-plis/drive01/378857/unprocessed/3T/rfMRI_REST1_RL/378857_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/378857/unprocessed/3T/rfMRI_REST1_RL/378857_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/378857/unprocessed/3T/rfMRI_REST1_RL/378857_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/378857
 /data/hcp-plis/drive01/379657/unprocessed/3T/rfMRI_REST1_RL/379657_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/379657/unprocessed/3T/T1w_MPR1/379657_3T_T1w_MPR1.nii.gz
@@ -21,6 +23,7 @@
 /data/hcp-plis/drive01/379657/unprocessed/3T/rfMRI_REST1_RL/379657_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/379657/unprocessed/3T/rfMRI_REST1_RL/379657_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/379657/unprocessed/3T/rfMRI_REST1_RL/379657_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/379657
 /data/hcp-plis/drive01/380036/unprocessed/3T/rfMRI_REST1_RL/380036_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/380036/unprocessed/3T/T1w_MPR1/380036_3T_T1w_MPR1.nii.gz
@@ -29,6 +32,7 @@
 /data/hcp-plis/drive01/380036/unprocessed/3T/rfMRI_REST1_RL/380036_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/380036/unprocessed/3T/rfMRI_REST1_RL/380036_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/380036/unprocessed/3T/rfMRI_REST1_RL/380036_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/380036
 /data/hcp-plis/drive01/381038/unprocessed/3T/rfMRI_REST1_RL/381038_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/381038/unprocessed/3T/T1w_MPR1/381038_3T_T1w_MPR1.nii.gz
@@ -37,6 +41,7 @@
 /data/hcp-plis/drive01/381038/unprocessed/3T/rfMRI_REST1_RL/381038_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/381038/unprocessed/3T/rfMRI_REST1_RL/381038_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/381038/unprocessed/3T/rfMRI_REST1_RL/381038_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/381038
 /data/hcp-plis/drive01/381543/unprocessed/3T/rfMRI_REST1_RL/381543_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/381543/unprocessed/3T/T1w_MPR1/381543_3T_T1w_MPR1.nii.gz
@@ -45,6 +50,7 @@
 /data/hcp-plis/drive01/381543/unprocessed/3T/rfMRI_REST1_RL/381543_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/381543/unprocessed/3T/rfMRI_REST1_RL/381543_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/381543/unprocessed/3T/rfMRI_REST1_RL/381543_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/381543
 /data/hcp-plis/drive01/382242/unprocessed/3T/rfMRI_REST1_RL/382242_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/382242/unprocessed/3T/T1w_MPR1/382242_3T_T1w_MPR1.nii.gz
@@ -53,6 +59,7 @@
 /data/hcp-plis/drive01/382242/unprocessed/3T/rfMRI_REST1_RL/382242_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/382242/unprocessed/3T/rfMRI_REST1_RL/382242_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/382242/unprocessed/3T/rfMRI_REST1_RL/382242_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/382242
 /data/hcp-plis/drive01/385450/unprocessed/3T/rfMRI_REST1_RL/385450_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/385450/unprocessed/3T/T1w_MPR1/385450_3T_T1w_MPR1.nii.gz
@@ -61,6 +68,7 @@
 /data/hcp-plis/drive01/385450/unprocessed/3T/rfMRI_REST1_RL/385450_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/385450/unprocessed/3T/rfMRI_REST1_RL/385450_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/385450/unprocessed/3T/rfMRI_REST1_RL/385450_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/385450
 /data/hcp-plis/drive01/386250/unprocessed/3T/rfMRI_REST1_RL/386250_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/386250/unprocessed/3T/T1w_MPR1/386250_3T_T1w_MPR1.nii.gz
@@ -69,6 +77,7 @@
 /data/hcp-plis/drive01/386250/unprocessed/3T/rfMRI_REST1_RL/386250_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/386250/unprocessed/3T/rfMRI_REST1_RL/386250_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/386250/unprocessed/3T/rfMRI_REST1_RL/386250_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/386250
 /data/hcp-plis/drive01/387959/unprocessed/3T/rfMRI_REST1_RL/387959_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/387959/unprocessed/3T/T1w_MPR1/387959_3T_T1w_MPR1.nii.gz
@@ -77,6 +86,7 @@
 /data/hcp-plis/drive01/387959/unprocessed/3T/rfMRI_REST1_RL/387959_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/387959/unprocessed/3T/rfMRI_REST1_RL/387959_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/387959/unprocessed/3T/rfMRI_REST1_RL/387959_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/387959
 /data/hcp-plis/drive01/389357/unprocessed/3T/rfMRI_REST1_RL/389357_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/389357/unprocessed/3T/T1w_MPR1/389357_3T_T1w_MPR1.nii.gz
@@ -85,6 +95,7 @@
 /data/hcp-plis/drive01/389357/unprocessed/3T/rfMRI_REST1_RL/389357_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/389357/unprocessed/3T/rfMRI_REST1_RL/389357_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/389357/unprocessed/3T/rfMRI_REST1_RL/389357_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/389357
 /data/hcp-plis/drive01/390645/unprocessed/3T/rfMRI_REST1_RL/390645_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/390645/unprocessed/3T/T1w_MPR1/390645_3T_T1w_MPR1.nii.gz
@@ -93,6 +104,7 @@
 /data/hcp-plis/drive01/390645/unprocessed/3T/rfMRI_REST1_RL/390645_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/390645/unprocessed/3T/rfMRI_REST1_RL/390645_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/390645/unprocessed/3T/rfMRI_REST1_RL/390645_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/390645
 /data/hcp-plis/drive01/391748/unprocessed/3T/rfMRI_REST1_RL/391748_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/391748/unprocessed/3T/T1w_MPR1/391748_3T_T1w_MPR1.nii.gz
@@ -101,6 +113,7 @@
 /data/hcp-plis/drive01/391748/unprocessed/3T/rfMRI_REST1_RL/391748_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/391748/unprocessed/3T/rfMRI_REST1_RL/391748_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/391748/unprocessed/3T/rfMRI_REST1_RL/391748_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/391748
 /data/hcp-plis/drive01/393247/unprocessed/3T/rfMRI_REST1_RL/393247_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/393247/unprocessed/3T/T1w_MPR1/393247_3T_T1w_MPR1.nii.gz
@@ -109,6 +122,7 @@
 /data/hcp-plis/drive01/393247/unprocessed/3T/rfMRI_REST1_RL/393247_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/393247/unprocessed/3T/rfMRI_REST1_RL/393247_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/393247/unprocessed/3T/rfMRI_REST1_RL/393247_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/393247
 /data/hcp-plis/drive01/393550/unprocessed/3T/rfMRI_REST1_RL/393550_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/393550/unprocessed/3T/T1w_MPR1/393550_3T_T1w_MPR1.nii.gz
@@ -117,6 +131,7 @@
 /data/hcp-plis/drive01/393550/unprocessed/3T/rfMRI_REST1_RL/393550_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/393550/unprocessed/3T/rfMRI_REST1_RL/393550_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/393550/unprocessed/3T/rfMRI_REST1_RL/393550_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/393550
 /data/hcp-plis/drive01/395251/unprocessed/3T/rfMRI_REST1_RL/395251_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/395251/unprocessed/3T/T1w_MPR1/395251_3T_T1w_MPR1.nii.gz
@@ -125,6 +140,7 @@
 /data/hcp-plis/drive01/395251/unprocessed/3T/rfMRI_REST1_RL/395251_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/395251/unprocessed/3T/rfMRI_REST1_RL/395251_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/395251/unprocessed/3T/rfMRI_REST1_RL/395251_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/395251
 /data/hcp-plis/drive01/395756/unprocessed/3T/rfMRI_REST1_RL/395756_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/395756/unprocessed/3T/T1w_MPR1/395756_3T_T1w_MPR1.nii.gz
@@ -133,6 +149,7 @@
 /data/hcp-plis/drive01/395756/unprocessed/3T/rfMRI_REST1_RL/395756_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/395756/unprocessed/3T/rfMRI_REST1_RL/395756_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/395756/unprocessed/3T/rfMRI_REST1_RL/395756_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/395756
 /data/hcp-plis/drive01/395958/unprocessed/3T/rfMRI_REST1_RL/395958_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/395958/unprocessed/3T/T1w_MPR1/395958_3T_T1w_MPR1.nii.gz
@@ -141,6 +158,7 @@
 /data/hcp-plis/drive01/395958/unprocessed/3T/rfMRI_REST1_RL/395958_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/395958/unprocessed/3T/rfMRI_REST1_RL/395958_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/395958/unprocessed/3T/rfMRI_REST1_RL/395958_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/395958
 /data/hcp-plis/drive01/397154/unprocessed/3T/rfMRI_REST1_RL/397154_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/397154/unprocessed/3T/T1w_MPR1/397154_3T_T1w_MPR1.nii.gz
@@ -149,6 +167,7 @@
 /data/hcp-plis/drive01/397154/unprocessed/3T/rfMRI_REST1_RL/397154_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/397154/unprocessed/3T/rfMRI_REST1_RL/397154_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/397154/unprocessed/3T/rfMRI_REST1_RL/397154_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/397154
 /data/hcp-plis/drive01/397760/unprocessed/3T/rfMRI_REST1_RL/397760_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/397760/unprocessed/3T/T1w_MPR1/397760_3T_T1w_MPR1.nii.gz
@@ -157,6 +176,7 @@
 /data/hcp-plis/drive01/397760/unprocessed/3T/rfMRI_REST1_RL/397760_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/397760/unprocessed/3T/rfMRI_REST1_RL/397760_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/397760/unprocessed/3T/rfMRI_REST1_RL/397760_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/397760
 /data/hcp-plis/drive01/397861/unprocessed/3T/rfMRI_REST1_RL/397861_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/397861/unprocessed/3T/T1w_MPR1/397861_3T_T1w_MPR1.nii.gz
@@ -165,6 +185,7 @@
 /data/hcp-plis/drive01/397861/unprocessed/3T/rfMRI_REST1_RL/397861_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/397861/unprocessed/3T/rfMRI_REST1_RL/397861_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/397861/unprocessed/3T/rfMRI_REST1_RL/397861_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/397861
 /data/hcp-plis/drive01/406432/unprocessed/3T/rfMRI_REST1_RL/406432_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/406432/unprocessed/3T/T1w_MPR1/406432_3T_T1w_MPR1.nii.gz
@@ -173,6 +194,7 @@
 /data/hcp-plis/drive01/406432/unprocessed/3T/rfMRI_REST1_RL/406432_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/406432/unprocessed/3T/rfMRI_REST1_RL/406432_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/406432/unprocessed/3T/rfMRI_REST1_RL/406432_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/406432
 /data/hcp-plis/drive01/406836/unprocessed/3T/rfMRI_REST1_RL/406836_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/406836/unprocessed/3T/T1w_MPR1/406836_3T_T1w_MPR1.nii.gz
@@ -181,6 +203,7 @@
 /data/hcp-plis/drive01/406836/unprocessed/3T/rfMRI_REST1_RL/406836_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/406836/unprocessed/3T/rfMRI_REST1_RL/406836_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/406836/unprocessed/3T/rfMRI_REST1_RL/406836_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/406836
 /data/hcp-plis/drive01/412528/unprocessed/3T/rfMRI_REST1_RL/412528_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/412528/unprocessed/3T/T1w_MPR1/412528_3T_T1w_MPR1.nii.gz
@@ -189,6 +212,7 @@
 /data/hcp-plis/drive01/412528/unprocessed/3T/rfMRI_REST1_RL/412528_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/412528/unprocessed/3T/rfMRI_REST1_RL/412528_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/412528/unprocessed/3T/rfMRI_REST1_RL/412528_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/412528
 /data/hcp-plis/drive01/414229/unprocessed/3T/rfMRI_REST1_RL/414229_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/414229/unprocessed/3T/T1w_MPR1/414229_3T_T1w_MPR1.nii.gz
@@ -197,6 +221,7 @@
 /data/hcp-plis/drive01/414229/unprocessed/3T/rfMRI_REST1_RL/414229_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/414229/unprocessed/3T/rfMRI_REST1_RL/414229_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/414229/unprocessed/3T/rfMRI_REST1_RL/414229_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/414229
 /data/hcp-plis/drive01/415837/unprocessed/3T/rfMRI_REST1_RL/415837_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/415837/unprocessed/3T/T1w_MPR1/415837_3T_T1w_MPR1.nii.gz
@@ -205,6 +230,7 @@
 /data/hcp-plis/drive01/415837/unprocessed/3T/rfMRI_REST1_RL/415837_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/415837/unprocessed/3T/rfMRI_REST1_RL/415837_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/415837/unprocessed/3T/rfMRI_REST1_RL/415837_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/415837
 /data/hcp-plis/drive01/422632/unprocessed/3T/rfMRI_REST1_RL/422632_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/422632/unprocessed/3T/T1w_MPR1/422632_3T_T1w_MPR1.nii.gz
@@ -213,6 +239,7 @@
 /data/hcp-plis/drive01/422632/unprocessed/3T/rfMRI_REST1_RL/422632_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/422632/unprocessed/3T/rfMRI_REST1_RL/422632_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/422632/unprocessed/3T/rfMRI_REST1_RL/422632_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/422632
 /data/hcp-plis/drive01/424939/unprocessed/3T/rfMRI_REST1_RL/424939_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/424939/unprocessed/3T/T1w_MPR1/424939_3T_T1w_MPR1.nii.gz
@@ -221,6 +248,7 @@
 /data/hcp-plis/drive01/424939/unprocessed/3T/rfMRI_REST1_RL/424939_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/424939/unprocessed/3T/rfMRI_REST1_RL/424939_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/424939/unprocessed/3T/rfMRI_REST1_RL/424939_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/424939
 /data/hcp-plis/drive01/429040/unprocessed/3T/rfMRI_REST1_RL/429040_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/429040/unprocessed/3T/T1w_MPR1/429040_3T_T1w_MPR1.nii.gz
@@ -229,6 +257,7 @@
 /data/hcp-plis/drive01/429040/unprocessed/3T/rfMRI_REST1_RL/429040_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/429040/unprocessed/3T/rfMRI_REST1_RL/429040_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/429040/unprocessed/3T/rfMRI_REST1_RL/429040_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/429040
 /data/hcp-plis/drive01/432332/unprocessed/3T/rfMRI_REST1_RL/432332_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/432332/unprocessed/3T/T1w_MPR1/432332_3T_T1w_MPR1.nii.gz
@@ -237,6 +266,7 @@
 /data/hcp-plis/drive01/432332/unprocessed/3T/rfMRI_REST1_RL/432332_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/432332/unprocessed/3T/rfMRI_REST1_RL/432332_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/432332/unprocessed/3T/rfMRI_REST1_RL/432332_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/432332
 /data/hcp-plis/drive01/433839/unprocessed/3T/rfMRI_REST1_RL/433839_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/433839/unprocessed/3T/T1w_MPR1/433839_3T_T1w_MPR1.nii.gz
@@ -245,6 +275,7 @@
 /data/hcp-plis/drive01/433839/unprocessed/3T/rfMRI_REST1_RL/433839_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/433839/unprocessed/3T/rfMRI_REST1_RL/433839_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/433839/unprocessed/3T/rfMRI_REST1_RL/433839_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/433839
 /data/hcp-plis/drive01/436239/unprocessed/3T/rfMRI_REST1_RL/436239_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/436239/unprocessed/3T/T1w_MPR1/436239_3T_T1w_MPR1.nii.gz
@@ -253,6 +284,7 @@
 /data/hcp-plis/drive01/436239/unprocessed/3T/rfMRI_REST1_RL/436239_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/436239/unprocessed/3T/rfMRI_REST1_RL/436239_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/436239/unprocessed/3T/rfMRI_REST1_RL/436239_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/436239
 /data/hcp-plis/drive01/436845/unprocessed/3T/rfMRI_REST1_RL/436845_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/436845/unprocessed/3T/T1w_MPR1/436845_3T_T1w_MPR1.nii.gz
@@ -261,6 +293,7 @@
 /data/hcp-plis/drive01/436845/unprocessed/3T/rfMRI_REST1_RL/436845_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/436845/unprocessed/3T/rfMRI_REST1_RL/436845_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/436845/unprocessed/3T/rfMRI_REST1_RL/436845_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/436845
 /data/hcp-plis/drive01/441939/unprocessed/3T/rfMRI_REST1_RL/441939_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/441939/unprocessed/3T/T1w_MPR1/441939_3T_T1w_MPR1.nii.gz
@@ -269,6 +302,7 @@
 /data/hcp-plis/drive01/441939/unprocessed/3T/rfMRI_REST1_RL/441939_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/441939/unprocessed/3T/rfMRI_REST1_RL/441939_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/441939/unprocessed/3T/rfMRI_REST1_RL/441939_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/441939
 /data/hcp-plis/drive01/445543/unprocessed/3T/rfMRI_REST1_RL/445543_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/445543/unprocessed/3T/T1w_MPR1/445543_3T_T1w_MPR1.nii.gz
@@ -277,6 +311,7 @@
 /data/hcp-plis/drive01/445543/unprocessed/3T/rfMRI_REST1_RL/445543_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/445543/unprocessed/3T/rfMRI_REST1_RL/445543_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/445543/unprocessed/3T/rfMRI_REST1_RL/445543_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/445543
 /data/hcp-plis/drive01/448347/unprocessed/3T/rfMRI_REST1_RL/448347_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/448347/unprocessed/3T/T1w_MPR1/448347_3T_T1w_MPR1.nii.gz
@@ -285,6 +320,7 @@
 /data/hcp-plis/drive01/448347/unprocessed/3T/rfMRI_REST1_RL/448347_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/448347/unprocessed/3T/rfMRI_REST1_RL/448347_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/448347/unprocessed/3T/rfMRI_REST1_RL/448347_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/448347
 /data/hcp-plis/drive01/449753/unprocessed/3T/rfMRI_REST1_RL/449753_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/449753/unprocessed/3T/T1w_MPR1/449753_3T_T1w_MPR1.nii.gz
@@ -293,6 +329,7 @@
 /data/hcp-plis/drive01/449753/unprocessed/3T/rfMRI_REST1_RL/449753_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/449753/unprocessed/3T/rfMRI_REST1_RL/449753_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/449753/unprocessed/3T/rfMRI_REST1_RL/449753_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/449753
 /data/hcp-plis/drive01/453441/unprocessed/3T/rfMRI_REST1_RL/453441_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/453441/unprocessed/3T/T1w_MPR1/453441_3T_T1w_MPR1.nii.gz
@@ -301,6 +338,7 @@
 /data/hcp-plis/drive01/453441/unprocessed/3T/rfMRI_REST1_RL/453441_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/453441/unprocessed/3T/rfMRI_REST1_RL/453441_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/453441/unprocessed/3T/rfMRI_REST1_RL/453441_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/453441
 /data/hcp-plis/drive01/456346/unprocessed/3T/rfMRI_REST1_RL/456346_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/456346/unprocessed/3T/T1w_MPR1/456346_3T_T1w_MPR1.nii.gz
@@ -309,6 +347,7 @@
 /data/hcp-plis/drive01/456346/unprocessed/3T/rfMRI_REST1_RL/456346_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/456346/unprocessed/3T/rfMRI_REST1_RL/456346_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/456346/unprocessed/3T/rfMRI_REST1_RL/456346_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/456346
 /data/hcp-plis/drive01/459453/unprocessed/3T/rfMRI_REST1_RL/459453_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/459453/unprocessed/3T/T1w_MPR1/459453_3T_T1w_MPR1.nii.gz
@@ -317,6 +356,7 @@
 /data/hcp-plis/drive01/459453/unprocessed/3T/rfMRI_REST1_RL/459453_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/459453/unprocessed/3T/rfMRI_REST1_RL/459453_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/459453/unprocessed/3T/rfMRI_REST1_RL/459453_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/459453
 /data/hcp-plis/drive01/465852/unprocessed/3T/rfMRI_REST1_RL/465852_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/465852/unprocessed/3T/T1w_MPR1/465852_3T_T1w_MPR1.nii.gz
@@ -325,6 +365,7 @@
 /data/hcp-plis/drive01/465852/unprocessed/3T/rfMRI_REST1_RL/465852_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/465852/unprocessed/3T/rfMRI_REST1_RL/465852_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/465852/unprocessed/3T/rfMRI_REST1_RL/465852_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/465852
 /data/hcp-plis/drive01/467351/unprocessed/3T/rfMRI_REST1_RL/467351_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/467351/unprocessed/3T/T1w_MPR1/467351_3T_T1w_MPR1.nii.gz
@@ -333,6 +374,7 @@
 /data/hcp-plis/drive01/467351/unprocessed/3T/rfMRI_REST1_RL/467351_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/467351/unprocessed/3T/rfMRI_REST1_RL/467351_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/467351/unprocessed/3T/rfMRI_REST1_RL/467351_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/467351
 /data/hcp-plis/drive01/473952/unprocessed/3T/rfMRI_REST1_RL/473952_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/473952/unprocessed/3T/T1w_MPR1/473952_3T_T1w_MPR1.nii.gz
@@ -341,6 +383,7 @@
 /data/hcp-plis/drive01/473952/unprocessed/3T/rfMRI_REST1_RL/473952_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/473952/unprocessed/3T/rfMRI_REST1_RL/473952_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/473952/unprocessed/3T/rfMRI_REST1_RL/473952_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/473952
 /data/hcp-plis/drive01/475855/unprocessed/3T/rfMRI_REST1_RL/475855_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/475855/unprocessed/3T/T1w_MPR1/475855_3T_T1w_MPR1.nii.gz
@@ -349,6 +392,7 @@
 /data/hcp-plis/drive01/475855/unprocessed/3T/rfMRI_REST1_RL/475855_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/475855/unprocessed/3T/rfMRI_REST1_RL/475855_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/475855/unprocessed/3T/rfMRI_REST1_RL/475855_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/475855
 /data/hcp-plis/drive01/479762/unprocessed/3T/rfMRI_REST1_RL/479762_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/479762/unprocessed/3T/T1w_MPR1/479762_3T_T1w_MPR1.nii.gz
@@ -357,6 +401,7 @@
 /data/hcp-plis/drive01/479762/unprocessed/3T/rfMRI_REST1_RL/479762_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/479762/unprocessed/3T/rfMRI_REST1_RL/479762_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/479762/unprocessed/3T/rfMRI_REST1_RL/479762_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/479762
 /data/hcp-plis/drive01/480141/unprocessed/3T/rfMRI_REST1_RL/480141_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/480141/unprocessed/3T/T1w_MPR1/480141_3T_T1w_MPR1.nii.gz
@@ -365,6 +410,7 @@
 /data/hcp-plis/drive01/480141/unprocessed/3T/rfMRI_REST1_RL/480141_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/480141/unprocessed/3T/rfMRI_REST1_RL/480141_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/480141/unprocessed/3T/rfMRI_REST1_RL/480141_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/480141
 /data/hcp-plis/drive01/481951/unprocessed/3T/rfMRI_REST1_RL/481951_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/481951/unprocessed/3T/T1w_MPR1/481951_3T_T1w_MPR1.nii.gz
@@ -373,6 +419,7 @@
 /data/hcp-plis/drive01/481951/unprocessed/3T/rfMRI_REST1_RL/481951_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/481951/unprocessed/3T/rfMRI_REST1_RL/481951_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/481951/unprocessed/3T/rfMRI_REST1_RL/481951_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/481951
 /data/hcp-plis/drive01/485757/unprocessed/3T/rfMRI_REST1_RL/485757_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/485757/unprocessed/3T/T1w_MPR1/485757_3T_T1w_MPR1.nii.gz
@@ -381,6 +428,7 @@
 /data/hcp-plis/drive01/485757/unprocessed/3T/rfMRI_REST1_RL/485757_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/485757/unprocessed/3T/rfMRI_REST1_RL/485757_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/485757/unprocessed/3T/rfMRI_REST1_RL/485757_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/485757
 /data/hcp-plis/drive01/486759/unprocessed/3T/rfMRI_REST1_RL/486759_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/486759/unprocessed/3T/T1w_MPR1/486759_3T_T1w_MPR1.nii.gz
@@ -389,6 +437,7 @@
 /data/hcp-plis/drive01/486759/unprocessed/3T/rfMRI_REST1_RL/486759_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/486759/unprocessed/3T/rfMRI_REST1_RL/486759_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/486759/unprocessed/3T/rfMRI_REST1_RL/486759_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/486759
 /data/hcp-plis/drive01/492754/unprocessed/3T/rfMRI_REST1_RL/492754_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/492754/unprocessed/3T/T1w_MPR1/492754_3T_T1w_MPR1.nii.gz
@@ -397,6 +446,7 @@
 /data/hcp-plis/drive01/492754/unprocessed/3T/rfMRI_REST1_RL/492754_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/492754/unprocessed/3T/rfMRI_REST1_RL/492754_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/492754/unprocessed/3T/rfMRI_REST1_RL/492754_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/492754
 /data/hcp-plis/drive01/495255/unprocessed/3T/rfMRI_REST1_RL/495255_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/495255/unprocessed/3T/T1w_MPR1/495255_3T_T1w_MPR1.nii.gz
@@ -405,6 +455,7 @@
 /data/hcp-plis/drive01/495255/unprocessed/3T/rfMRI_REST1_RL/495255_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/495255/unprocessed/3T/rfMRI_REST1_RL/495255_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/495255/unprocessed/3T/rfMRI_REST1_RL/495255_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/495255
 /data/hcp-plis/drive01/497865/unprocessed/3T/rfMRI_REST1_RL/497865_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/497865/unprocessed/3T/T1w_MPR1/497865_3T_T1w_MPR1.nii.gz
@@ -413,6 +464,7 @@
 /data/hcp-plis/drive01/497865/unprocessed/3T/rfMRI_REST1_RL/497865_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/497865/unprocessed/3T/rfMRI_REST1_RL/497865_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/497865/unprocessed/3T/rfMRI_REST1_RL/497865_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/497865
 /data/hcp-plis/drive01/499566/unprocessed/3T/rfMRI_REST1_RL/499566_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/499566/unprocessed/3T/T1w_MPR1/499566_3T_T1w_MPR1.nii.gz
@@ -421,6 +473,7 @@
 /data/hcp-plis/drive01/499566/unprocessed/3T/rfMRI_REST1_RL/499566_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/499566/unprocessed/3T/rfMRI_REST1_RL/499566_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/499566/unprocessed/3T/rfMRI_REST1_RL/499566_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/499566
 /data/hcp-plis/drive01/500222/unprocessed/3T/rfMRI_REST1_RL/500222_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/500222/unprocessed/3T/T1w_MPR1/500222_3T_T1w_MPR1.nii.gz
@@ -429,6 +482,7 @@
 /data/hcp-plis/drive01/500222/unprocessed/3T/rfMRI_REST1_RL/500222_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/500222/unprocessed/3T/rfMRI_REST1_RL/500222_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/500222/unprocessed/3T/rfMRI_REST1_RL/500222_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/500222
 /data/hcp-plis/drive01/506234/unprocessed/3T/rfMRI_REST1_RL/506234_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/506234/unprocessed/3T/T1w_MPR1/506234_3T_T1w_MPR1.nii.gz
@@ -437,6 +491,7 @@
 /data/hcp-plis/drive01/506234/unprocessed/3T/rfMRI_REST1_RL/506234_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/506234/unprocessed/3T/rfMRI_REST1_RL/506234_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/506234/unprocessed/3T/rfMRI_REST1_RL/506234_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/506234
 /data/hcp-plis/drive01/510326/unprocessed/3T/rfMRI_REST1_RL/510326_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/510326/unprocessed/3T/T1w_MPR1/510326_3T_T1w_MPR1.nii.gz
@@ -445,6 +500,7 @@
 /data/hcp-plis/drive01/510326/unprocessed/3T/rfMRI_REST1_RL/510326_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/510326/unprocessed/3T/rfMRI_REST1_RL/510326_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/510326/unprocessed/3T/rfMRI_REST1_RL/510326_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/510326
 /data/hcp-plis/drive01/512835/unprocessed/3T/rfMRI_REST1_RL/512835_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/512835/unprocessed/3T/T1w_MPR1/512835_3T_T1w_MPR1.nii.gz
@@ -453,6 +509,7 @@
 /data/hcp-plis/drive01/512835/unprocessed/3T/rfMRI_REST1_RL/512835_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/512835/unprocessed/3T/rfMRI_REST1_RL/512835_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/512835/unprocessed/3T/rfMRI_REST1_RL/512835_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/512835
 /data/hcp-plis/drive01/513736/unprocessed/3T/rfMRI_REST1_RL/513736_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/513736/unprocessed/3T/T1w_MPR1/513736_3T_T1w_MPR1.nii.gz
@@ -461,6 +518,7 @@
 /data/hcp-plis/drive01/513736/unprocessed/3T/rfMRI_REST1_RL/513736_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/513736/unprocessed/3T/rfMRI_REST1_RL/513736_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/513736/unprocessed/3T/rfMRI_REST1_RL/513736_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/513736
 /data/hcp-plis/drive01/517239/unprocessed/3T/rfMRI_REST1_RL/517239_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/517239/unprocessed/3T/T1w_MPR1/517239_3T_T1w_MPR1.nii.gz
@@ -469,6 +527,7 @@
 /data/hcp-plis/drive01/517239/unprocessed/3T/rfMRI_REST1_RL/517239_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/517239/unprocessed/3T/rfMRI_REST1_RL/517239_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/517239/unprocessed/3T/rfMRI_REST1_RL/517239_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/517239
 /data/hcp-plis/drive01/519950/unprocessed/3T/rfMRI_REST1_RL/519950_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/519950/unprocessed/3T/T1w_MPR1/519950_3T_T1w_MPR1.nii.gz
@@ -477,6 +536,7 @@
 /data/hcp-plis/drive01/519950/unprocessed/3T/rfMRI_REST1_RL/519950_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/519950/unprocessed/3T/rfMRI_REST1_RL/519950_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/519950/unprocessed/3T/rfMRI_REST1_RL/519950_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/519950
 /data/hcp-plis/drive01/520228/unprocessed/3T/rfMRI_REST1_RL/520228_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/520228/unprocessed/3T/T1w_MPR1/520228_3T_T1w_MPR1.nii.gz
@@ -485,6 +545,7 @@
 /data/hcp-plis/drive01/520228/unprocessed/3T/rfMRI_REST1_RL/520228_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/520228/unprocessed/3T/rfMRI_REST1_RL/520228_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/520228/unprocessed/3T/rfMRI_REST1_RL/520228_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/520228
 /data/hcp-plis/drive01/521331/unprocessed/3T/rfMRI_REST1_RL/521331_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/521331/unprocessed/3T/T1w_MPR1/521331_3T_T1w_MPR1.nii.gz
@@ -493,6 +554,7 @@
 /data/hcp-plis/drive01/521331/unprocessed/3T/rfMRI_REST1_RL/521331_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/521331/unprocessed/3T/rfMRI_REST1_RL/521331_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/521331/unprocessed/3T/rfMRI_REST1_RL/521331_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/521331
 /data/hcp-plis/drive01/522434/unprocessed/3T/rfMRI_REST1_RL/522434_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/522434/unprocessed/3T/T1w_MPR1/522434_3T_T1w_MPR1.nii.gz
@@ -501,6 +563,7 @@
 /data/hcp-plis/drive01/522434/unprocessed/3T/rfMRI_REST1_RL/522434_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/522434/unprocessed/3T/rfMRI_REST1_RL/522434_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/522434/unprocessed/3T/rfMRI_REST1_RL/522434_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/522434
 /data/hcp-plis/drive01/523032/unprocessed/3T/rfMRI_REST1_RL/523032_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/523032/unprocessed/3T/T1w_MPR1/523032_3T_T1w_MPR1.nii.gz
@@ -509,6 +572,7 @@
 /data/hcp-plis/drive01/523032/unprocessed/3T/rfMRI_REST1_RL/523032_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/523032/unprocessed/3T/rfMRI_REST1_RL/523032_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/523032/unprocessed/3T/rfMRI_REST1_RL/523032_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/523032
 /data/hcp-plis/drive01/524135/unprocessed/3T/rfMRI_REST1_RL/524135_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/524135/unprocessed/3T/T1w_MPR1/524135_3T_T1w_MPR1.nii.gz
@@ -517,6 +581,7 @@
 /data/hcp-plis/drive01/524135/unprocessed/3T/rfMRI_REST1_RL/524135_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/524135/unprocessed/3T/rfMRI_REST1_RL/524135_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/524135/unprocessed/3T/rfMRI_REST1_RL/524135_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/524135
 /data/hcp-plis/drive01/525541/unprocessed/3T/rfMRI_REST1_RL/525541_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/525541/unprocessed/3T/T1w_MPR1/525541_3T_T1w_MPR1.nii.gz
@@ -525,6 +590,7 @@
 /data/hcp-plis/drive01/525541/unprocessed/3T/rfMRI_REST1_RL/525541_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/525541/unprocessed/3T/rfMRI_REST1_RL/525541_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/525541/unprocessed/3T/rfMRI_REST1_RL/525541_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/525541
 /data/hcp-plis/drive01/529549/unprocessed/3T/rfMRI_REST1_RL/529549_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/529549/unprocessed/3T/T1w_MPR1/529549_3T_T1w_MPR1.nii.gz
@@ -533,6 +599,7 @@
 /data/hcp-plis/drive01/529549/unprocessed/3T/rfMRI_REST1_RL/529549_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/529549/unprocessed/3T/rfMRI_REST1_RL/529549_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/529549/unprocessed/3T/rfMRI_REST1_RL/529549_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/529549
 /data/hcp-plis/drive01/529953/unprocessed/3T/rfMRI_REST1_RL/529953_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/529953/unprocessed/3T/T1w_MPR1/529953_3T_T1w_MPR1.nii.gz
@@ -541,6 +608,7 @@
 /data/hcp-plis/drive01/529953/unprocessed/3T/rfMRI_REST1_RL/529953_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/529953/unprocessed/3T/rfMRI_REST1_RL/529953_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/529953/unprocessed/3T/rfMRI_REST1_RL/529953_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/529953
 /data/hcp-plis/drive01/530635/unprocessed/3T/rfMRI_REST1_RL/530635_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/530635/unprocessed/3T/T1w_MPR1/530635_3T_T1w_MPR1.nii.gz
@@ -549,6 +617,7 @@
 /data/hcp-plis/drive01/530635/unprocessed/3T/rfMRI_REST1_RL/530635_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/530635/unprocessed/3T/rfMRI_REST1_RL/530635_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/530635/unprocessed/3T/rfMRI_REST1_RL/530635_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/530635
 /data/hcp-plis/drive01/531536/unprocessed/3T/rfMRI_REST1_RL/531536_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/531536/unprocessed/3T/T1w_MPR1/531536_3T_T1w_MPR1.nii.gz
@@ -557,6 +626,7 @@
 /data/hcp-plis/drive01/531536/unprocessed/3T/rfMRI_REST1_RL/531536_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/531536/unprocessed/3T/rfMRI_REST1_RL/531536_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/531536/unprocessed/3T/rfMRI_REST1_RL/531536_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/531536
 /data/hcp-plis/drive01/536647/unprocessed/3T/rfMRI_REST1_RL/536647_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/536647/unprocessed/3T/T1w_MPR1/536647_3T_T1w_MPR1.nii.gz
@@ -565,6 +635,7 @@
 /data/hcp-plis/drive01/536647/unprocessed/3T/rfMRI_REST1_RL/536647_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/536647/unprocessed/3T/rfMRI_REST1_RL/536647_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/536647/unprocessed/3T/rfMRI_REST1_RL/536647_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/536647
 /data/hcp-plis/drive01/540436/unprocessed/3T/rfMRI_REST1_RL/540436_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/540436/unprocessed/3T/T1w_MPR1/540436_3T_T1w_MPR1.nii.gz
@@ -573,6 +644,7 @@
 /data/hcp-plis/drive01/540436/unprocessed/3T/rfMRI_REST1_RL/540436_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/540436/unprocessed/3T/rfMRI_REST1_RL/540436_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/540436/unprocessed/3T/rfMRI_REST1_RL/540436_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/540436
 /data/hcp-plis/drive01/541943/unprocessed/3T/rfMRI_REST1_RL/541943_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/541943/unprocessed/3T/T1w_MPR1/541943_3T_T1w_MPR1.nii.gz
@@ -581,6 +653,7 @@
 /data/hcp-plis/drive01/541943/unprocessed/3T/rfMRI_REST1_RL/541943_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/541943/unprocessed/3T/rfMRI_REST1_RL/541943_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/541943/unprocessed/3T/rfMRI_REST1_RL/541943_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/541943
 /data/hcp-plis/drive01/545345/unprocessed/3T/rfMRI_REST1_RL/545345_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/545345/unprocessed/3T/T1w_MPR1/545345_3T_T1w_MPR1.nii.gz
@@ -589,6 +662,7 @@
 /data/hcp-plis/drive01/545345/unprocessed/3T/rfMRI_REST1_RL/545345_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/545345/unprocessed/3T/rfMRI_REST1_RL/545345_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/545345/unprocessed/3T/rfMRI_REST1_RL/545345_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/545345
 /data/hcp-plis/drive01/547046/unprocessed/3T/rfMRI_REST1_RL/547046_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/547046/unprocessed/3T/T1w_MPR1/547046_3T_T1w_MPR1.nii.gz
@@ -597,6 +671,7 @@
 /data/hcp-plis/drive01/547046/unprocessed/3T/rfMRI_REST1_RL/547046_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/547046/unprocessed/3T/rfMRI_REST1_RL/547046_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/547046/unprocessed/3T/rfMRI_REST1_RL/547046_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/547046
 /data/hcp-plis/drive01/548250/unprocessed/3T/rfMRI_REST1_RL/548250_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/548250/unprocessed/3T/T1w_MPR1/548250_3T_T1w_MPR1.nii.gz
@@ -605,6 +680,7 @@
 /data/hcp-plis/drive01/548250/unprocessed/3T/rfMRI_REST1_RL/548250_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/548250/unprocessed/3T/rfMRI_REST1_RL/548250_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/548250/unprocessed/3T/rfMRI_REST1_RL/548250_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/548250
 /data/hcp-plis/drive01/549757/unprocessed/3T/rfMRI_REST1_RL/549757_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/549757/unprocessed/3T/T1w_MPR1/549757_3T_T1w_MPR1.nii.gz
@@ -613,6 +689,7 @@
 /data/hcp-plis/drive01/549757/unprocessed/3T/rfMRI_REST1_RL/549757_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/549757/unprocessed/3T/rfMRI_REST1_RL/549757_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/549757/unprocessed/3T/rfMRI_REST1_RL/549757_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/549757
 /data/hcp-plis/drive01/552544/unprocessed/3T/rfMRI_REST1_RL/552544_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/552544/unprocessed/3T/T1w_MPR1/552544_3T_T1w_MPR1.nii.gz
@@ -621,6 +698,7 @@
 /data/hcp-plis/drive01/552544/unprocessed/3T/rfMRI_REST1_RL/552544_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/552544/unprocessed/3T/rfMRI_REST1_RL/552544_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/552544/unprocessed/3T/rfMRI_REST1_RL/552544_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/552544
 /data/hcp-plis/drive01/553344/unprocessed/3T/rfMRI_REST1_RL/553344_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/553344/unprocessed/3T/T1w_MPR1/553344_3T_T1w_MPR1.nii.gz
@@ -629,6 +707,7 @@
 /data/hcp-plis/drive01/553344/unprocessed/3T/rfMRI_REST1_RL/553344_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/553344/unprocessed/3T/rfMRI_REST1_RL/553344_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/553344/unprocessed/3T/rfMRI_REST1_RL/553344_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/553344
 /data/hcp-plis/drive01/555348/unprocessed/3T/rfMRI_REST1_RL/555348_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/555348/unprocessed/3T/T1w_MPR1/555348_3T_T1w_MPR1.nii.gz
@@ -637,6 +716,7 @@
 /data/hcp-plis/drive01/555348/unprocessed/3T/rfMRI_REST1_RL/555348_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/555348/unprocessed/3T/rfMRI_REST1_RL/555348_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/555348/unprocessed/3T/rfMRI_REST1_RL/555348_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/555348
 /data/hcp-plis/drive01/555651/unprocessed/3T/rfMRI_REST1_RL/555651_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/555651/unprocessed/3T/T1w_MPR1/555651_3T_T1w_MPR1.nii.gz
@@ -645,6 +725,7 @@
 /data/hcp-plis/drive01/555651/unprocessed/3T/rfMRI_REST1_RL/555651_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/555651/unprocessed/3T/rfMRI_REST1_RL/555651_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/555651/unprocessed/3T/rfMRI_REST1_RL/555651_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/555651
 /data/hcp-plis/drive01/557857/unprocessed/3T/rfMRI_REST1_RL/557857_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/557857/unprocessed/3T/T1w_MPR1/557857_3T_T1w_MPR1.nii.gz
@@ -653,6 +734,7 @@
 /data/hcp-plis/drive01/557857/unprocessed/3T/rfMRI_REST1_RL/557857_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/557857/unprocessed/3T/rfMRI_REST1_RL/557857_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/557857/unprocessed/3T/rfMRI_REST1_RL/557857_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/557857
 /data/hcp-plis/drive01/559053/unprocessed/3T/rfMRI_REST1_RL/559053_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/559053/unprocessed/3T/T1w_MPR1/559053_3T_T1w_MPR1.nii.gz
@@ -661,6 +743,7 @@
 /data/hcp-plis/drive01/559053/unprocessed/3T/rfMRI_REST1_RL/559053_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/559053/unprocessed/3T/rfMRI_REST1_RL/559053_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/559053/unprocessed/3T/rfMRI_REST1_RL/559053_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/559053
 /data/hcp-plis/drive01/561242/unprocessed/3T/rfMRI_REST1_RL/561242_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/561242/unprocessed/3T/T1w_MPR1/561242_3T_T1w_MPR1.nii.gz
@@ -669,6 +752,7 @@
 /data/hcp-plis/drive01/561242/unprocessed/3T/rfMRI_REST1_RL/561242_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/561242/unprocessed/3T/rfMRI_REST1_RL/561242_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/561242/unprocessed/3T/rfMRI_REST1_RL/561242_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/561242
 /data/hcp-plis/drive01/561444/unprocessed/3T/rfMRI_REST1_RL/561444_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/561444/unprocessed/3T/T1w_MPR1/561444_3T_T1w_MPR1.nii.gz
@@ -677,6 +761,7 @@
 /data/hcp-plis/drive01/561444/unprocessed/3T/rfMRI_REST1_RL/561444_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/561444/unprocessed/3T/rfMRI_REST1_RL/561444_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/561444/unprocessed/3T/rfMRI_REST1_RL/561444_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/561444
 /data/hcp-plis/drive01/562345/unprocessed/3T/rfMRI_REST1_RL/562345_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/562345/unprocessed/3T/T1w_MPR1/562345_3T_T1w_MPR1.nii.gz
@@ -685,6 +770,7 @@
 /data/hcp-plis/drive01/562345/unprocessed/3T/rfMRI_REST1_RL/562345_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/562345/unprocessed/3T/rfMRI_REST1_RL/562345_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/562345/unprocessed/3T/rfMRI_REST1_RL/562345_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/562345
 /data/hcp-plis/drive01/562446/unprocessed/3T/rfMRI_REST1_RL/562446_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/562446/unprocessed/3T/T1w_MPR1/562446_3T_T1w_MPR1.nii.gz
@@ -693,6 +779,7 @@
 /data/hcp-plis/drive01/562446/unprocessed/3T/rfMRI_REST1_RL/562446_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/562446/unprocessed/3T/rfMRI_REST1_RL/562446_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/562446/unprocessed/3T/rfMRI_REST1_RL/562446_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/562446
 /data/hcp-plis/drive01/565452/unprocessed/3T/rfMRI_REST1_RL/565452_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/565452/unprocessed/3T/T1w_MPR1/565452_3T_T1w_MPR1.nii.gz
@@ -701,6 +788,7 @@
 /data/hcp-plis/drive01/565452/unprocessed/3T/rfMRI_REST1_RL/565452_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/565452/unprocessed/3T/rfMRI_REST1_RL/565452_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/565452/unprocessed/3T/rfMRI_REST1_RL/565452_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/565452
 /data/hcp-plis/drive01/566454/unprocessed/3T/rfMRI_REST1_RL/566454_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/566454/unprocessed/3T/T1w_MPR1/566454_3T_T1w_MPR1.nii.gz
@@ -709,6 +797,7 @@
 /data/hcp-plis/drive01/566454/unprocessed/3T/rfMRI_REST1_RL/566454_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/566454/unprocessed/3T/rfMRI_REST1_RL/566454_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/566454/unprocessed/3T/rfMRI_REST1_RL/566454_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/566454
 /data/hcp-plis/drive01/567052/unprocessed/3T/rfMRI_REST1_RL/567052_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/567052/unprocessed/3T/T1w_MPR1/567052_3T_T1w_MPR1.nii.gz
@@ -717,6 +806,7 @@
 /data/hcp-plis/drive01/567052/unprocessed/3T/rfMRI_REST1_RL/567052_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/567052/unprocessed/3T/rfMRI_REST1_RL/567052_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/567052/unprocessed/3T/rfMRI_REST1_RL/567052_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/567052
 /data/hcp-plis/drive01/567961/unprocessed/3T/rfMRI_REST1_RL/567961_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/567961/unprocessed/3T/T1w_MPR1/567961_3T_T1w_MPR1.nii.gz
@@ -725,6 +815,7 @@
 /data/hcp-plis/drive01/567961/unprocessed/3T/rfMRI_REST1_RL/567961_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/567961/unprocessed/3T/rfMRI_REST1_RL/567961_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/567961/unprocessed/3T/rfMRI_REST1_RL/567961_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/567961
 /data/hcp-plis/drive01/568963/unprocessed/3T/rfMRI_REST1_RL/568963_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/568963/unprocessed/3T/T1w_MPR1/568963_3T_T1w_MPR1.nii.gz
@@ -733,6 +824,7 @@
 /data/hcp-plis/drive01/568963/unprocessed/3T/rfMRI_REST1_RL/568963_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/568963/unprocessed/3T/rfMRI_REST1_RL/568963_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/568963/unprocessed/3T/rfMRI_REST1_RL/568963_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/568963
 /data/hcp-plis/drive01/570243/unprocessed/3T/rfMRI_REST1_RL/570243_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/570243/unprocessed/3T/T1w_MPR1/570243_3T_T1w_MPR1.nii.gz
@@ -741,6 +833,7 @@
 /data/hcp-plis/drive01/570243/unprocessed/3T/rfMRI_REST1_RL/570243_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/570243/unprocessed/3T/rfMRI_REST1_RL/570243_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/570243/unprocessed/3T/rfMRI_REST1_RL/570243_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/570243
 /data/hcp-plis/drive01/571144/unprocessed/3T/rfMRI_REST1_RL/571144_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/571144/unprocessed/3T/T1w_MPR1/571144_3T_T1w_MPR1.nii.gz
@@ -749,6 +842,7 @@
 /data/hcp-plis/drive01/571144/unprocessed/3T/rfMRI_REST1_RL/571144_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/571144/unprocessed/3T/rfMRI_REST1_RL/571144_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/571144/unprocessed/3T/rfMRI_REST1_RL/571144_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/571144
 /data/hcp-plis/drive01/571548/unprocessed/3T/rfMRI_REST1_RL/571548_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/571548/unprocessed/3T/T1w_MPR1/571548_3T_T1w_MPR1.nii.gz
@@ -757,6 +851,7 @@
 /data/hcp-plis/drive01/571548/unprocessed/3T/rfMRI_REST1_RL/571548_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/571548/unprocessed/3T/rfMRI_REST1_RL/571548_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/571548/unprocessed/3T/rfMRI_REST1_RL/571548_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/571548
 /data/hcp-plis/drive01/572045/unprocessed/3T/rfMRI_REST1_RL/572045_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/572045/unprocessed/3T/T1w_MPR1/572045_3T_T1w_MPR1.nii.gz
@@ -765,6 +860,7 @@
 /data/hcp-plis/drive01/572045/unprocessed/3T/rfMRI_REST1_RL/572045_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/572045/unprocessed/3T/rfMRI_REST1_RL/572045_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/572045/unprocessed/3T/rfMRI_REST1_RL/572045_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/572045
 /data/hcp-plis/drive01/573249/unprocessed/3T/rfMRI_REST1_RL/573249_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/573249/unprocessed/3T/T1w_MPR1/573249_3T_T1w_MPR1.nii.gz
@@ -773,6 +869,7 @@
 /data/hcp-plis/drive01/573249/unprocessed/3T/rfMRI_REST1_RL/573249_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/573249/unprocessed/3T/rfMRI_REST1_RL/573249_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/573249/unprocessed/3T/rfMRI_REST1_RL/573249_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/573249
 /data/hcp-plis/drive01/573451/unprocessed/3T/rfMRI_REST1_RL/573451_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/573451/unprocessed/3T/T1w_MPR1/573451_3T_T1w_MPR1.nii.gz
@@ -781,6 +878,7 @@
 /data/hcp-plis/drive01/573451/unprocessed/3T/rfMRI_REST1_RL/573451_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/573451/unprocessed/3T/rfMRI_REST1_RL/573451_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/573451/unprocessed/3T/rfMRI_REST1_RL/573451_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/573451
 /data/hcp-plis/drive01/576255/unprocessed/3T/rfMRI_REST1_RL/576255_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/576255/unprocessed/3T/T1w_MPR1/576255_3T_T1w_MPR1.nii.gz
@@ -789,6 +887,7 @@
 /data/hcp-plis/drive01/576255/unprocessed/3T/rfMRI_REST1_RL/576255_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/576255/unprocessed/3T/rfMRI_REST1_RL/576255_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/576255/unprocessed/3T/rfMRI_REST1_RL/576255_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/576255
 /data/hcp-plis/drive01/579665/unprocessed/3T/rfMRI_REST1_RL/579665_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/579665/unprocessed/3T/T1w_MPR1/579665_3T_T1w_MPR1.nii.gz
@@ -797,6 +896,7 @@
 /data/hcp-plis/drive01/579665/unprocessed/3T/rfMRI_REST1_RL/579665_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/579665/unprocessed/3T/rfMRI_REST1_RL/579665_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/579665/unprocessed/3T/rfMRI_REST1_RL/579665_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/579665
 /data/hcp-plis/drive01/579867/unprocessed/3T/rfMRI_REST1_RL/579867_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/579867/unprocessed/3T/T1w_MPR1/579867_3T_T1w_MPR1.nii.gz
@@ -805,6 +905,7 @@
 /data/hcp-plis/drive01/579867/unprocessed/3T/rfMRI_REST1_RL/579867_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/579867/unprocessed/3T/rfMRI_REST1_RL/579867_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/579867/unprocessed/3T/rfMRI_REST1_RL/579867_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/579867
 /data/hcp-plis/drive01/580044/unprocessed/3T/rfMRI_REST1_RL/580044_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/580044/unprocessed/3T/T1w_MPR1/580044_3T_T1w_MPR1.nii.gz
@@ -813,6 +914,7 @@
 /data/hcp-plis/drive01/580044/unprocessed/3T/rfMRI_REST1_RL/580044_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/580044/unprocessed/3T/rfMRI_REST1_RL/580044_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/580044/unprocessed/3T/rfMRI_REST1_RL/580044_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/580044
 /data/hcp-plis/drive01/580347/unprocessed/3T/rfMRI_REST1_RL/580347_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/580347/unprocessed/3T/T1w_MPR1/580347_3T_T1w_MPR1.nii.gz
@@ -821,6 +923,7 @@
 /data/hcp-plis/drive01/580347/unprocessed/3T/rfMRI_REST1_RL/580347_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/580347/unprocessed/3T/rfMRI_REST1_RL/580347_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/580347/unprocessed/3T/rfMRI_REST1_RL/580347_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/580347
 /data/hcp-plis/drive01/580650/unprocessed/3T/rfMRI_REST1_RL/580650_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/580650/unprocessed/3T/T1w_MPR1/580650_3T_T1w_MPR1.nii.gz
@@ -829,6 +932,7 @@
 /data/hcp-plis/drive01/580650/unprocessed/3T/rfMRI_REST1_RL/580650_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/580650/unprocessed/3T/rfMRI_REST1_RL/580650_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/580650/unprocessed/3T/rfMRI_REST1_RL/580650_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/580650
 /data/hcp-plis/drive01/580751/unprocessed/3T/rfMRI_REST1_RL/580751_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/580751/unprocessed/3T/T1w_MPR1/580751_3T_T1w_MPR1.nii.gz
@@ -837,6 +941,7 @@
 /data/hcp-plis/drive01/580751/unprocessed/3T/rfMRI_REST1_RL/580751_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/580751/unprocessed/3T/rfMRI_REST1_RL/580751_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/580751/unprocessed/3T/rfMRI_REST1_RL/580751_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/580751
 /data/hcp-plis/drive01/581349/unprocessed/3T/rfMRI_REST1_RL/581349_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/581349/unprocessed/3T/T1w_MPR1/581349_3T_T1w_MPR1.nii.gz
@@ -845,6 +950,7 @@
 /data/hcp-plis/drive01/581349/unprocessed/3T/rfMRI_REST1_RL/581349_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/581349/unprocessed/3T/rfMRI_REST1_RL/581349_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/581349/unprocessed/3T/rfMRI_REST1_RL/581349_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/581349
 /data/hcp-plis/drive01/581450/unprocessed/3T/rfMRI_REST1_RL/581450_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/581450/unprocessed/3T/T1w_MPR1/581450_3T_T1w_MPR1.nii.gz
@@ -853,6 +959,7 @@
 /data/hcp-plis/drive01/581450/unprocessed/3T/rfMRI_REST1_RL/581450_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/581450/unprocessed/3T/rfMRI_REST1_RL/581450_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/581450/unprocessed/3T/rfMRI_REST1_RL/581450_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/581450
 /data/hcp-plis/drive01/583858/unprocessed/3T/rfMRI_REST1_RL/583858_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/583858/unprocessed/3T/T1w_MPR1/583858_3T_T1w_MPR1.nii.gz
@@ -861,6 +968,7 @@
 /data/hcp-plis/drive01/583858/unprocessed/3T/rfMRI_REST1_RL/583858_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/583858/unprocessed/3T/rfMRI_REST1_RL/583858_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/583858/unprocessed/3T/rfMRI_REST1_RL/583858_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/583858
 /data/hcp-plis/drive01/584355/unprocessed/3T/rfMRI_REST1_RL/584355_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/584355/unprocessed/3T/T1w_MPR1/584355_3T_T1w_MPR1.nii.gz
@@ -869,6 +977,7 @@
 /data/hcp-plis/drive01/584355/unprocessed/3T/rfMRI_REST1_RL/584355_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/584355/unprocessed/3T/rfMRI_REST1_RL/584355_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/584355/unprocessed/3T/rfMRI_REST1_RL/584355_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/584355
 /data/hcp-plis/drive01/585256/unprocessed/3T/rfMRI_REST1_RL/585256_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/585256/unprocessed/3T/T1w_MPR1/585256_3T_T1w_MPR1.nii.gz
@@ -877,6 +986,7 @@
 /data/hcp-plis/drive01/585256/unprocessed/3T/rfMRI_REST1_RL/585256_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/585256/unprocessed/3T/rfMRI_REST1_RL/585256_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/585256/unprocessed/3T/rfMRI_REST1_RL/585256_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/585256
 /data/hcp-plis/drive01/585862/unprocessed/3T/rfMRI_REST1_RL/585862_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/585862/unprocessed/3T/T1w_MPR1/585862_3T_T1w_MPR1.nii.gz
@@ -885,6 +995,7 @@
 /data/hcp-plis/drive01/585862/unprocessed/3T/rfMRI_REST1_RL/585862_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/585862/unprocessed/3T/rfMRI_REST1_RL/585862_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/585862/unprocessed/3T/rfMRI_REST1_RL/585862_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/585862
 /data/hcp-plis/drive01/586460/unprocessed/3T/rfMRI_REST1_RL/586460_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/586460/unprocessed/3T/T1w_MPR1/586460_3T_T1w_MPR1.nii.gz
@@ -893,6 +1004,7 @@
 /data/hcp-plis/drive01/586460/unprocessed/3T/rfMRI_REST1_RL/586460_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/586460/unprocessed/3T/rfMRI_REST1_RL/586460_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/586460/unprocessed/3T/rfMRI_REST1_RL/586460_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/586460
 /data/hcp-plis/drive01/587664/unprocessed/3T/rfMRI_REST1_RL/587664_3T_rfMRI_REST1_RL.nii.gz
 /data/hcp-plis/drive01/587664/unprocessed/3T/T1w_MPR1/587664_3T_T1w_MPR1.nii.gz
@@ -901,4 +1013,5 @@
 /data/hcp-plis/drive01/587664/unprocessed/3T/rfMRI_REST1_RL/587664_3T_BIAS_32CH.nii.gz
 /data/hcp-plis/drive01/587664/unprocessed/3T/rfMRI_REST1_RL/587664_3T_BIAS_BC.nii.gz
 /data/hcp-plis/drive01/587664/unprocessed/3T/rfMRI_REST1_RL/587664_3T_rfMRI_REST1_RL_SBRef.nii.gz
+/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA/datain.txt
 /data/users2/jwardell1/nshor_docker/hcp-project/HCP/587664

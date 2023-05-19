@@ -20,7 +20,7 @@ mv /data/users2/jwardell1/nshor_docker/fbirn-project/mkpths.sh /data/users2/jwar
 cd fbirn-project
 bash /data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/mkpths.sh
 bash /data/users2/jwardell1/nshor_docker/fbirn-project/submit.sh
-echo "fbirn done"
+echo "fbirn submitted"
 
 
 cd /data/users2/jwardell1/nshor_docker
@@ -44,7 +44,7 @@ mv /data/users2/jwardell1/nshor_docker/bsnip-project/mkpths.sh /data/users2/jwar
 cd bsnip-project
 bash /data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP/Boston/mkpths.sh
 bash /data/users2/jwardell1/nshor_docker/bsnip-project/submit.sh
-echo "bsnip done"
+echo "bsnip submitted"
 
 
 
@@ -71,7 +71,7 @@ mv /data/users2/jwardell1/nshor_docker/hcp-project/mkpths.sh /data/users2/jwarde
 cd hcp-project
 bash /data/users2/jwardell1/nshor_docker/hcp-project/HCP/mkpths.sh
 bash /data/users2/jwardell1/nshor_docker/hcp-project/submit.sh
-echo "hcp done"
+echo "hcp submitted"
 
 
 
@@ -95,4 +95,4 @@ mv /data/users2/jwardell1/nshor_docker/ds004078-project/mkpths.sh /data/users2/j
 cd ds004078-project
 bash /data/users2/jwardell1/nshor_docker/ds004078-project/ds004078/mkpths.sh
 bash /data/users2/jwardell1/nshor_docker/ds004078-project/submit.sh
-echo "ds004078 done"
+echo "ds004078 submitted"
