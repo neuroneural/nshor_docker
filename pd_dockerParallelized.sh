@@ -280,7 +280,10 @@ function epireg_set() {
 
         $FSLDIR/bin/flirt -ref ${vrefhead} -in ${vepi} -dof 6 -cost bbr -wmseg ${vout}_fast_wmseg -init ${vout}_init.mat -omat ${vout}.mat -out ${vout} -schedule ${FSLDIR}/etc/flirtsch/bbr.sch
 
+#DEBUG REMOVE WHEN DONE
+echo "applywarp start"
         $FSLDIR/bin/applywarp -i ${vepi} -r ${vrefhead} -o ${vout} --premat=${vout}.mat --interp=spline
+echo "applywarp done"
 }
 
 function skullstrip() {
@@ -383,6 +386,7 @@ function moco_sc() {
 	fi
 
     	3dresample -orient RPI -inset moco_${suffix}+tlrc.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+	echo "moco done"
 
 }
 
@@ -397,7 +401,7 @@ vout=${subjectID}_rfMRI_v0_correg
 epi_orig=$func_filepath
 
 #DEBUG UNCOMMENT WHEN DONE
-#skullstrip ${anatdir}
+skullstrip ${anatdir}
 
 
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
