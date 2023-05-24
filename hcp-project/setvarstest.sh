@@ -1,5 +1,8 @@
 #!/bin/bash
 
+module load singularity
+
+
 SLURM_ARRAY_TASK_ID=1
 
 SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/hcp-project/HCP/paths

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 DATA_DIRECTORY=/data/hcp-plis/drive01
-PARAMS_DIRECTORY=/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA
+#PARAMS_DIRECTORY=/data/neuromark2/Data/HCP_Development/Data_BIDS/Raw_Data/HCD0001305_V1_MR/ses_01/func1_PA
+PARAMS_DIRECTORY=/data/users2/jwardell1/nshor_docker/hcp-project
 num_subs=`ls $DATA_DIRECTORY | wc -l`
 IFS=$'\n' sub_ids=($(cat /data/users2/jwardell1/nshor_docker/hcp-project/HCP/subjects.txt))
 PATH_FILE=/data/users2/jwardell1/nshor_docker/hcp-project/HCP/paths

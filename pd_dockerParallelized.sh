@@ -55,7 +55,6 @@ do
         esac
 done
 
-#print the filenames to console for debugging purposes
 echo "func_file : ${func_file}"
 echo "anat_file : ${anat_file}"
 echo "json_file : ${json_file}"
@@ -107,6 +106,9 @@ export FSLDIR PATH
 template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
 templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
 
+rm -rf ${outputUniverse}/derivatives/
+
+
 #Create directory for subject intermediate derivative files
 mkdir -p  ${outputUniverse}/derivatives/$subjectID
 
@@ -140,71 +142,23 @@ mkdir -p ${sbrefdir}
 #performs bias field correction using bias channel and body coil fieldmaps
 ###NOTE: for any of the data that has LR or RL, we need to infer what that is before running these, these methods are not generalized to the RL/LR (can probably use the filename)
 function afni_set() {
-	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz  ]
-	then
-		rm ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz
-	fi
 
 
     3dcalc -a ${biasch_filepath} -b ${biasbc_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz -expr 'b/a'
-    echo "function afni_set debug 1"
 
-
-	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz  ]
-	then
-		rm ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz
-	fi
- 
 
     3dWarp -deoblique -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz
 
-	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz ]; then
-		echo "${subjectID}_bias_field_deobl.nii.gz file exists"
-	else 
-		echo "${subjectID}_bias_field_deobl.nii.gz file DOES NOT exist"
-	fi
-	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field.nii.gz ]; then
-		echo "${subjectID}_bias_field.nii.gz file exists"
-	else 
-		echo "${subjectID}_bias_field.nii.gz file DOES NOT exist"
-	fi
-    echo "function afni_set debug 2"
-
-
-	if [ -f ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz  ]
-	then
-		rm ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz
-	fi
 
     3dAutomask -dilate 2 -prefix ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ${sbref_filepath}
-
-    if [ -f ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz ]; then
-	    echo "Brain mask created successfully."
-    else
-	    echo "Error: Brain mask creation failed."
-    fi
-    echo "function afni_set debug 3"
 
 
     3dWarp -oblique_parent ${func_filepath} -gridset ${func_filepath} -prefix ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_bias_field_deobl.nii.gz
    
  
-	if [ -f ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz ]
-	then
-		echo "${outputUniverse}/derivatives/${subjectID}_biasfield_card2EPIoblN.nii.gz file created successfully"
-	else
-		echo "${outputUniverse}/derivatives/${subjectID}_biasfield_card2EPIoblN.nii.gz creation failed"
-	fi
-
-    echo "function afni_set debug 4"
-
-
-#output file is not created
     3dcalc -float -a ${func_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS.nii.gz -expr 'a*b*c'
-    echo "function afni_set debug 5"
 
     3dcalc  -float  -a ${sbref_filepath} -b ${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_Mask.nii.gz -c ${outputUniverse}/derivatives/$subjectID/bias_field/${subjectID}_biasfield_card2EPIoblN.nii.gz  -prefix ${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS_SBRef.nii.gz -expr 'a*b*c'
-    echo "function afni_set debug 6"
 }
 
 #performs topup correction using acquisition parameters, LR/RL spin echo and sbref fieldmaps 
@@ -217,49 +171,19 @@ function topup_set {
 
         fslmerge -t ${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz ${spinlr_filepath} ${spinrl_filepath}
 
+        topup --imain=${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz --datain=$acqparams --out=${fmapdir}/${subjectID}_TOPUP --fout=${fmapdir}/${subjectID}_TOPUP_FIELDMAP.nii.gz --iout=${fmapdir}/${subjectID}_TOPUP_CORRECTION.nii.gz  -v
 
 
-#################
-# START DEBUG	
-#################
-
-	#cp ${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz ./imgfile3T.nii.gz
-	#fslchfiletype NIFTI imgfile3T.nii.gz imgfile.nii
-#after locating a datain file with the acq params matrix, I'm going to try mounting the directory containing the 
-#file and pass this file into the script to use here. That is the last thing I can think of that might be causing this issue 
-#because the acqparams file is created using an echo statement.
-	if [ -f ${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz ]
-	then
-		echo "${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz exists"
-	else
-		echo "${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz cant find it"
-	fi
-
-        #topup --imain=${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz --datain=$acqparams --out=${fmapdir}/${subjectID}_TOPUP --fout=${fmapdir}/${subjectID}_TOPUP_FIELDMAP.nii.gz --iout=${fmapdir}/${subjectID}_TOPUP_CORRECTION.nii.gz 
-        topup --imain=${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz --datain=$acqparams 
-	#topup --imain=imgfile.nii --datain=$acqparams
-exit
-
-#################
-# END DEBUG	
-#################
-
-        if [ -f ${fmapdir}/${subjectID}_TOPUP_FIELDMAP.nii.gz ]; then
-                echo   "TOPUP SUCCESS"
-        fi
-
-        applytopup --imain=${funcdir}/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/${subjectID}/fieldmap/${subjectID}_TOPUP --out=${funcdir}/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_UNWARPED.nii.gz &
+        applytopup --imain=${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/${subjectID}/fieldmap/${subjectID}_TOPUP --out=${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS_UNWARPED.nii.gz -v &
 
         topup1_PID=$!
 
-        applytopup --imain=${outputUniverse}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_LR_DEBIAS_SBRef.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP --out=${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_LR_SBRef_DEBIAS_UNWARPED.nii.gz &
+        applytopup --imain=${outputUniverse}/derivatives/$subjectID/func/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS_SBRef.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${outputUniverse}/derivatives/$subjectID/fieldmap/${subjectID}_TOPUP --out=${outputUniverse}/derivatives/$subjectID/SBRef/${subjectID}_3T_rfMRI_REST1_RL_SBRef_DEBIAS_UNWARPED.nii.gz -v &
         topup2_PID=$!
-        echo 'finished topup'
         wait $topup1_PID
         wait $topup2_PID
+        echo 'finished topup'
 }
-
-
 
 
 function epireg_set() {
@@ -294,7 +218,6 @@ function skullstrip() {
     ./ROBEX ${anatdir}/T1_bc.nii.gz ${anatdir}/T1_bc_ss.nii.gz
 }
 
-#MoCo means motion correction 
 function moco_sc() {
         epi_in=$1
         ref_vol=$2
@@ -337,11 +260,6 @@ function moco_sc() {
 		slice_timing_file=slice_timing_file.txt
 		slice_duration=$(fslval $func_filepath slice_duration)
 
-		if [ -f Despike_${suffix}.nii.gz ]
-		then
-			rm Despike_${suffix}.nii.gz
-		fi
-
 		3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
 
 		if (( $(echo "$slice_duration < $TR" | bc -l) )); then
@@ -365,34 +283,15 @@ function moco_sc() {
                 #Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
                 TR=`abids_json_info.py -field RepetitionTime -json ${json_filepath}`
 
-		if [ -f Despike_${suffix}.nii.gz ]
-		then
-			rm Despike_${suffix}.nii.gz
-		fi
-
 		3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
 
 		#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, ect
-		if [ -f tshift_Despiked_${suffix}.nii.gz ]
-		then
-			rm tshift_Despiked_${suffix}.nii.gz
-		fi
 
 		3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
         fi
 
     
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz
-
-	if [ -f ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz  ]
-	then
-		rm ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
-	fi
-	
-	if [ -f tshift_${suffix}*  ]
-	then
-		rm tshift_${suffix}*
-	fi
 
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix tshift_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D moco_${suffix}+orig
 	
@@ -412,7 +311,7 @@ vout=${subjectID}_rfMRI_v0_correg
 
 epi_orig=$func_filepath
 
-#skullstrip ${anatdir}
+skullstrip ${anatdir}
 
 
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
@@ -420,10 +319,8 @@ if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]];
 fi
 
 if [[ (-n "${biasch_file}") || (-n "${biasbc_file}") || (-n "${sbref_file}") ]]; then 
-#DEBUG UNCOMMENT WHEN DONE
-	#afni_set &
-	#AFNI_PID=$!
-	echo
+	afni_set &
+	AFNI_PID=$!
 fi
 
 
@@ -434,17 +331,15 @@ fi
 
 if [[ (-n "${spinlr_file}") || (-n "${spinrl_file}")  ]]
 then
-#DEBUG UNCOMMENT WHEN DONE
         topup_set &
-        #TOPUP_PID=$!
-	exit
+        TOPUP_PID=$!
 fi
 
 
 
 
 
-#antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
 if [[ (-z "${biasch_file}") || (-z "${sbref_file}") ]]
@@ -467,10 +362,10 @@ then
 	wait ${TOPUP_PID}
 fi
 
-#3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
+3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
 
 
-#epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
+epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
 EPI_PID=$!
 
 moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest &
@@ -480,7 +375,7 @@ mcflirt -in ${epi_orig} -reffile ${coregdir}/${func_file} -out ${mocodir}/${subj
 MCFLIRT_PID=$!
 
 wait $SCMOCO_PID
-wait $EPI_PID
+#wait $EPI_PID
 
 c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${func_file} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
@@ -502,7 +397,9 @@ cp ${anatdir}/T1_bc_ss.nii.gz  ${procdir}
 mkdir -p ${outputMount}/processed
 mtdPrcDir=${outputMount}/processed
 
-cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}
+filenii="${func_file%.*}"
+filename="${filenii%.*}"
+cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${filename}.nii.gz
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt
