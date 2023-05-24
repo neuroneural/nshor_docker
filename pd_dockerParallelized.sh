@@ -280,10 +280,7 @@ function epireg_set() {
 
         $FSLDIR/bin/flirt -ref ${vrefhead} -in ${vepi} -dof 6 -cost bbr -wmseg ${vout}_fast_wmseg -init ${vout}_init.mat -omat ${vout}.mat -out ${vout} -schedule ${FSLDIR}/etc/flirtsch/bbr.sch
 
-#DEBUG REMOVE WHEN DONE
-echo "applywarp start"
         $FSLDIR/bin/applywarp -i ${vepi} -r ${vrefhead} -o ${vout} --premat=${vout}.mat --interp=spline
-echo "applywarp done"
 }
 
 function skullstrip() {
@@ -312,7 +309,6 @@ function moco_sc() {
                 echo "no json file was included in input text file"
 		# Get the TR value from the nii header
 		TR=$(fslval $func_filepath pixdim4)
-		TR=$(echo "scale=0; $TR/1000" | bc)
 
 		#Get the number of slices from the nii header
 		num_slices=$(fslval $func_filepath dim3)
@@ -369,12 +365,20 @@ function moco_sc() {
                 #Pulls the TR from the json file. This tells 3dTshift what the scaling factor is
                 TR=`abids_json_info.py -field RepetitionTime -json ${json_filepath}`
 
+		if [ -f Despike_${suffix}.nii.gz ]
+		then
+			rm Despike_${suffix}.nii.gz
+		fi
+
 		3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
 
 		#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, ect
+		if [ -f tshift_Despiked_${suffix}.nii.gz ]
+		then
+			rm tshift_Despiked_${suffix}.nii.gz
+		fi
+
 		3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
-       		3dTshift -tzero 0 -tpattern '${Tshiftparams} ' -quintic -prefix tshift_${suffix} ${epi_in}
-      		3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D tshift_${suffix}+orig  
         fi
 
     
@@ -384,8 +388,16 @@ function moco_sc() {
 	then
 		rm ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
 	fi
+	
+	if [ -f tshift_${suffix}*  ]
+	then
+		rm tshift_${suffix}*
+	fi
 
-    	3dresample -orient RPI -inset moco_${suffix}+tlrc.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix tshift_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D moco_${suffix}+orig
+	
+
+    	3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
 	echo "moco done"
 
 }
@@ -400,8 +412,7 @@ vout=${subjectID}_rfMRI_v0_correg
 
 epi_orig=$func_filepath
 
-#DEBUG UNCOMMENT WHEN DONE
-skullstrip ${anatdir}
+#skullstrip ${anatdir}
 
 
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
@@ -433,7 +444,7 @@ fi
 
 
 
-antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+#antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
 if [[ (-z "${biasch_file}") || (-z "${sbref_file}") ]]
@@ -456,9 +467,10 @@ then
 	wait ${TOPUP_PID}
 fi
 
-3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
+#3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
 
-epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
+
+#epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead}  &
 EPI_PID=$!
 
 moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest &

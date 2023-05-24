@@ -8,7 +8,6 @@ mkdir /data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP
 mkdir /data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP/Boston
 mv /data/users2/jwardell1/nshor_docker/bsnip-project/subjects.txt /data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP/Boston/subjects.txt
 mv /data/users2/jwardell1/nshor_docker/bsnip-project/mkpths.sh /data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP/Boston/mkpths.sh
-cd bsnip-project
 bash /data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP/Boston/mkpths.sh
 
 
