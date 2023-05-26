@@ -106,7 +106,7 @@ export FSLDIR PATH
 template=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
 templatemask=/usr/share/fsl/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
 
-rm -rf ${outputUniverse}/derivatives/
+rm -rf ${outputUniverse}/derivatives/$subjectID
 
 
 #Create directory for subject intermediate derivative files
@@ -285,18 +285,18 @@ function moco_sc() {
 
 		3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
 
-		#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, ect
+		#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, etc
 
 		3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
         fi
 
     
-	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D ${mocodir}/Despike_${suffix}.nii.gz
+	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D moco_${suffix}+orig
 
-	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix tshift_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D moco_${suffix}+orig
 	
+	3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
 
-    	3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+
 	echo "moco done"
 
 }
@@ -338,7 +338,7 @@ fi
 
 
 
-
+#warps T1 image to MNI152 template
 antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
 ANTS_PID=$! 
 
@@ -375,14 +375,16 @@ mcflirt -in ${epi_orig} -reffile ${coregdir}/${func_file} -out ${mocodir}/${subj
 MCFLIRT_PID=$!
 
 wait $SCMOCO_PID
-#wait $EPI_PID
+wait $EPI_PID
 
 c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${func_file} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
 wait $ANTS_PID
 
+#computes matrix for warping functional image to MNI152 T1 image
 antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz -v
 
+#warps functional image to MNI152 T1 image
 WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
 cp ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz ${procdir}
@@ -399,7 +401,7 @@ mtdPrcDir=${outputMount}/processed
 
 filenii="${func_file%.*}"
 filename="${filenii%.*}"
-cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${filename}.nii.gz
+cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${filename}_processed.nii.gz
 
 end=`date +%s`
 echo $((end-start)) >> ${procdir}/benchTime.txt

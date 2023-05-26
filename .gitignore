@@ -10,3 +10,5 @@ ds004078/
 ds004302/
 dkrimg.sif
 dockerimg.tar
+*.nii
+*.nii.gz
