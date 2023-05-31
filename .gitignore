@@ -6,9 +6,10 @@ jobs/
 subjects.txt
 FBIRN/
 BSNIP/
+HCP/
 ds004078/
 ds004302/
-dkrimg.sif
+*.sif
 dockerimg.tar
 *.nii
 *.nii.gz
