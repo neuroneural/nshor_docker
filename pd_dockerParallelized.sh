@@ -443,6 +443,7 @@ mtdPrcDir=${outputMount}/processed
 filenii="${func_file%.*}"
 filename="${filenii%.*}"
 cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${filename}_processed.nii.gz
+cp ${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
 
 #  Clean up shared memory directory
 rm -rf ${tmpfs}/derivatives/$subjectID
