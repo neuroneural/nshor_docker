@@ -1,23 +1,23 @@
 #!/bin/bash
 
 DATA_DIRECTORY=/data/users2/nshor/Multiband_with_MEG
-num_subs=`cat subjects.txt | wc -l`
-IFS=$'\n' sub_ids=($(cat subjects.txt))
-PATH_FILE=/data/users2/jwardell1/nshor_docker/ds004078-project/ds004078/paths
+num_subs=`cat /data/users2/jwardell1/nshor_docker/examples/ds004078-project/ds004078/subjects.txt | wc -l`
+IFS=$'\n' sub_ids=($(cat /data/users2/jwardell1/nshor_docker/examples/ds004078-project/ds004078/subjects.txt))
+PATH_FILE=/data/users2/jwardell1/nshor_docker/examples/ds004078-project/ds004078/paths
 touch ${PATH_FILE}
 
 for(( i=0; i<$num_subs; i++))
 do
 	subjectID=${sub_ids[$i]}
 	
-	subfunc=/data/users2/jwardell1/nshor_docker/ds004078-project/ds004078/subfunc.txt
+	subfunc=/data/users2/jwardell1/nshor_docker/examples/ds004078-project/ds004078/subfunc.txt
 	touch $subfunc
 	cd ${DATA_DIRECTORY}/${subjectID}/func && ls *.nii.gz > $subfunc
 	sub_func_files=($(cat $subfunc))
 	num_func_files=`cat $subfunc | wc -l`
 
 
-	subjson=/data/users2/jwardell1/nshor_docker/ds004078-project/ds004078/subjson.txt
+	subjson=/data/users2/jwardell1/nshor_docker/examples/ds004078-project/ds004078/subjson.txt
 	touch $subjson
 	cd ${DATA_DIRECTORY}/${subjectID}/func && ls *.json > $subjson
 	sub_json_files=($(cat $subjson))
@@ -26,7 +26,7 @@ do
 
 	anat_filename=${subjectID}_run-01_T1w.nii.gz
 
-	OUTPUT_DIRECTORY=/data/users2/jwardell1/nshor_docker/ds004078-project/ds004078
+	OUTPUT_DIRECTORY=/data/users2/jwardell1/nshor_docker/examples/ds004078-project/ds004078
 	sub_outpath="${OUTPUT_DIRECTORY}/${subjectID}"
 	mkdir "${OUTPUT_DIRECTORY}/${subjectID}"
 

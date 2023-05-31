@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project_dir=/data/users2/jwardell1/nshor_docker/fbirn-project
+project_dir=/data/users2/jwardell1/nshor_docker/examples/fbirn-project
 paths_file=${project_dir}/FBIRN/paths
 
 num_lines=`wc -l <  $paths_file`

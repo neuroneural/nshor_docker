@@ -5,7 +5,7 @@ module load singularity
 
 SLURM_ARRAY_TASK_ID=1
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/hcp-project/HCP/paths
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
 RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker

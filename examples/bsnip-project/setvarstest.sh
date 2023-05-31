@@ -2,7 +2,7 @@
 
 module load singularity/3.10.2
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/fbirn-project/FBIRN/paths
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
 RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
@@ -12,6 +12,7 @@ SLURM_ARRAY_TASK_ID=1
 
 IFS=$'\n'
 paths_array=($(cat ${SUB_PATHS_FILE}))
+
 func_ix=$(( 3*$SLURM_ARRAY_TASK_ID ))
 anat_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
 out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))

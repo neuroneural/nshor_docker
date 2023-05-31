@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project_dir=/data/users2/jwardell1/nshor_docker/ds004078-project
+project_dir=/data/users2/jwardell1/nshor_docker/examples/ds004078-project
 paths_file=${project_dir}/ds004078/paths
 
 num_lines=`wc -l <  $paths_file`

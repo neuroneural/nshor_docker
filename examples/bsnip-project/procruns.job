@@ -5,8 +5,8 @@
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
 #SBATCH -J bsnip-test
-#SBATCH -e /data/users2/jwardell1/nshor_docker/bsnip-project/jobs/error%A.err
-#SBATCH -o /data/users2/jwardell1/nshor_docker/bsnip-project/jobs/out%A.out
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/bsnip-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/bsnip-project/jobs/out%A.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jwardell1@student.gsu.edu
@@ -16,7 +16,7 @@ sleep 5s
 
 module load singularity/3.10.2
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/bsnip-project/BSNIP/Boston/paths
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
 RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker

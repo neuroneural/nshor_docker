@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project_dir=/data/users2/jwardell1/nshor_docker/bsnip-project
+project_dir=/data/users2/jwardell1/nshor_docker/examples/bsnip-project
 paths_file=${project_dir}/BSNIP/Boston/paths
 
 num_lines=`wc -l <  $paths_file`

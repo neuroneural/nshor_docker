@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-project_dir=/data/users2/jwardell1/nshor_docker/hcp-project
+project_dir=/data/users2/jwardell1/nshor_docker/examples/hcp-project
 paths_file=${project_dir}/HCP/paths
 
 num_lines=`wc -l <  $paths_file`
