@@ -50,7 +50,7 @@ git clone https://github.com/neuroneural/nshor_docker/
 ```
 
 ### Repository Structure and Contents (Informational)
-The repository contains 4 example project directories, named `<DATASET>-project` where `<DATASET>` is replaced by the dataset name. Inside each of these project directories are some helper scripts for each dataset to perform various tasks related to this script.
+The repository contains example project directories in the `examples` directory. Each example is named `<DATASET>-project` where `<DATASET>` is replaced by the dataset name. Inside each of these project directories are some helper scripts for each dataset to perform various tasks related to this script.
 
 
 #### The `mkpths.sh` Script
