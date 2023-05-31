@@ -92,6 +92,16 @@ The repository contains example project directories in the `examples` directory.
 singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -o $out_bind &
 ```
 
+There is a master submission script to be executed on the login node in the root directory of this repository. It is called `sub_dsall.sh` and it cleans up the output files and recreates them for each of the example datasets. After that, it executes the `submit.sh` script to send each dataset to process on slurm. 
+#### The `sub_dsall.sh` Script
+* Processes each example dataset in the following way: 
+* Copies script to make paths file and output directory into project dir
+* Copies textfile list of subjects into project dir
+* Deletes existing processed files in output directory
+* Makes new empty output directory 
+* Moves subjects list and script for making paths file and output directories into output directory 
+* Executes script to make paths file and output directories for each subject
+* Submits the dataset to slurm for processing
 
 
 ## Prepare the Docker Container
