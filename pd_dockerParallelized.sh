@@ -9,7 +9,7 @@ mni_project=true
 
 #    Getopts is used by shell procedures to parse positional parameters.
 #    Check for the optional flags that were provided in the pd_dockerParallelized.sh script
-while getopts f:a:j:c:b:s:l:r:p:o: flag
+while getopts f:a:j:c:b:s:l:r:p:o:n: flag
 do
         case "${flag}" in
                 f) # -f flag was used to provide the functional MRI image file 
