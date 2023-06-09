@@ -384,9 +384,11 @@ if [ "$mni_project" = false  ]; then
 fi
 
 
-#warps T1 image to MNI152 template
-antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
-ANTS_PID=$! 
+if [ "$mni_project" = true  ]; then
+	#warps T1 image to MNI152 template
+	antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+	ANTS_PID=$! 
+fi
 
 
 #   If fieldmaps were provided for bias correction, wait for the bias correction process to finish, otherwise don't do anything
@@ -431,13 +433,28 @@ wait $EPI_PID
 #   Translates the FSL corregistration matrix to one that ANTs can use
 c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${func_file} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
 
-wait $ANTS_PID
+if [ "$mni_project" = true  ]; then
+	wait $ANTS_PID
+fi
 
-	#computes the ANTs matrix for warping functional image to template T1 image
+
+if [ "$mni_project" = false  ];then 
+
+	#transform ${mocodir}/${subjectID}_rfMRI_moco.nii.gz according to a reference image and a transform (or a set of transforms).
+	antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed_native.nii.gz
+
+	#warps functional image to T1_bc_ss.nii.gz image using ANTs
+	WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template} ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+
+else
+
+	#computes the ANTs matrix for warping functional image to MNI152 T1 image
 	antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz
 
-	#warps functional image to template T1 image using ANTs
+	#warps functional image to MNI152 T1 image using ANTs
 	WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
+
+fi
 
 mkdir -p ${outputMount}/processed
 mtdPrcDir=${outputMount}/processed
