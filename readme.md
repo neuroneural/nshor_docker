@@ -119,6 +119,15 @@ To verify that your docker image was created, use the docker image ls command to
 docker image ls
 ```
 
+
+There may be a scenario in which archiving the docker image to a tar file would be beneficial. In a case where singularity and docker are not available on the same server, then exporting to a tar file would make it possible to build the singularity file without the docker daemon running. To archive an existing docker image, use the following command. 
+
+
+```
+docker save -o fmriproc.tar fmriproc 
+```
+
+
 ## Prepare the Singularity Container
 Singularity is a container software used in HPC settings to work with Docker. You can create Singularity images and containers without needing administrative rights on the server. This script should be executed inside a Singularity container build off of a Docker image. With the Docker image built, load the Singularity module and build the .sif image. 
 
@@ -127,7 +136,15 @@ module load singularity
 singularity build --writable-tmpfs output.sif docker-daemon://fmriproc
 ```
 
-The `--writable-tmpfs` flag creates a temporary file system in the sif container that you can write intermediate files to. This script writes all intermediate files to the sif container's temporary file system. The temp file system is deleted after the script has been executed in the container. 
+If your docker image has been archived as a .tar file, then you can use Singularity's docker-archive option without needing the docker daemon to be awake. 
+
+```
+module load singularity
+singularity build --writable-tmpfs output.sif docker-archive://fmriproc.tar
+```
+
+
+The `--writable-tmpfs` flag creates a temporary file system in the sif container that you can write intermediate files to. This script writes all intermediate files to the sif container's temporary file system's `shm` directory, or shared memory. 
 
 
 ## Prepare the "Paths" Input File
