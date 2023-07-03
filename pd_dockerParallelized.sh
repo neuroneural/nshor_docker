@@ -52,7 +52,7 @@ do
 			out_filepath=${OPTARG}
 			;;
                 n) # -n flag was used to indicate not putting subject into MNI space
-			mni_project=false
+			mni_project=${OPTARG}
 			;;
         esac
 done
@@ -209,11 +209,17 @@ function topup_set {
 
 # Align subject fMRI with sMRI (corregistration)
 function epireg_set() {
-        coregdir=$1 # directory where intermediate files associated with corregistration are written
-        vrefbrain=$2 # skull stripped bias corrected T1 anatomical image
-        vepi=$3 # subject fMRI file
-        vout=$4 # name of file to be output by this function (final corregistered result)
-        vrefhead=$5 # bias corrected T1 anat image with head still present (before skull strip)
+        # directory where intermediate files associated with corregistration are written
+	coregdir=$1 
+
+	# skull stripped bias corrected T1 anatomical image
+        vrefbrain=$2 
+
+	# subject fMRI file
+        vepi=$3 
+
+	# bias corrected T1 anat image with head still present (before skull strip)
+        vrefhead=$4 
 
 	# Move to corregistration intermediate directory and copy the anatomical skull and brain data here 
         cd ${coregdir}
@@ -222,13 +228,80 @@ function epireg_set() {
 
 	# align epi to anat
 	#fmri_ts_ds_mc_e2a.nii.gz
-    	align_epi_anat.py -epi2anat -anat ${anatdir}/${vrefbrain} \
-     		-save_skullstrip -suffix _e2a.nii.gz   \
-     		-epi ${mocodir}/$moco_out -epi_base 0  \
-     		-epi_strip 3dAutomask  \
-    		-anat_has_skull no \
-     		-giant_move    \
-     		-volreg off -tshift off      
+	if [ "$mni_project" = false ]; then
+	    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
+     			-save_skullstrip -suffix _e2a.nii.gz   \
+     			-epi ${mocodir}/$moco_out -epi_base 0  \
+     			-epi_strip 3dAutomask  \
+    			-anat_has_skull no \
+     			-giant_move    \
+     			-volreg off -tshift off      
+	else
+		# Instead of fslapplywarp, use afni epi2anat to align fMRI to sMRI
+	    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
+     			-save_skullstrip -suffix _e2a.nii.gz   \
+     			-epi ${mocodir}/$moco_out -epi_base 0  \
+     			-epi_strip 3dAutomask  \
+    			-anat_has_skull no \
+     			-giant_move    \
+     			-volreg off -tshift off      
+
+		echo "resulting files after epi2anat"
+		echo `ls`
+
+		cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${mtdPrcDir}/fmri_ts_ds_mc_e2a.nii.gz #is the problem with e2a
+		cp ${mocodir}/${moco_out} ${mtdPrcDir}/${moco_out} #is the problem with moco
+
+		# Compute warping parameters for putting e2a res into MNI space
+		antsRegistrationSyN.sh \
+			-d 3 \
+			-n 16 \
+			-f ${template} \
+			-m ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz \
+			-x ${templatemask} \
+			-o ${normdir}/${subjectID}_ANTsReg 
+
+		echo "resulting files after antsRegistrationSyN.sh"
+		echo `ls ${normdir}`
+
+		# Use warping parameters to place e2a into MNI space
+		WarpTimeSeriesImageMultiTransform \
+			4 \
+			${coregdir}/fmri_ts_ds_mc_e2a.nii.gz \
+			${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz \
+			-R ${template}  \
+			${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  \
+			${normdir}/${subjectID}_ANTsReg0GenericAffine.mat \
+
+		echo "resulting files after WarpTimeSeriesImageMultiTransform"
+		echo `ls ${procdir}`
+
+		#use ants to register the sMRI to fMRI
+		#${ANTSPATH}/antsRegistrationSyNQuick.sh \
+  		#	-d 3 \
+  		#	-f ${vrefbrain} \
+  		#	-m ${mocodir}/$moco_out \
+  		#	-o epiToT1_ \
+  		#	-t r	
+
+		# use ants to find warp matrix for registered sMRI/fMRI to MNI template
+		#${ANTSPATH}/antsRegistrationSyNQuick.sh \
+		#	  -d 3 \
+		#	  -f ${template} \
+		#	  -m epiToT1_Warped.nii.gz \
+		#	  -o epiToTemplate_ \
+		#	  -t s
+
+		#use ants to warp to MNI space
+		#${ANTSPATH}/antsApplyTransforms \
+		#    -d 3 \
+		#    -i ${mocodir}/${vepi} \
+		#    -o epiDeformedToTemplate.nii.gz \
+		#    -r ${template} \
+		#    -t epiToTemplate_Warped.nii.gz \
+		#    -t epiToT1_0GenericAffine.mat \
+		#    -t epiToTemplate_0GenericAffine.mat
+	fi
 }
 
 
@@ -345,8 +418,15 @@ vrefbrain=T1_bc_ss.nii.gz
 #  Bias Corrected Anatomical T1 Image (Head Included)
 vrefhead=T1_bc.nii.gz
 
-#  EPI Image of BOLD Signal
-vepi=fmri_ts_ds_mc_e2a.nii.gz
+
+if [ $mni_project = true ];  then
+	#  EPI Image of BOLD Signal
+	vepi=fmri_ts_ds_mc.nii.gz
+else
+	#  EPI Template Brain in MNI Space
+	vepi=$template
+fi
+
 
 #  Suffix for Corregistered Image
 vout=${subjectID}_rsfMRI_processed_rest
@@ -382,11 +462,12 @@ if [ "$mni_project" = false  ]; then
 fi
 
 
-if [ "$mni_project" = true  ]; then
-	#warps T1 image to MNI152 template
-	antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
-	ANTS_PID=$! 
-fi
+#if [ "$mni_project" = true  ]; then
+#	#warps T1 image to MNI152 template
+	#try replacing with epi2anat
+#	antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
+#	ANTS_PID=$! 
+#fi
 
 
 #   If fieldmaps were provided for bias correction, wait for the bias correction process to finish, otherwise don't do anything
@@ -414,18 +495,21 @@ moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest
 
 
 #  Function call to epireg_set, the function that performs alignment to T1 Image
-epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead} 
+epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vrefhead} 
 
-cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+
+if [ "$mni_project" = true ]; then
+	cp ${coregdir}/*epiDeformedToTemplate*.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+else
+	cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+fi
 
 mkdir -p ${outputMount}/processed
 mtdPrcDir=${outputMount}/processed
 
-filenii="${func_file%.*}"
-filename="${filenii%.*}"
 
 #  Write final processed file to server
-cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${filename}_processed.nii.gz
+cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${subjectID}_rsfMRI_processed_rest.nii.gz
 
 #  Write displacement parameters to server
 cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par

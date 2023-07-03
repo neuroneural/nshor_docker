@@ -58,7 +58,7 @@ biasbc_file=`basename $biasbc_filepath`
 sbref_file=`basename $sbref_filepath`
 params_file=`basename $params_filepath`
 
-singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$params_bind:/params,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -c $biasch_file -b $biasbc_file -s $sbref_file -l $spinlr_file -r $spinrl_file -o $out_bind -p $params_file  -n false &
+singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$params_bind:/params,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -c $biasch_file -b $biasbc_file -s $sbref_file -l $spinlr_file -r $spinrl_file -o $out_bind -p $params_file  -n true &
 
 
 wait
