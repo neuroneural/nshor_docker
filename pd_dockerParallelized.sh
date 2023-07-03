@@ -235,9 +235,10 @@ function epireg_set() {
      			-epi_strip 3dAutomask  \
     			-anat_has_skull no \
      			-giant_move    \
-     			-volreg off -tshift off      
+     			-volreg off \
+			-tshift off      
 	else
-		# Instead of fslapplywarp, use afni epi2anat to align fMRI to sMRI
+		# Align sMRI with fMRI
 	    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
      			-save_skullstrip -suffix _e2a.nii.gz   \
      			-epi ${mocodir}/$moco_out -epi_base 0  \
@@ -249,58 +250,26 @@ function epireg_set() {
 		echo "resulting files after epi2anat"
 		echo `ls`
 
-		cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${mtdPrcDir}/fmri_ts_ds_mc_e2a.nii.gz #is the problem with e2a
-		cp ${mocodir}/${moco_out} ${mtdPrcDir}/${moco_out} #is the problem with moco
+		# Use e2a anatomical image to compute non-linear MNI warp matrix
+		3dQwarp \
+			-plusminus \
+			-source ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz \ #this should be timeseries fMRI
+			-base ${template} \ #MNI 152mm template
+			-prefix warp
 
-		# Compute warping parameters for putting e2a res into MNI space
-		antsRegistrationSyN.sh \
-			-d 3 \
-			-n 16 \
-			-f ${template} \
-			-m ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz \
-			-x ${templatemask} \
-			-o ${normdir}/${subjectID}_ANTsReg 
+		echo "resulting files after 3dQwarp"
+		echo `ls`
 
-		echo "resulting files after antsRegistrationSyN.sh"
-		echo `ls ${normdir}`
+		# Apply the nonlinear warp using 3dNwarpApply
+		3dNwarpApply \
+			-nwarp warp.nii.gz \
+			-source ${coregedir}/fmri_ts_ds_mc_e2a.nii.gz \
+			-master ${template} \
+			-prefix warped_output.nii.gz
 
-		# Use warping parameters to place e2a into MNI space
-		WarpTimeSeriesImageMultiTransform \
-			4 \
-			${coregdir}/fmri_ts_ds_mc_e2a.nii.gz \
-			${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz \
-			-R ${template}  \
-			${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  \
-			${normdir}/${subjectID}_ANTsReg0GenericAffine.mat \
+		echo "resulting files after 3dNwarpApply"
+		echo `ls`
 
-		echo "resulting files after WarpTimeSeriesImageMultiTransform"
-		echo `ls ${procdir}`
-
-		#use ants to register the sMRI to fMRI
-		#${ANTSPATH}/antsRegistrationSyNQuick.sh \
-  		#	-d 3 \
-  		#	-f ${vrefbrain} \
-  		#	-m ${mocodir}/$moco_out \
-  		#	-o epiToT1_ \
-  		#	-t r	
-
-		# use ants to find warp matrix for registered sMRI/fMRI to MNI template
-		#${ANTSPATH}/antsRegistrationSyNQuick.sh \
-		#	  -d 3 \
-		#	  -f ${template} \
-		#	  -m epiToT1_Warped.nii.gz \
-		#	  -o epiToTemplate_ \
-		#	  -t s
-
-		#use ants to warp to MNI space
-		#${ANTSPATH}/antsApplyTransforms \
-		#    -d 3 \
-		#    -i ${mocodir}/${vepi} \
-		#    -o epiDeformedToTemplate.nii.gz \
-		#    -r ${template} \
-		#    -t epiToTemplate_Warped.nii.gz \
-		#    -t epiToT1_0GenericAffine.mat \
-		#    -t epiToTemplate_0GenericAffine.mat
 	fi
 }
 
