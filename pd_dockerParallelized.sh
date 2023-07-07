@@ -251,21 +251,13 @@ function epireg_set() {
 		echo `ls`
 
 		# Use e2a anatomical image to compute non-linear MNI warp matrix
-		3dQwarp \
-			-plusminus \
-			-source ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz \ #this should be timeseries fMRI
-			-base ${template} \ #MNI 152mm template
-			-prefix warp
+		3dQwarp -plusminus -source ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -base ${template} -prefix warp -resample
 
 		echo "resulting files after 3dQwarp"
 		echo `ls`
 
 		# Apply the nonlinear warp using 3dNwarpApply
-		3dNwarpApply \
-			-nwarp warp.nii.gz \
-			-source ${coregedir}/fmri_ts_ds_mc_e2a.nii.gz \
-			-master ${template} \
-			-prefix warped_output.nii.gz
+		3dNwarpApply -nwarp warp_Allin.nii -source ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -master ${template} -prefix warped_output.nii.gz
 
 		echo "resulting files after 3dNwarpApply"
 		echo `ls`
@@ -412,8 +404,9 @@ skullstrip ${anatdir}
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
 	echo "bias channel and sbref field maps were not included for bias correction."
 else
-	afni_set &
-	AFNI_PID=$!
+	#afni_set &
+	#AFNI_PID=$!
+	echo "DEBUG"
 fi
 
 
@@ -422,8 +415,9 @@ if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
         echo "LR or RL spin echo field maps were not included for topup correction."
 else
-        topup_set &
-        TOPUP_PID=$!
+	echo "DEBUG"
+        #topup_set &
+        #TOPUP_PID=$!
 fi
 
 if [ "$mni_project" = false  ]; then
@@ -431,19 +425,12 @@ if [ "$mni_project" = false  ]; then
 fi
 
 
-#if [ "$mni_project" = true  ]; then
-#	#warps T1 image to MNI152 template
-	#try replacing with epi2anat
-#	antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
-#	ANTS_PID=$! 
-#fi
-
-
 #   If fieldmaps were provided for bias correction, wait for the bias correction process to finish, otherwise don't do anything
 if [[ (-z "${biasch_file}") || (-z "${sbref_file}") ]]
 then
         echo
 else
+	echo "DEBUG"
         wait ${AFNI_PID}
 fi
 
@@ -453,7 +440,8 @@ if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
 	echo
 else
-	wait ${TOPUP_PID}
+	echo "DEBUG"
+	#wait ${TOPUP_PID}
 fi
 
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
@@ -468,7 +456,7 @@ epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vrefhead}
 
 
 if [ "$mni_project" = true ]; then
-	cp ${coregdir}/*epiDeformedToTemplate*.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+	cp ${coregdir}/warped_output.nii.gz  ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
 else
 	cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
 fi
@@ -479,12 +467,14 @@ mtdPrcDir=${outputMount}/processed
 
 #  Write final processed file to server
 cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+cp ${coregdir}/* ${mtdPrcDir}
 
 #  Write displacement parameters to server
-cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
+#cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
 
 #  Clean up shared memory directory
-rm -rf ${tmpfs}/derivatives/$subjectID
+#rm -rf ${tmpfs}/derivatives/$subjectID
+echo "DEBUG SKIP DELETE"
 
 #  Write benchmark time to server
 end=`date +%s`
