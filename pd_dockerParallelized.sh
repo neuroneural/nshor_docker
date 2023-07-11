@@ -6,6 +6,7 @@ set -x
 #  Sets MNI project to true by default
 mni_project=true
 
+orig_space=false
 
 #    Getopts is used by shell procedures to parse positional parameters.
 #    Check for the optional flags that were provided in the pd_dockerParallelized.sh script
@@ -52,7 +53,7 @@ do
 			out_filepath=${OPTARG}
 			;;
                 n) # -n flag was used to indicate not putting subject into MNI space
-			mni_project=false
+			mni_project=${OPTARG}
 			;;
         esac
 done
@@ -70,7 +71,6 @@ echo "spinrl_file : ${spinrl_file}"
 echo "params_file : ${params_file}"
 echo "out_filepath : ${out_filepath}"
 echo "mni_project :  ${mni_project}"
-
 
 
 # Extract subject ID from out filepath.
@@ -187,6 +187,8 @@ function topup_set {
 	# Estimates the geometric susceptibility fieldmap using the LR/RL fieldmap and acquisition parameters matrix
         topup --imain=${fmapdir}/${subjectID}_3T_Phase_Map.nii.gz --datain=$acqparams --out=${fmapdir}/${subjectID}_TOPUP --fout=${fmapdir}/${subjectID}_TOPUP_FIELDMAP.nii.gz --iout=${fmapdir}/${subjectID}_TOPUP_CORRECTION.nii.gz  -v
 
+	#Maybe should wait for afni_set to finish here
+
 	# Applies the estimated geometric susceptibility fieldmap to the de-biased fMRI data created from function afni_set (as a background process)
         applytopup --imain=${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS.nii.gz --inindex=1 --method=jac --datain=$acqparams --topup=${tmpfs}/derivatives/${subjectID}/fieldmap/${subjectID}_TOPUP --out=${funcdir}/${subjectID}_3T_rfMRI_REST1_RL_DEBIAS_UNWARPED.nii.gz -v &
 	
@@ -207,34 +209,64 @@ function topup_set {
 }
 
 # Align subject fMRI with sMRI (corregistration)
-# EPI is a technique used to capture BOLD signal
 function epireg_set() {
-        coregdir=$1 # directory where intermediate files associated with corregistration are written
-        vrefbrain=$2 # skull stripped bias corrected T1 anatomical image
-        vepi=$3 # subject fMRI file
-        vout=$4 # name of file to be output by this function (final corregistered result)
-        vrefhead=$5 # bias corrected T1 anat image with head still present (before skull strip)
+        # directory where intermediate files associated with corregistration are written
+	coregdir=$1 
+
+	# skull stripped bias corrected T1 anatomical image
+        vrefbrain=$2 
+
+	# subject fMRI file
+        vepi=$3 
+
+	# bias corrected T1 anat image with head still present (before skull strip)
+        vrefhead=$4 
 
 	# Move to corregistration intermediate directory and copy the anatomical skull and brain data here 
         cd ${coregdir}
         cp ../anat/${vrefbrain} .
         cp ../anat/${vrefhead} .
-      
-	# Creates brain matter segmentation probability maps
-        $FSLDIR/bin/fast -N -o ${vout}_fast ${vrefbrain}
 
-	# Thresholds segmentation probability maps to produce a binary white matter segmentation image
-        $FSLDIR/bin/fslmaths ${vout}_fast_pve_2 -thr 0.5 -bin ${vout}_fast_wmseg
+	# align epi to anat
+	#fmri_ts_ds_mc_e2a.nii.gz
+    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
+     			-save_skullstrip \
+			-suffix _e2a.nii.gz   \
+     			-epi ${mocodir}/$moco_out \
+			-epi_base 0  \
+     			-epi_strip 3dAutomask  \
+    			-anat_has_skull no \
+     			-giant_move    \
+     			-volreg off \
+			-tshift off      
+	
+	echo "resulting files after align_epi_anat.py"
+	echo `ls`
 
-	# Computes a matrix to align the subject fMRI image to sMRI image (?)
-        $FSLDIR/bin/flirt -ref ${vrefbrain} -in ${vepi} -dof 6 -omat ${vout}_init.mat
+	if [ "$mni_project" = true ]; then
+		# Use vrefbrain anatomical image to compute non-linear MNI warp matrix
+    		3dQwarp -source ${vrefbrain} \
+    			-base $template \
+    			-prefix T1_bc_ss_mni.nii.gz \
+    			-allineate \
+			-verb \
+			-duplo
 
-        $FSLDIR/bin/flirt -ref ${vrefhead} -in ${vepi} -dof 6 -cost bbr -wmseg ${vout}_fast_wmseg -init ${vout}_init.mat -omat ${vout}.mat -out ${vout} -schedule ${FSLDIR}/etc/flirtsch/bbr.sch -v
+		echo "resulting files after 3dQwarp"
+		echo `ls`
 
-        $FSLDIR/bin/applywarp -i ${vepi} -r ${vrefhead} -o ${vout} --premat=${vout}.mat --interp=spline -v
+		# Apply the nonlinear warp using 3dNwarpApply
+    		3dNwarpApply -nwarp T1_bc_ss_mni_WARP.nii.gz \
+    			-source fmri_ts_ds_mc_e2a.nii.gz \
+    			-master $template \
+    			-prefix warped_output.nii.gz
 
-	echo "EPI APPLYWARP DONE"
+		echo "resulting files after 3dNwarpApply"
+		echo `ls`
+
+	fi
 }
+
 
 function skullstrip() {
     anatdir=$1
@@ -316,28 +348,28 @@ function moco_sc() {
 		3dDespike -NEW -prefix Despike_${suffix}.nii.gz ${epi_in}
 
 		#Timeshifts the data. It's SliceRef-1 because AFNI indexes at 0 so 1=0, 2=1, 3=2, etc
-
 		3dTshift -tzero $(($SliceRef-1)) -tpattern @tshiftparams.1D -TR ${TR} -quintic -prefix tshift_Despiked_${suffix}.nii.gz Despike_${suffix}.nii.gz
         fi
 
    	#   Rotate all volumes to align with the first volume as a reference 
-	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix}+orig -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D Despike_${suffix}.nii.gz
-
+	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D Despike_${suffix}.nii.gz
 	
 	echo `ls .`
 
-	#   Resample the points into the correct coordinate system ? Not sure
-	if [ -f moco_${suffix}+tlrc.HEAD  ]; then
-		3dresample -orient RPI -inset moco_${suffix}+tlrc.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
+	if [ -f "moco_${suffix}+orig*" ]; then
+		3dresample -orient RPI -inset moco_${suffix}+orig -prefix ${mocodir}/${moco_out} 
+	else
+		3dresample -orient RPI -inset moco_${suffix}+tlrc -prefix ${mocodir}/${moco_out} 
 	fi
 
-	if [ -f moco_${suffix}+orig.HEAD  ]; then
-		3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${subjectID}_rfMRI_moco_${suffix}.nii.gz
-	fi
 
 	echo "moco done"
 
 }
+
+
+
+moco_out=fmri_ts_ds_mc.nii.gz
 
 
 #  Skull Stripped Bias Corrected Anatomical T1 Image
@@ -346,14 +378,20 @@ vrefbrain=T1_bc_ss.nii.gz
 #  Bias Corrected Anatomical T1 Image (Head Included)
 vrefhead=T1_bc.nii.gz
 
-#  EPI Image of BOLD Signal
-vepi=$func_filepath
+
+if [ $mni_project = true ];  then
+	#  EPI Image of BOLD Signal
+	vepi=fmri_ts_ds_mc.nii.gz
+else
+	#  EPI Template Brain in MNI Space
+	vepi=$template
+fi
+
 
 #  Suffix for Corregistered Image
-vout=${subjectID}_rfMRI_v0_correg
+vout=${subjectID}_rsfMRI_processed_rest
 
 
-#  ? Might should be deleted but this is the original EPI Image of BOLD Signal
 epi_orig=$func_filepath
 
 
@@ -365,8 +403,9 @@ skullstrip ${anatdir}
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
 	echo "bias channel and sbref field maps were not included for bias correction."
 else
-	afni_set &
-	AFNI_PID=$!
+	#afni_set &
+	#AFNI_PID=$!
+	echo "DEBUG"
 fi
 
 
@@ -375,19 +414,13 @@ if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
         echo "LR or RL spin echo field maps were not included for topup correction."
 else
-        topup_set &
-        TOPUP_PID=$!
+	echo "DEBUG"
+        #topup_set &
+        #TOPUP_PID=$!
 fi
 
 if [ "$mni_project" = false  ]; then
         template=${coregdir}/T1_bc_ss.nii.gz
-fi
-
-
-if [ "$mni_project" = true  ]; then
-	#warps T1 image to MNI152 template
-	antsRegistrationSyN.sh -d 3 -n 16 -f ${template} -m ${anatdir}/T1_bc_ss.nii.gz -x ${templatemask} -o ${normdir}/${subjectID}_ANTsReg &
-	ANTS_PID=$! 
 fi
 
 
@@ -396,6 +429,7 @@ if [[ (-z "${biasch_file}") || (-z "${sbref_file}") ]]
 then
         echo
 else
+	echo "DEBUG"
         wait ${AFNI_PID}
 fi
 
@@ -405,71 +439,42 @@ if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
 	echo
 else
-	wait ${TOPUP_PID}
+	echo "DEBUG"
+	#wait ${TOPUP_PID}
 fi
 
-
-#   From the original script. Not exactly sure why this is here. It multiplies the epi_orig voxels by 1 and puts it in ${coregdir}/${func_file}
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
 
 
-#  Function call to epireg_set, the function that performs alignment to T1 Image
-epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vout} ${vrefhead} &
-EPI_PID=$!
-
-
 #   Function call to moco_sc, the function that performs slice timing correction and motion correction
-moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest &
-SCMOCO_PID=$!
-
-#   Removes motion related artifacts
-mcflirt -in ${epi_orig} -reffile ${coregdir}/${func_file} -out ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -mats -plots -rmsrel -rmsabs -report &
-
-#   Wait for moco_sc and epireg_set to finish
-wait $SCMOCO_PID
-wait $EPI_PID
+moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest
 
 
-#   Translates the FSL corregistration matrix to one that ANTs can use
-c3d_affine_tool -ref ${coregdir}/T1_bc_ss.nii.gz -src ${coregdir}/${func_file} ${coregdir}/${subjectID}_rfMRI_v0_correg.mat -fsl2ras -oitk ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
-
-if [ "$mni_project" = true  ]; then
-	wait $ANTS_PID
-fi
+#  Function call to epireg_set, the function that performs alignment to T1 Image
+epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vrefhead} 
 
 
-if [ "$mni_project" = false  ];then 
-
-	#transform ${mocodir}/${subjectID}_rfMRI_moco.nii.gz according to a reference image and a transform (or a set of transforms).
-	antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed_native.nii.gz
-
-	#warps functional image to T1_bc_ss.nii.gz image using ANTs
-	WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template} ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
-
+if [ "$mni_project" = true ]; then
+	cp ${coregdir}/warped_output.nii.gz  ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
 else
-
-	#computes the ANTs matrix for warping functional image to MNI152 T1 image
-	antsApplyTransforms -d 4 -e 3 -i ${mocodir}/${subjectID}_rfMRI_moco.nii.gz -r $template -n BSpline -t ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz -t ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat -t ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt -o ${procdir}/${subjectID}_rsfMRI_processed.nii.gz
-
-	#warps functional image to MNI152 T1 image using ANTs
-	WarpTimeSeriesImageMultiTransform 4 ${mocodir}/${subjectID}_rfMRI_moco_rest.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz  -R ${template}  ${normdir}/${subjectID}_ANTsReg1Warp.nii.gz  ${normdir}/${subjectID}_ANTsReg0GenericAffine.mat ${coregdir}/${subjectID}_rfMRI_FSL_to_ANTs_coreg.txt
-
+	cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
 fi
 
 mkdir -p ${outputMount}/processed
 mtdPrcDir=${outputMount}/processed
 
-filenii="${func_file%.*}"
-filename="${filenii%.*}"
 
 #  Write final processed file to server
-cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${filename}_processed.nii.gz
+cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+#cp ${coregdir}/* ${mtdPrcDir}
+#cp ${mocodir}/* ${mtdPrcDir}
 
 #  Write displacement parameters to server
-cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
+#cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
 
 #  Clean up shared memory directory
-rm -rf ${tmpfs}/derivatives/$subjectID
+#rm -rf ${tmpfs}/derivatives/$subjectID
+echo "DEBUG SKIP DELETE"
 
 #  Write benchmark time to server
 end=`date +%s`
