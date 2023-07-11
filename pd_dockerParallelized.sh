@@ -6,6 +6,7 @@ set -x
 #  Sets MNI project to true by default
 mni_project=true
 
+orig_space=false
 
 #    Getopts is used by shell procedures to parse positional parameters.
 #    Check for the optional flags that were provided in the pd_dockerParallelized.sh script
@@ -228,36 +229,34 @@ function epireg_set() {
 
 	# align epi to anat
 	#fmri_ts_ds_mc_e2a.nii.gz
-	if [ "$mni_project" = false ]; then
-	    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
-     			-save_skullstrip -suffix _e2a.nii.gz   \
-     			-epi ${mocodir}/$moco_out -epi_base 0  \
+    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
+     			-save_skullstrip \
+			-suffix _e2a.nii.gz   \
+     			-epi ${mocodir}/$moco_out \
+			-epi_base 0  \
      			-epi_strip 3dAutomask  \
     			-anat_has_skull no \
      			-giant_move    \
      			-volreg off \
 			-tshift off      
-	else
-		# Align sMRI with fMRI
-	    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
-     			-save_skullstrip -suffix _e2a.nii.gz   \
-     			-epi ${mocodir}/$moco_out -epi_base 0  \
-     			-epi_strip 3dAutomask  \
-    			-anat_has_skull no \
-     			-giant_move    \
-     			-volreg off -tshift off      
 
-		echo "resulting files after epi2anat"
-		echo `ls`
-
-		# Use e2a anatomical image to compute non-linear MNI warp matrix
-		3dQwarp -plusminus -source ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -base ${template} -prefix warp -resample
+	if [ "$mni_project" = true ]; then
+		# Use vrefbrain anatomical image to compute non-linear MNI warp matrix
+    		3dQwarp -source ${vrefbrain} \
+    			-base $template \
+    			-prefix T1_bc_ss_mni.nii.gz \
+    			-allineate \
+			-verb \
+			-duplo
 
 		echo "resulting files after 3dQwarp"
 		echo `ls`
 
 		# Apply the nonlinear warp using 3dNwarpApply
-		3dNwarpApply -nwarp warp_Allin.nii -source ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -master ${template} -prefix warped_output.nii.gz
+    		3dNwarpApply -nwarp T1_bc_ss_mni_WARP.nii.gz \
+    			-source fmri_ts_ds_mc_e2a.nii.gz \
+    			-master $template \
+    			-prefix warped_output.nii.gz
 
 		echo "resulting files after 3dNwarpApply"
 		echo `ls`
@@ -350,18 +349,11 @@ function moco_sc() {
         fi
 
    	#   Rotate all volumes to align with the first volume as a reference 
-	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix}+orig -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D Despike_${suffix}.nii.gz
+	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D Despike_${suffix}.nii.gz
 	
 	echo `ls .`
 
-	#   Resample the points into the correct coordinate system ? Not sure
-	if [ -f moco_${suffix}+tlrc.HEAD  ]; then
-		3dresample -orient RPI -inset moco_${suffix}+tlrc.HEAD -prefix ${mocodir}/${moco_out}
-	fi
-
-	if [ -f moco_${suffix}+orig.HEAD  ]; then
-		3dresample -orient RPI -inset moco_${suffix}+orig.HEAD -prefix ${mocodir}/${moco_out}
-	fi
+	3dresample -orient RPI -inset moco_${suffix}+orig -prefix ${mocodir}/${moco_out} 
 
 
 	echo "moco done"
@@ -468,6 +460,7 @@ mtdPrcDir=${outputMount}/processed
 #  Write final processed file to server
 cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${subjectID}_rsfMRI_processed_rest.nii.gz
 cp ${coregdir}/* ${mtdPrcDir}
+cp ${mocodir}/* ${mtdPrcDir}
 
 #  Write displacement parameters to server
 #cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
