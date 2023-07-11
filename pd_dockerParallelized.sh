@@ -239,6 +239,9 @@ function epireg_set() {
      			-giant_move    \
      			-volreg off \
 			-tshift off      
+	
+	echo "resulting files after align_epi_anat.py"
+	echo `ls`
 
 	if [ "$mni_project" = true ]; then
 		# Use vrefbrain anatomical image to compute non-linear MNI warp matrix
@@ -353,7 +356,11 @@ function moco_sc() {
 	
 	echo `ls .`
 
-	3dresample -orient RPI -inset moco_${suffix}+orig -prefix ${mocodir}/${moco_out} 
+	if [ -f "moco_${suffix}+orig*" ]; then
+		3dresample -orient RPI -inset moco_${suffix}+orig -prefix ${mocodir}/${moco_out} 
+	else
+		3dresample -orient RPI -inset moco_${suffix}+tlrc -prefix ${mocodir}/${moco_out} 
+	fi
 
 
 	echo "moco done"
@@ -459,8 +466,8 @@ mtdPrcDir=${outputMount}/processed
 
 #  Write final processed file to server
 cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${subjectID}_rsfMRI_processed_rest.nii.gz
-cp ${coregdir}/* ${mtdPrcDir}
-cp ${mocodir}/* ${mtdPrcDir}
+#cp ${coregdir}/* ${mtdPrcDir}
+#cp ${mocodir}/* ${mtdPrcDir}
 
 #  Write displacement parameters to server
 #cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
