@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH -n 1
+#SBATCH -n 4
 #SBATCH -c 4
-#SBATCH --mem=20g
+#SBATCH --mem=120g
 #SBATCH -p qTRD
-#SBATCH --time=01:00:00
-#SBATCH -J ds004302-test
+#SBATCH --time=20:00:00
+#SBATCH -J ds004302-proc
 #SBATCH -e /data/users2/jwardell1/nshor_docker/ds004302-project/jobs/error%A.err
 #SBATCH -o /data/users2/jwardell1/nshor_docker/ds004302-project/jobs/out%A.out
 #SBATCH -A psy53c17

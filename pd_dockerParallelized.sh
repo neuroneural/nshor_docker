@@ -6,7 +6,6 @@ set -x
 #  Sets MNI project to true by default
 mni_project=true
 
-orig_space=false
 
 #    Getopts is used by shell procedures to parse positional parameters.
 #    Check for the optional flags that were provided in the pd_dockerParallelized.sh script
@@ -356,7 +355,7 @@ function moco_sc() {
 	
 	echo `ls .`
 
-	if [ -f "moco_${suffix}+orig*" ]; then
+	if [ -f "moco_${suffix}+orig.BRIK" ]; then
 		3dresample -orient RPI -inset moco_${suffix}+orig -prefix ${mocodir}/${moco_out} 
 	else
 		3dresample -orient RPI -inset moco_${suffix}+tlrc -prefix ${mocodir}/${moco_out} 
@@ -403,9 +402,8 @@ skullstrip ${anatdir}
 if [[ (-z "${biasch_file}") || (-z "${biasbc_file}") || (-z "${sbref_file}") ]]; then 
 	echo "bias channel and sbref field maps were not included for bias correction."
 else
-	#afni_set &
-	#AFNI_PID=$!
-	echo "DEBUG"
+	afni_set &
+	AFNI_PID=$!
 fi
 
 
@@ -414,9 +412,8 @@ if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
         echo "LR or RL spin echo field maps were not included for topup correction."
 else
-	echo "DEBUG"
-        #topup_set &
-        #TOPUP_PID=$!
+        topup_set &
+        TOPUP_PID=$!
 fi
 
 if [ "$mni_project" = false  ]; then
@@ -429,7 +426,6 @@ if [[ (-z "${biasch_file}") || (-z "${sbref_file}") ]]
 then
         echo
 else
-	echo "DEBUG"
         wait ${AFNI_PID}
 fi
 
@@ -439,8 +435,7 @@ if [[ (-z "${spinlr_file}") || (-z "${spinrl_file}") ]]
 then
 	echo
 else
-	echo "DEBUG"
-	#wait ${TOPUP_PID}
+	wait ${TOPUP_PID}
 fi
 
 3dcalc -a0 ${epi_orig} -prefix ${coregdir}/${func_file} -expr 'a*1'
@@ -466,15 +461,13 @@ mtdPrcDir=${outputMount}/processed
 
 #  Write final processed file to server
 cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${subjectID}_rsfMRI_processed_rest.nii.gz
-#cp ${coregdir}/* ${mtdPrcDir}
-#cp ${mocodir}/* ${mtdPrcDir}
 
 #  Write displacement parameters to server
 #cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
+# should we bring back mcflirt?
 
 #  Clean up shared memory directory
-#rm -rf ${tmpfs}/derivatives/$subjectID
-echo "DEBUG SKIP DELETE"
+rm -rf ${tmpfs}/derivatives/$subjectID
 
 #  Write benchmark time to server
 end=`date +%s`
