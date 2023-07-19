@@ -4,7 +4,7 @@
 #SBATCH --mem=120g
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
-#SBATCH -J fbirn-proc
+#SBATCH -J PRPfbirn
 #SBATCH -e /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/error%A.err
 #SBATCH -o /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/out%A.out
 #SBATCH -A psy53c17
@@ -24,21 +24,25 @@ SCRIPT_NAME=pd_dockerParallelized.sh
 
 IFS=$'\n'
 paths_array=($(cat ${SUB_PATHS_FILE}))
-func_ix=$(( 3*$SLURM_ARRAY_TASK_ID ))
-anat_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
-out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))
+func_ix=$(( 4*$SLURM_ARRAY_TASK_ID ))
+anat_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 1 ))
+mask_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 2 ))
+out_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 3 ))
 
 func_filepath=${paths_array[${func_ix}]}
 anat_filepath=${paths_array[${anat_ix}]}
+mask_filepath=${paths_array[${mask_ix}]}
 
 out_bind=${paths_array[${out_ix}]}
 func_bind=`dirname $func_filepath`
 anat_bind=`dirname $anat_filepath`
+mask_bind=`dirname $mask_filepath`
 
 func_file=`basename $func_filepath`
 anat_file=`basename $anat_filepath`
+mask_file=`basename $mask_filepath`
 
-singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$mask_bind:/mask,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -m $mask_file -o $out_bind &
 
 wait
 

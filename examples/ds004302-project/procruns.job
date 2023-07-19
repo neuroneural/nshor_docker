@@ -4,7 +4,7 @@
 #SBATCH --mem=120g
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
-#SBATCH -J ds004302-proc
+#SBATCH -J PRP4302
 #SBATCH -e /data/users2/jwardell1/nshor_docker/ds004302-project/jobs/error%A.err
 #SBATCH -o /data/users2/jwardell1/nshor_docker/ds004302-project/jobs/out%A.out
 #SBATCH -A psy53c17
