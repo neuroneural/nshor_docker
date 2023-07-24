@@ -4,7 +4,7 @@
 #SBATCH --mem=120g
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
-#SBATCH -J bsnip-proc
+#SBATCH -J PRPbsnip
 #SBATCH -e /data/users2/jwardell1/nshor_docker/examples/bsnip-project/jobs/error%A.err
 #SBATCH -o /data/users2/jwardell1/nshor_docker/examples/bsnip-project/jobs/out%A.out
 #SBATCH -A psy53c17

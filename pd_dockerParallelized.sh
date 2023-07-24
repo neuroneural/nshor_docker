@@ -9,7 +9,7 @@ mni_project=true
 
 #    Getopts is used by shell procedures to parse positional parameters.
 #    Check for the optional flags that were provided in the pd_dockerParallelized.sh script
-while getopts f:a:j:c:b:s:l:r:p:o:n: flag
+while getopts f:a:j:c:b:s:l:r:p:o:n:m: flag
 do
         case "${flag}" in
                 f) # -f flag was used to provide the functional MRI image file 
@@ -54,6 +54,10 @@ do
                 n) # -n flag was used to indicate not putting subject into MNI space
 			mni_project=${OPTARG}
 			;;
+                m) # -m flag was used to provide the group brain mask
+			group_mask=${OPTARG}
+			mask_filepath=/mask/${group_mask}
+			;;
         esac
 done
 
@@ -70,6 +74,7 @@ echo "spinrl_file : ${spinrl_file}"
 echo "params_file : ${params_file}"
 echo "out_filepath : ${out_filepath}"
 echo "mni_project :  ${mni_project}"
+echo "group_mask :  ${group_mask}"
 
 
 # Extract subject ID from out filepath.
@@ -83,7 +88,7 @@ then
 else
 	# If the specified output directory does not contain "ses", then the subject ID is at the very end of the specified output directory
 	path_ending_in_ID=$out_filepath
-fi
+fi	
 
 # The basename utility deletes any prefix ending with the last slash ‘/’ character present in string
 # Extract the subject ID from the path ending in id and capture it in a variable to use later
@@ -449,10 +454,25 @@ moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest
 epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vrefhead} 
 
 
+base="${func_file%%.*}"
+processed_filename="${subjectID}_${base}".nii.gz
+
 if [ "$mni_project" = true ]; then
-	cp ${coregdir}/warped_output.nii.gz  ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+	if [ $mask_filepath -z ]; then
+		echo "skipping brain masking because mask file was not provided"
+		cp ${coregdir}/warped_output.nii.gz ${procdir}/${processed_filename}
+	else
+		3dcalc -a  ${coregdir}/warped_output.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
+		cp ${procdir}/fmri_masked.nii.gz  ${procdir}/${processed_filename}
+	fi
 else
-	cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz
+	if [ $mask_filepath -z]; then
+		echo "skipping brain masking because mask file was not provided"
+		cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${processed_filename}
+	else
+		3dcalc -a ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
+		cp ${procdir}/fmri_masked.nii.gz ${procdir}/${processed_filename}
+	fi
 fi
 
 mkdir -p ${outputMount}/processed
@@ -460,11 +480,7 @@ mtdPrcDir=${outputMount}/processed
 
 
 #  Write final processed file to server
-cp ${procdir}/${subjectID}_rsfMRI_processed_rest.nii.gz ${mtdPrcDir}/${subjectID}_rsfMRI_processed_rest.nii.gz
-
-#  Write displacement parameters to server
-#cp ${mocodir}/${subjectID}_rfMRI_moco.nii.gz.par ${mtdPrcDir}/${subjectID}_rfMRI_moco.nii.gz.par
-# should we bring back mcflirt?
+cp ${procdir}/${processed_filename} ${mtdPrcDir}/${processed_filename}
 
 #  Clean up shared memory directory
 rm -rf ${tmpfs}/derivatives/$subjectID

@@ -6,7 +6,7 @@ region=$2
 if [ -z "$dataset" ]; then
 	echo "provide the dataset name as an argument to this script in lowercase"
 	echo "provide the region name as the second argument to this script if your dataset has a region"
-	exit 1
+	exit
 fi
 
 if [ "$dataset" = "ds004078" ]; then 
