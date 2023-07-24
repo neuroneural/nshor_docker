@@ -458,11 +458,21 @@ base="${func_file%%.*}"
 processed_filename="${subjectID}_${base}".nii.gz
 
 if [ "$mni_project" = true ]; then
-	3dcalc -a  ${coregdir}/warped_output.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
-	cp ${procdir}/fmri_masked.nii.gz  ${procdir}/${processed_filename}
+	if [ $mask_filepath -z ]; then
+		echo "skipping brain masking because mask file was not provided"
+		cp ${coregdir}/warped_output.nii.gz ${procdir}/${processed_filename}
+	else
+		3dcalc -a  ${coregdir}/warped_output.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
+		cp ${procdir}/fmri_masked.nii.gz  ${procdir}/${processed_filename}
+	fi
 else
-	3dcalc -a  ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
-	cp ${procdir}/fmri_masked.nii.gz ${procdir}/${processed_filename}
+	if [ $mask_filepath -z]; then
+		echo "skipping brain masking because mask file was not provided"
+		cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${processed_filename}
+	else
+		3dcalc -a ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
+		cp ${procdir}/fmri_masked.nii.gz ${procdir}/${processed_filename}
+	fi
 fi
 
 mkdir -p ${outputMount}/processed
