@@ -1,28 +1,29 @@
 #!/bin/bash
-
 module load singularity/3.10.2
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/paths
+export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/paths
 
-SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
-RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
-SCRIPT_NAME=pd_dockerParallelized.sh
-
-SLURM_ARRAY_TASK_ID=1
+export SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
+export RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
+export SCRIPT_NAME=pd_dockerParallelized.sh
 
 IFS=$'\n'
-paths_array=($(cat ${SUB_PATHS_FILE}))
+export paths_array=($(cat ${SUB_PATHS_FILE}))
 
-func_ix=$(( 3*$SLURM_ARRAY_TASK_ID ))
-anat_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
-out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))
+export func_ix=$(( 4*$SLURM_ARRAY_TASK_ID ))
+export anat_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 1 ))
+export mask_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 2 ))
+export out_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 3 ))
 
-func_filepath=${paths_array[${func_ix}]}
-anat_filepath=${paths_array[${anat_ix}]}
+export func_filepath=${paths_array[${func_ix}]}
+export anat_filepath=${paths_array[${anat_ix}]}
+export mask_filepath=${paths_array[${mask_ix}]}
 
-out_bind=${paths_array[${out_ix}]}
-func_bind=`dirname $func_filepath`
-anat_bind=`dirname $anat_filepath`
+export out_bind=${paths_array[${out_ix}]}
+export func_bind=`dirname $func_filepath`
+export anat_bind=`dirname $anat_filepath`
+export mask_bind=`dirname $mask_filepath`
 
-func_file=`basename $func_filepath`
-anat_file=`basename $anat_filepath`
+export func_file=`basename $func_filepath`
+export anat_file=`basename $anat_filepath`
+export mask_file=`basename $mask_filepath`
