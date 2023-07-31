@@ -5,8 +5,8 @@
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
 #SBATCH -J PRPfbirn
-#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/error%A.err
-#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/out%A.out
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/error%A_%a.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/out%A_%a.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jwardell1@student.gsu.edu
