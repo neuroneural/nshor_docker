@@ -1,0 +1,101 @@
+#!/bin/bash
+#SBATCH -n 1
+#SBATCH -c 1
+#SBATCH --mem=10g
+#SBATCH -p qTRD
+#SBATCH --time=00:10:00
+#SBATCH -J meanmask
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/hcp-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/hcp-project/jobs/out%A.out
+#SBATCH -A psy53c17
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jwardell1@student.gsu.edu
+#SBATCH --oversubscribe
+
+# This script goes over each subject directory, generates brain mask and then computes the average mask across all subjects.
+
+echo "in generate_group_mean_mask.job"
+echo "module load afni"
+module load afni
+
+BASEDIR=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP
+echo "BASEDIR is $BASEDIR"
+
+OUTDIR=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP/group_mean_masks
+echo "OUTDIR is $OUTDIR"
+
+CURDIR=`pwd`
+echo "CURDIR is $CURDIR"
+
+subjects_file=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP/subjects.txt
+echo "subjects_file is $subjects_file"
+
+if [ -f $subjects_file ]; then
+	n=`cat $subjects_file | grep wc -l`
+	echo "subjects file exists and has $n subs"
+else
+	echo "subjects file path incorrect"
+fi 
+
+cd $BASEDIR
+
+IFS=$'\n' subject=($(cat "$subjects_file"))
+echo "subs array is ${subject[@]}"
+
+idx=$SLURM_ARRAY_TASK_ID
+echo "slurm array id is $SLURM_ARRAY_TASK_ID"
+
+echo "current subject is ${subject[idx]}"
+
+if [ -d ${subject[idx]}/processed ]; then
+	echo "subject processed directory exists, cd to it now"
+	cd ${subject[idx]}/processed
+else
+	echo "subject processed directory not found, exiting program"
+	exit
+fi
+
+if [ -f amask.nii ]; then
+	"echo subject amask.nii file found in subject directory, deleting it now"
+	rm amask.nii
+fi
+
+proc_fmri_1=${subject[idx]}_${subject[idx]}_3T_rfMRI_REST1_LR.nii.gz
+echo "proc_fmri_1 is $proc_fmri_1"
+
+proc_fmri_2=${subject[idx]}_rsfMRI_processed_rest.nii.gz
+echo "proc_fmri_2 is $proc_fmri_2"
+
+if [[ (-z "${proc_fmri_1}") && (-z "${proc_fmri_2}") ]]; then
+	echo "neither of the two processed filenames were found"
+	exit
+elif [[ !(-z "${proc_fmri_1}") || !(-z "${proc_fmri_2}") ]]; then
+	echo "one of the filenames exists, so we will choose the existing one"
+	if [ -z ${proc_fmri_1}]; then
+		echo "choose proc_fmri_1"
+		proc_fmri=$proc_fmri_1
+		echo "proc_fmri is $proc_fmri"
+	else
+		echo "choose proc_fmri_2"
+		proc_fmri=$proc_fmri_2
+		echo "proc_fmri is $proc_fmri"
+	fi
+elif [[ !(-z "${proc_fmri_1}") && !(-z "${proc_fmri_2}") ]]; then
+	echo "both processed file names exist, so choose proc_fmri_1: $proc_fmri_1"
+	proc_fmri=$proc_fmri_1
+	echo "proc_fmri is $proc_fmri"
+fi
+
+
+echo "3dAutomask -prefix amask.nii $proc_fmri &> /dev/null"
+3dAutomask -prefix amask.nii $proc_fmri &> /dev/null
+chmod 777 amask.nii
+
+echo "ln -sf `pwd`/amask.nii $OUTDIR/${subject[idx]}_amask.nii"
+ln -sf `pwd`/amask.nii $OUTDIR/${subject[idx]}_amask.nii
+chmod 777 $OUTDIR/${subject[idx]}_amask.nii
+
+
+wait
+
+sleep 10s

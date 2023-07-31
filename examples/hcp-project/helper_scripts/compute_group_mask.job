@@ -1,0 +1,28 @@
+#!/bin/bash
+#SBATCH -n 1
+#SBATCH -c 1
+#SBATCH --mem=10g
+#SBATCH -p qTRD
+#SBATCH --time=00:10:00
+#SBATCH -J grpmask
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/hcp-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/hcp-project/jobs/out%A.out
+#SBATCH -A psy53c17
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jwardell1@student.gsu.edu
+#SBATCH --oversubscribe
+
+sleep 5s
+
+module load afni
+
+OUTDIR=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP/group_mean_masks
+cd $OUTDIR
+files=(*_amask.nii)
+3dMean -prefix allsubjmean.nii "${files[@]}"
+3dcalc -a allsubjmean.nii -prefix groupmeanmask.nii -expr 'step(a-0.7)'
+rm *_amask.nii
+
+wait
+
+sleep 10s
