@@ -5,8 +5,8 @@
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
 #SBATCH -J varnorm
-#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/error%A.err
-#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/out%A.out
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/hcp-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/hcp-project/jobs/out%A.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jwardell1@student.gsu.edu
@@ -14,11 +14,11 @@
 
 module load afni
 
-BASEDIR=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN
-OUTDIR=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/group_mean_masks
+BASEDIR=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP
+OUTDIR=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP/group_mean_masks
 CURDIR=`pwd`
 
-subjects_file=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/subjects.txt
+subjects_file=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP/subjects.txt
 
 cd $BASEDIR
 
