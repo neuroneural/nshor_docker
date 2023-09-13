@@ -28,10 +28,10 @@ GICA_DIR=/data/users2/jwardell1/ica-torch-gica/standalone_gica_script
 
 IFS=$'\n'
 paths_array=($(cat ${PATHS_FILE}))
-sub_ix=$(( 3*$SLURM_ARRAY_TASK_ID ))
-func_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
-out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))
-mask_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 3 ))
+sub_ix=$(( 4*$SLURM_ARRAY_TASK_ID ))
+func_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 1 ))
+out_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 2 ))
+mask_ix=$(( 4*$SLURM_ARRAY_TASK_ID + 3 ))
 
 subject_ID=${paths_array[${sub_ix}]}
 func_filepath=${paths_array[${func_ix}]}

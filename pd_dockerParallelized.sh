@@ -460,18 +460,26 @@ processed_filename="${subjectID}_${base}".nii.gz
 if [ "$mni_project" = true ]; then
 	if [ $mask_filepath -z ]; then
 		echo "skipping brain masking because mask file was not provided"
-		cp ${coregdir}/warped_output.nii.gz ${procdir}/${processed_filename}
+		3dresample -dxyz 3 3 3 -inset ${coregdir}/warped_output.nii.gz -prefix ${coregdir}/warped_output_resampled.nii.gz
+		3dBlurToFWHM -input ${coregdir}/warped_output_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/warped_output_resampled_blurred.nii.gz
+		cp ${coregdir}/warped_output_resampled_blurred.nii.gz ${procdir}/${processed_filename}
 	else
 		3dcalc -a  ${coregdir}/warped_output.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
-		cp ${procdir}/fmri_masked.nii.gz  ${procdir}/${processed_filename}
+		3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
+		3dBlurToFWHM -input ${procdir}/fmri_masked_resampled.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_masked_resampled_blurred.nii.gz
+		cp ${procdir}/fmri_masked_resampled_blurred.nii.gz  ${procdir}/${processed_filename}
 	fi
 else
 	if [ $mask_filepath -z]; then
 		echo "skipping brain masking because mask file was not provided"
-		cp ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz ${procdir}/${processed_filename}
+		3dresample -dxyz 3 3 3 -inset ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -prefix ${coregdir}/fmri_ts_ds_mc_e2a_resampled.nii.gz
+		3dBlurToFWHM -input ${coregdir}/fmri_ts_ds_mc_e2a_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/fmri_ts_ds_mc_e2a_resampled_blurred.nii.gz
+		cp ${coregdir}/fmri_ts_ds_mc_e2a_resampled_blurred.nii.gz ${procdir}/${processed_filename}
 	else
 		3dcalc -a ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
-		cp ${procdir}/fmri_masked.nii.gz ${procdir}/${processed_filename}
+		3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
+		3dBlurToFWHM -input ${procdir}/fmri_masked_resampled.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_masked_resampled_blurred.nii.gz
+		cp ${procdir}/fmri_masked_resampled_blurred.nii.gz ${procdir}/${processed_filename}
 	fi
 fi
 
