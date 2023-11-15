@@ -3,6 +3,10 @@
 #  Print commands and their arguments as they are executed.
 set -x
 
+
+# Script stops execution upon error
+set -e
+
 #  Sets MNI project to true by default
 mni_project=true
 
@@ -231,9 +235,11 @@ function epireg_set() {
         cp ../anat/${vrefbrain} .
         cp ../anat/${vrefhead} .
 
-	# align epi to anat
-	#fmri_ts_ds_mc_e2a.nii.gz
-    	align_epi_anat.py -epi2anat -anat ${vrefbrain} \
+	if [ "$mni_project" = false ]; then
+		echo "mni_project is ${mni_project}, use afni to align sMRI/fMRI"
+		# align epi to anat
+		#fmri_ts_ds_mc_e2a.nii.gz
+    		align_epi_anat.py -epi2anat -anat ${vrefbrain} \
      			-save_skullstrip \
 			-suffix _e2a.nii.gz   \
      			-epi ${mocodir}/$moco_out \
@@ -244,31 +250,54 @@ function epireg_set() {
      			-volreg off \
 			-tshift off      
 	
-	echo "resulting files after align_epi_anat.py"
-	echo `ls`
+		echo "resulting files after align_epi_anat.py"
+		echo `ls`
+		
+	fi
+
+
+
 
 	if [ "$mni_project" = true ]; then
-		# Use vrefbrain anatomical image to compute non-linear MNI warp matrix
-    		3dQwarp -source ${vrefbrain} \
-    			-base $template \
-    			-prefix T1_bc_ss_mni.nii.gz \
-    			-allineate \
-			-verb \
-			-duplo
+		################OLD VERSION
+		echo "mni_project is ${mni_project}, use fsl to align sMRI/fMRI"
+		#vout=${subjectID}_rfMRI_v0_correg
 
-		echo "resulting files after 3dQwarp"
-		echo `ls`
+		#Creates brain matter segmentation probability maps
+        	#$FSLDIR/bin/fast -N -o ${vout}_fast ${vrefbrain}
 
-		# Apply the nonlinear warp using 3dNwarpApply
-    		3dNwarpApply -nwarp T1_bc_ss_mni_WARP.nii.gz \
-    			-source fmri_ts_ds_mc_e2a.nii.gz \
-    			-master $template \
-    			-prefix warped_output.nii.gz
+		# Thresholds segmentation probability maps to produce a binary white matter segmentation image
+        	#$FSLDIR/bin/fslmaths ${vout}_fast_pve_2 -thr 0.5 -bin ${vout}_fast_wmseg
 
-		echo "resulting files after 3dNwarpApply"
-		echo `ls`
+		# Computes a matrix to align the subject fMRI image to sMRI image (?)
+        	#$FSLDIR/bin/flirt -ref ${vrefbrain} -in ${vepi} -dof 6 -omat ${vout}_init.mat
 
+        	#$FSLDIR/bin/flirt -ref ${vrefhead} -in ${vepi} -dof 6 -cost bbr -wmseg ${vout}_fast_wmseg -init ${vout}_init.mat -omat ${vout}.mat -out ${vout} -schedule ${FSLDIR}/etc/flirtsch/bbr.sch -v
+
+	        #$FSLDIR/bin/applywarp -i ${vepi} -r ${vrefhead} -o ${procdir}/warped_output.nii.gz --premat=${vout}.mat --interp=spline -v
+	        #$FSLDIR/bin/applywarp -i ${vepi} -r ${vrefhead} -o ${procdir}/warped_output.nii.gz --premat=${vout}.mat -v
+		################OLD VERSION
+
+
+
+		################NEW VERSION TESTING
+		# Register func.nii to struc.nii
+		flirt -ref ${vrefbrain} -in ${vepi} -omat func2struct.mat -dof 6 
+
+		# Output is func2struct.mat, tells how to transform the functional into space of anatomical 
+		# Now brain extract the anatomical and map struc.nii onto the standard template
+		# output will be struc2standard_aff.mat - how to map the structural to standard
+		bet ${vrefbrain} struct_bet.nii
+		flirt -ref ${template} -in struct_bet.nii -omat struct2standard_aff.mat
+
+		# Now use with fnirt...
+		fnirt --ref=${template} --in=${vrefbrain} --aff=struct2standard_aff.mat --cout=struct2standard_warp.nii
+
+		# Now get functional into standard space
+		applywarp --ref=${template} --in=${vepi} --out=${procdir}/warped_output.nii.gz --warp=struct2standard_warp.nii --premat=func2struct.mat
+		################NEW VERSION TESTING
 	fi
+
 }
 
 
@@ -358,7 +387,6 @@ function moco_sc() {
    	#   Rotate all volumes to align with the first volume as a reference 
 	3dvolreg -verbose -zpad 1 -base ${ref_vol} -heptic -prefix moco_${suffix} -1Dfile ${subjectID}_motion.1D -1Dmatrix_save mat.${subjectID}.1D Despike_${suffix}.nii.gz
 	
-	echo `ls .`
 
 	if [ -f "moco_${suffix}+orig.BRIK" ]; then
 		3dresample -orient RPI -inset moco_${suffix}+orig -prefix ${mocodir}/${moco_out} 
@@ -366,6 +394,9 @@ function moco_sc() {
 		3dresample -orient RPI -inset moco_${suffix}+tlrc -prefix ${mocodir}/${moco_out} 
 	fi
 
+	mcflirt -in ${mocodir}/${moco_out} -reffile ${coregdir}/$func_file -out ${mocodir}/${moco_out}_flirt -verbose -mats -plots -rmsrel -rmsabs -report
+
+	mv ${mocodir}/${moco_out}_flirt.nii.gz ${mocodir}/${moco_out}
 
 	echo "moco done"
 
@@ -382,14 +413,6 @@ vrefbrain=T1_bc_ss.nii.gz
 #  Bias Corrected Anatomical T1 Image (Head Included)
 vrefhead=T1_bc.nii.gz
 
-
-if [ $mni_project = true ];  then
-	#  EPI Image of BOLD Signal
-	vepi=fmri_ts_ds_mc.nii.gz
-else
-	#  EPI Template Brain in MNI Space
-	vepi=$template
-fi
 
 
 #  Suffix for Corregistered Image
@@ -451,26 +474,28 @@ moco_sc ${epi_orig} ${coregdir}/${func_file} ${subjectID} rest
 
 
 #  Function call to epireg_set, the function that performs alignment to T1 Image
-epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vrefhead} 
+epireg_set ${coregdir} ${vrefbrain} ${mocodir}/${moco_out} ${vrefhead} 
 
 
 base="${func_file%%.*}"
 processed_filename="${subjectID}_${base}".nii.gz
 
 if [ "$mni_project" = true ]; then
-	if [ $mask_filepath -z ]; then
+	if [ "$mask_filepath" -z ]; then
 		echo "skipping brain masking because mask file was not provided"
-		3dresample -dxyz 3 3 3 -inset ${coregdir}/warped_output.nii.gz -prefix ${coregdir}/warped_output_resampled.nii.gz
-		3dBlurToFWHM -input ${coregdir}/warped_output_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/warped_output_resampled_blurred.nii.gz
-		cp ${coregdir}/warped_output_resampled_blurred.nii.gz ${procdir}/${processed_filename}
+		3dresample -dxyz 3 3 3 -inset ${procdir}/warped_output.nii.gz -prefix ${coregdir}/fmri_resampled.nii.gz
+		3dBlurToFWHM -input ${coregdir}/fmri_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/fmri_resampled_blurred.nii.gz
+		cp ${coregdir}/fmri_resampled_blurred.nii.gz ${procdir}/${processed_filename}
 	else
-		3dcalc -a  ${coregdir}/warped_output.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
-		3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
-		3dBlurToFWHM -input ${procdir}/fmri_masked_resampled.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_masked_resampled_blurred.nii.gz
-		cp ${procdir}/fmri_masked_resampled_blurred.nii.gz  ${procdir}/${processed_filename}
+		echo "begin resample, mask, and blur using ${group_mask}"
+		#3dresample -dxyz 3 3 3 -inset ${procdir}/warped_output.nii.gz -prefix ${procdir}/fmri_resampled.nii.gz
+		3dresample -master ${mask_filepath} -prefix ${procdir}/fmri_resampled.nii.gz -input ${procdir}/warped_output.nii.gz
+		3dcalc -a  ${procdir}/fmri_resampled.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_resampled_masked.nii.gz
+		3dBlurToFWHM -input ${procdir}/fmri_resampled_masked.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_resampled_masked_blurred.nii.gz
+		cp ${procdir}/fmri_resampled_masked_blurred.nii.gz  ${procdir}/${processed_filename}
 	fi
 else
-	if [ $mask_filepath -z]; then
+	if [ "$mask_filepath" -z]; then
 		echo "skipping brain masking because mask file was not provided"
 		3dresample -dxyz 3 3 3 -inset ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -prefix ${coregdir}/fmri_ts_ds_mc_e2a_resampled.nii.gz
 		3dBlurToFWHM -input ${coregdir}/fmri_ts_ds_mc_e2a_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/fmri_ts_ds_mc_e2a_resampled_blurred.nii.gz

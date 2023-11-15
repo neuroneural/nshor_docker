@@ -8,4 +8,8 @@ num_total_runs=$(( $num_lines / 4 ))
 
 runix=$(( $num_total_runs - 1 ))
 
-sbatch --array=0-${runix}%10 ${project_dir}/procruns.job
+
+#batch_size=10
+#sbatch --array=0-${runix}%${batch_size} ${project_dir}/procruns.job
+
+sbatch --array=0-${runix} ${project_dir}/procruns.job

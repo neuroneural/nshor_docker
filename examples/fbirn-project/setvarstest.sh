@@ -2,7 +2,7 @@
 
 module load singularity/3.10.2
 
-SLURM_ARRAY_TASK_ID=0
+SLURM_ARRAY_TASK_ID=1
 
 export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/paths
 
