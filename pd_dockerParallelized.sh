@@ -464,10 +464,11 @@ if [ "$mni_project" = true ]; then
 		3dBlurToFWHM -input ${coregdir}/warped_output_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/warped_output_resampled_blurred.nii.gz
 		cp ${coregdir}/warped_output_resampled_blurred.nii.gz ${procdir}/${processed_filename}
 	else
-		3dcalc -a  ${coregdir}/warped_output.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
-		3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
-		3dBlurToFWHM -input ${procdir}/fmri_masked_resampled.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_masked_resampled_blurred.nii.gz
-		cp ${procdir}/fmri_masked_resampled_blurred.nii.gz  ${procdir}/${processed_filename}
+		3dresample -master ${mask_filepath} -prefix ${procdir}/fmri_resampled.nii.gz -input ${coregdir}/warped_output.nii.gz
+		3dcalc -a  ${procdir}/fmri_resampled.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_resampled_masked.nii.gz
+		#3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
+		3dBlurToFWHM -input ${procdir}/fmri_resampled_masked.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_resampled_masked_blurred.nii.gz
+		cp ${procdir}/fmri_resampled_masked_blurred.nii.gz  ${procdir}/${processed_filename}
 	fi
 else
 	if [ $mask_filepath -z]; then
