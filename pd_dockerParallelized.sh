@@ -241,11 +241,13 @@ function epireg_set() {
      			-epi_strip 3dAutomask  \
     			-anat_has_skull no \
      			-giant_move    \
-     			-volreg off \
+     			-volreg on \
 			-tshift off      
 	
 	echo "resulting files after align_epi_anat.py"
+	echo "should see motion parameters"
 	echo `ls`
+	cp fmri_ts_ds_mc_vr_motion.1D ${mocodir}/fmri_ts_ds_mc_vr_motion.1D
 
 	if [ "$mni_project" = true ]; then
 		# Use vrefbrain anatomical image to compute non-linear MNI warp matrix
@@ -365,7 +367,6 @@ function moco_sc() {
 	else
 		3dresample -orient RPI -inset moco_${suffix}+tlrc -prefix ${mocodir}/${moco_out} 
 	fi
-
 
 	echo "moco done"
 
@@ -490,6 +491,7 @@ mtdPrcDir=${outputMount}/processed
 
 #  Write final processed file to server
 cp ${procdir}/${processed_filename} ${mtdPrcDir}/${processed_filename}
+cp ${mocodir}/fmri_ts_ds_mc_vr_motion.1D ${mtdPrcDir}/fmri_ts_ds_mc_vr_motion.1D
 
 #  Clean up shared memory directory
 rm -rf ${tmpfs}/derivatives/$subjectID
