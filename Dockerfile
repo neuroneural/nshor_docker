@@ -41,6 +41,9 @@ RUN export ND_ENTRYPOINT="/neurodocker/startup.sh" \
 
 ENTRYPOINT ["/neurodocker/startup.sh"]
 
+COPY pd_dockerParallelized.sh /main.sh
+
+
 RUN apt-get update -qq \
     && apt-get install -y -q --no-install-recommends \
            afni \

@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -n 4
+#SBATCH -n 1
 #SBATCH -c 4
 #SBATCH --mem=120g
 #SBATCH -p qTRD
@@ -18,9 +18,12 @@ module load singularity/3.10.2
 
 SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/paths
 
-SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
+#SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
+SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc_s2c.sif
 RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
-SCRIPT_NAME=pd_dockerParallelized.sh
+#SCRIPT_NAME=pd_dockerParallelized.sh
+SCRIPT_NAME=main.sh
+
 
 IFS=$'\n'
 paths_array=($(cat ${SUB_PATHS_FILE}))
@@ -42,7 +45,7 @@ func_file=`basename $func_filepath`
 anat_file=`basename $anat_filepath`
 mask_file=`basename $mask_filepath`
 
-singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$mask_bind:/mask,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -m $mask_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$mask_bind:/mask,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -m $mask_file -o $out_bind &
 
 wait
 

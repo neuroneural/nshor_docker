@@ -6,9 +6,8 @@ SLURM_ARRAY_TASK_ID=1
 
 export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/paths
 
-export SIF_FILE=/data/users2/jwardell1/nshor_docker/dkrimg.sif
+export SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc_s2c.sif
 export RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
-export SCRIPT_NAME=pd_dockerParallelized.sh
 
 export IFS=$'\n'
 export paths_array=($(cat ${SUB_PATHS_FILE}))
