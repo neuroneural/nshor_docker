@@ -54,10 +54,6 @@ do
                 n) # -n flag was used to indicate not putting subject into MNI space
 			mni_project=${OPTARG}
 			;;
-                m) # -m flag was used to provide the group brain mask
-			group_mask=${OPTARG}
-			mask_filepath=/mask/${group_mask}
-			;;
         esac
 done
 
@@ -74,7 +70,6 @@ echo "spinrl_file : ${spinrl_file}"
 echo "params_file : ${params_file}"
 echo "out_filepath : ${out_filepath}"
 echo "mni_project :  ${mni_project}"
-echo "group_mask :  ${group_mask}"
 
 
 # Extract subject ID from out filepath.
@@ -271,6 +266,7 @@ function epireg_set() {
 		echo `ls`
 
 	fi
+
 }
 
 
@@ -458,32 +454,29 @@ epireg_set ${coregdir} ${vrefbrain} ${vepi} ${vrefhead}
 base="${func_file%%.*}"
 processed_filename="${subjectID}_${base}".nii.gz
 
-if [ "$mni_project" = true ]; then
-	if [ $mask_filepath -z ]; then
-		echo "skipping brain masking because mask file was not provided"
-		3dresample -dxyz 3 3 3 -inset ${coregdir}/warped_output.nii.gz -prefix ${coregdir}/warped_output_resampled.nii.gz
-		3dBlurToFWHM -input ${coregdir}/warped_output_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/warped_output_resampled_blurred.nii.gz
-		cp ${coregdir}/warped_output_resampled_blurred.nii.gz ${procdir}/${processed_filename}
-	else
-		3dresample -master ${mask_filepath} -prefix ${procdir}/fmri_resampled.nii.gz -input ${coregdir}/warped_output.nii.gz
-		3dcalc -a  ${procdir}/fmri_resampled.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_resampled_masked.nii.gz
-		#3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
-		3dBlurToFWHM -input ${procdir}/fmri_resampled_masked.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_resampled_masked_blurred.nii.gz
-		cp ${procdir}/fmri_resampled_masked_blurred.nii.gz  ${procdir}/${processed_filename}
-	fi
-else
-	if [ $mask_filepath -z]; then
-		echo "skipping brain masking because mask file was not provided"
-		3dresample -dxyz 3 3 3 -inset ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -prefix ${coregdir}/fmri_ts_ds_mc_e2a_resampled.nii.gz
-		3dBlurToFWHM -input ${coregdir}/fmri_ts_ds_mc_e2a_resampled.nii.gz -FWHM 6 -automask -prefix ${coregdir}/fmri_ts_ds_mc_e2a_resampled_blurred.nii.gz
-		cp ${coregdir}/fmri_ts_ds_mc_e2a_resampled_blurred.nii.gz ${procdir}/${processed_filename}
-	else
-		3dcalc -a ${coregdir}/fmri_ts_ds_mc_e2a.nii.gz -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
-		3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
-		3dBlurToFWHM -input ${procdir}/fmri_masked_resampled.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_masked_resampled_blurred.nii.gz
-		cp ${procdir}/fmri_masked_resampled_blurred.nii.gz ${procdir}/${processed_filename}
-	fi
+
+
+reg_moco=warped_output.nii.gz
+
+if [ "$mni_project" = false ]; then
+	reg_moco=fmri_ts_ds_mc_e2a.nii.gz
 fi
+
+#  Compute Subject Brain Mask
+3dAutomask -prefix ${subjectID}_amask.nii ${coregdir}/${reg_moco} &> /dev/null
+mask_filepath=`pwd`/${subjectID}_amask.nii
+
+#  Perform Brain Masking using logical AND
+3dcalc -a  ${coregdir}/${reg_moco} -b  ${mask_filepath} -expr 'a*b' -prefix ${procdir}/fmri_masked.nii.gz
+
+#  Resample Masked fMRI to 3x3x3 voxels
+3dresample -dxyz 3 3 3 -inset ${procdir}/fmri_masked.nii.gz -prefix ${procdir}/fmri_masked_resampled.nii.gz
+
+#  Blur to 6 FWHM
+3dBlurToFWHM -input ${procdir}/fmri_masked_resampled.nii.gz -FWHM 6 -automask -prefix ${procdir}/fmri_masked_resampled_blurred.nii.gz
+
+#  Rename to processed filename
+cp ${procdir}/fmri_masked_resampled_blurred.nii.gz  ${procdir}/${processed_filename}
 
 mkdir -p ${outputMount}/processed
 mtdPrcDir=${outputMount}/processed
@@ -491,7 +484,12 @@ mtdPrcDir=${outputMount}/processed
 
 #  Write final processed file to server
 cp ${procdir}/${processed_filename} ${mtdPrcDir}/${processed_filename}
+
+#  Write displacement pars to cluster
 cp ${mocodir}/fmri_ts_ds_mc_vr_motion.1D ${mtdPrcDir}/fmri_ts_ds_mc_vr_motion.1D
+
+#  Write subject brain mask to cluster
+cp ${mask_filepath} ${mtdPrcDir}/${subjectID}_amask.nii
 
 #  Clean up shared memory directory
 rm -rf ${tmpfs}/derivatives/$subjectID
