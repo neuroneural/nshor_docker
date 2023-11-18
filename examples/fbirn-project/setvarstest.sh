@@ -5,8 +5,8 @@ module load singularity/3.10.2
 SLURM_ARRAY_TASK_ID=1
 
 export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/paths
-
 export SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc_s2c.sif
+export SCRIPT_NAME=pd_dockerParallelized.sh
 export RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
 
 export IFS=$'\n'

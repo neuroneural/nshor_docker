@@ -4,7 +4,7 @@ project_dir=/data/users2/jwardell1/nshor_docker/examples/fbirn-project
 paths_file=${project_dir}/FBIRN/paths
 
 num_lines=`wc -l <  $paths_file`
-num_total_runs=$(( $num_lines / 4 ))
+num_total_runs=$(( $num_lines / 3 ))
 
 runix=$(( $num_total_runs - 1 ))
 
