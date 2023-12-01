@@ -13,3 +13,4 @@ ds004302/
 dockerimg.tar
 *.nii
 *.nii.gz
+*.tar

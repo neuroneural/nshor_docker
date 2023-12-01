@@ -4,9 +4,9 @@
 #SBATCH --mem=120g
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
-#SBATCH -J PRPfbirn
-#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/error%A_%a.err
-#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/out%A_%a.out
+#SBATCH -J pHMc
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/out%A.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jwardell1@student.gsu.edu
@@ -21,6 +21,7 @@ SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/
 SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc_s2c.sif
 RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
 
+SLURM_ARRAY_TASK_ID=0
 
 IFS=$'\n'
 paths_array=($(cat ${SUB_PATHS_FILE}))
@@ -38,7 +39,8 @@ anat_bind=`dirname $anat_filepath`
 func_file=`basename $func_filepath`
 anat_file=`basename $anat_filepath`
 
-singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -o $out_bind &
+#singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out,${RUN_BIND_POINT}:/run $SIF_FILE /run/pd_dockerParallelized.sh -f $func_file -a $anat_file -o $out_bind &
 
 wait
 
