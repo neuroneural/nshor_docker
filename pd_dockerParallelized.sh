@@ -443,9 +443,10 @@ function framewise_displacement {
         	dy_b=${nums_arr[4]}
         	dz_b=${nums_arr[5]}
 		pi=3.14159
-		fd_at_timepoint=$(echo "((($dx_b - $dx) + ($dy_b - $dy) + ($dz_b - $dz) + 50 * (180 / $pi) * (($rx_b - $rx) + ($ry_b - $ry) + ($rz_b - $rz))))" | bc -l)
+		fd_at_timepoint=$(echo "((($dx_b - $dx) + ($dy_b - $dy) + ($dz_b - $dz) + 50 * ($pi / 180) * (($rx_b - $rx) + ($ry_b - $ry) + ($rz_b - $rz))))" | bc -l)
 		#fd_at_timepoint=$(echo "((($dx_b - $dx) + ($dy_b - $dy) + ($dz_b - $dz) + ($rx_b - $rx) + ($ry_b - $ry) + ($rz_b - $rz)))" | bc -l)
-		fd_at_timepoint=$(echo "$fd_at_timepoint" | nawk '{print ($1>=0)? $1:0-$1}')
+		#fd_at_timepoint=$(echo "$fd_at_timepoint" | nawk '{print ($1>=0)? $1:0-$1}')
+		fd_at_timepoint=`echo "sqrt($fd_at_timepoint^2)" | bc`
         	echo $fd_at_timepoint >> ${fw_outfile}
 	done
 	echo "done with fwd"
