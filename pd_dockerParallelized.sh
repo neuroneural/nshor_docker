@@ -614,12 +614,13 @@ mtdPrcDir=${outputMount}/processed
 cp ${procdir}/${processed_filename} ${mtdPrcDir}/${processed_filename}
 
 #  Write displacement pars to cluster
-cp ${mocodir}/fmri_ts_ds_mc_vr_motion.1D ${mtdPrcDir}/fmri_ts_ds_mc_vr_motion.1D
+cp ${mocodir}/fmri_ts_ds_mc_vr_motion.1D ${mtdPrcDir}/${subjectID}_motion.1D
+echo $mean_fwd > mean_fwd.txt
+cp ${procdir}/mean_fwd.txt ${mtdPrcDir}/mean_fwd.txt
 
 #  Write subject brain mask to cluster
 cp ${mask_filepath} ${mtdPrcDir}/${subjectID}_amask.nii
 
-cp ${mocodir}/fmri_ts_ds_mc_vr_motion.1D ${mtdPrcDir}/${subjectID}_motion.1D
 
 #  Clean up shared memory directory
 rm -rf ${tmpfs}/derivatives/$subjectID
