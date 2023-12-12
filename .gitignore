@@ -10,7 +10,7 @@ HCP/
 ds004078/
 ds004302/
 *.sif
-dockerimg.tar
 *.nii
 *.nii.gz
 *.tar
+*.npy
