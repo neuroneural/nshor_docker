@@ -63,12 +63,22 @@ def get_info(labels_dict, path):
 	n_subs = len(labels_dict.keys())
 	return n_subs, n_comp, n_tp
 
-
-labels_dict = np.load('/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/labels.npy',allow_pickle='TRUE').item()
+# For diagnosis 1 labels
+labels_dict = np.load('/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/labels1.npy',allow_pickle='TRUE').item()
 paths_string = '/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/time_courses_files.txt'
 tc_concat, labels = load_subject_timecourses(paths_string, labels_dict)
 data_dict = {
 	'data'   : tc_concat,
 	'labels' : labels
 }
-np.save('tc_data_dict.npy', data_dict)
+np.save('tc_data_dict1.npy', data_dict)
+
+# For diagnosis 2 labels
+labels_dict = np.load('/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/labels2.npy',allow_pickle='TRUE').item()
+paths_string = '/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/time_courses_files.txt'
+tc_concat, labels = load_subject_timecourses(paths_string, labels_dict)
+data_dict = {
+	'data'   : tc_concat,
+	'labels' : labels
+}
+np.save('tc_data_dict2.npy', data_dict)

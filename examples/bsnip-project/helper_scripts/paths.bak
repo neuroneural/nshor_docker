@@ -1,0 +1,16 @@
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S2041FDH1/ses_01/func/rest.nii
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S2041FDH1/ses_01/anat/T1.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/group_mean_masks/groupmeanmask.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/S2041FDH1/ses_01
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S6455NWD1/ses_01/func/rest.nii
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S6455NWD1/ses_01/anat/T1.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/group_mean_masks/groupmeanmask.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/S6455NWD1/ses_01
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S9453VUM1/ses_01/func/rest.nii
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S9453VUM1/ses_01/anat/T1.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/group_mean_masks/groupmeanmask.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/S9453VUM1/ses_01
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S9875KAK1/ses_01/func/rest.nii
+/data/qneuromark/Data/BSNIP/Data_BIDS/Raw_Data/Boston/S9875KAK1/ses_01/anat/T1.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/group_mean_masks/groupmeanmask.nii
+/data/users2/jwardell1/nshor_docker/examples/bsnip-project/BSNIP/Boston/S9875KAK1/ses_01
