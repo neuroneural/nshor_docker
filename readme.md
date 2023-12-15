@@ -240,7 +240,7 @@ For more information, see the [`setvarstest.sh` script](#the-setvarstestsh-scrip
 * run the `pd_dockerParallelized.sh` script inside the sif container using singularity exec
   * see the above section for the singularity exec call
 * note, you need to adjust the `SLURM_ARRAY_TASK_ID` to control which run to process from your paths input file
-  * setting `SLURM_ARRAY_TASK_ID=1` processes the first run from your paths input file
+  * setting `SLURM_ARRAY_TASK_ID=0` processes the first run from your paths input file
   * this only applies to interactive runs that use the `setvarstest.sh` scripts to set environment variables
 
 
