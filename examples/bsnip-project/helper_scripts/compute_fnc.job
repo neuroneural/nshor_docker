@@ -5,8 +5,8 @@
 #SBATCH -p qTRD
 #SBATCH --time=20:00:00
 #SBATCH -J fnc
-#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/error%A.err
-#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/fbirn-project/jobs/out%A.out
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/bsnip-project/jobs/error%A.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/bsnip-project/jobs/out%A.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jwardell1@student.gsu.edu
@@ -16,7 +16,7 @@ sleep 5s
 
 #SLURM_ARRAY_TASK_ID=1
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/helper_scripts/paths_fnc
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/bsnip-project/helper_scripts/paths_fnc
 
 IFS=$'\n'
 paths_array=($(cat ${SUB_PATHS_FILE}))
@@ -35,9 +35,8 @@ source /data/users2/jwardell1/miniconda3/etc/profile.d/conda.sh
 
 conda activate /data/users2/jwardell1/miniconda3/envs/ica-torch
 
-downsampling_factor=3
 
-python /data/users2/jwardell1/nshor_docker/examples/fbirn-project/helper_scripts/compute_fnc.py $sub_id $tc_file $out_dir $downsampling_factor
+python /data/users2/jwardell1/nshor_docker/examples/bsnip-project/helper_scripts/compute_fnc.py $sub_id $tc_file $out_dir
 
 wait
 
