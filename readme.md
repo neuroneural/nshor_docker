@@ -226,7 +226,7 @@ The example of such a batch job script is `procruns.job` in this repository. See
 The following is an example of what the singularity exec call should look like:
 
  ```
-singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -j $json_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -o $out_bind
  ```
 For more information about running SLURM batch jobs, see the [SBATCH scripting guide](https://trendscenter.github.io/wiki/docs/Job_submission.html#sbatch-scripting-guide) in the cluster documentation.
 
