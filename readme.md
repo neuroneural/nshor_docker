@@ -76,12 +76,6 @@ The repository contains example project directories in the `examples` directory.
 * sets the SLURM array to the number calculated in the previous step
 * submits the `procruns.job` script to SLURM as an sbatch submission
 
-#### The `submitforce.sh` Script
-* copies the `mkpths.sh` and `subjects.txt` files up a directory
-* deletes the output directories for all subjects
-* recreates the output directories for all subjects using `mkpths.sh`
-* calculates the number of runs 
-* submits the sbatch job to SLURM setting array to number of runs
 
 #### The `setvarstest.sh` Script
 * sets the environment variables necessary to run this script in the container
@@ -89,19 +83,8 @@ The repository contains example project directories in the `examples` directory.
 * you can then execute the following singularity exec call to test the script (in SLURM interactive mode)
 
 ```
-singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /run/${SCRIPT_NAME} -f $func_file -a $anat_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -o $out_bind
 ```
-
-#### The `sub_dsall.sh` Script
-There is a master submission script to be executed on the login node in the root directory of this repository. It is called `sub_dsall.sh` and it cleans up the output files and recreates them for each of the example datasets. After that, it executes the `submit.sh` script to send each dataset to process on slurm. 
-* Processes each example dataset in the following way: 
-* Copies script to make paths file and output directory into project dir
-* Copies textfile list of subjects into project dir
-* Deletes existing processed files in output directory
-* Makes new empty output directory 
-* Moves subjects list and script for making paths file and output directories into output directory 
-* Executes script to make paths file and output directories for each subject
-* Submits the dataset to slurm for processing
 
 
 ## Prepare the Docker Container
