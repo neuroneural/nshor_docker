@@ -1,0 +1,13 @@
+#!/bin/bash
+
+project_dir=/data/users2/jwardell1/nshor_docker/examples/devcog-project
+paths_file=${project_dir}/DEVCOG/paths_remaining
+
+num_lines=`wc -l <  $paths_file`
+num_total_runs=$(( $num_lines / 4 ))
+
+endix=$(( $num_total_runs - 1 ))
+startix=0
+
+#sbatch --array=0-${runix}%10 ${project_dir}/procruns.job
+sbatch --array=${startix}-${endix} ${project_dir}/procruns.job
