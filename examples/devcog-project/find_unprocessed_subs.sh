@@ -10,10 +10,15 @@ for ((i=0; i<222; i++)); do
 
     # Check if a .nii.gz file exists in the processed directory
     if ! ls "${processed_dir}"/*.nii.gz 1> /dev/null 2>&1; then
+	echo 
+	echo 
+	echo "WARNING, SUB PROCESSED FILE NOT FOUND"
         # Print the 4 arguments to paths_remaining.txt
         echo "${func_filepath}" >> paths_remaining.txt
         echo "${anat_filepath}" >> paths_remaining.txt
         echo "${json_filepath}" >> paths_remaining.txt
         echo "${out_bind}" >> paths_remaining.txt
+	echo 
+	echo 
     fi
 done

@@ -6,7 +6,11 @@ export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/oulu-project/
 export SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc.sif
 #export RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
 
-export SLURM_ARRAY_TASK_ID=1
+if [ -z $1 ]; then
+	export SLURM_ARRAY_TASK_ID=0
+else
+	export SLURM_ARRAY_TASK_ID=$1
+fi
 
 export IFS=$'\n'
 export paths_array=($(cat ${SUB_PATHS_FILE}))
