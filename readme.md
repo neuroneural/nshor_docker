@@ -88,9 +88,12 @@ singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_
 
 > You must use `module load singularity` before running singularity commands in a given session. Otherwise, you will get a "command 'singularity' not found" error.
 
-
 ## Set Up for Slurm Job Submissions
-You can view more examples in the [examples](https://github.com/neuroneural/nshor_docker/tree/master/examples) section of this repository, but here's a simple example setup for submitting a large number of files to the cluster for processing. Look at [Repository Structure and Contents] for more info on the purpose of each file, and additional helper files that show up in the examples section.
+The script can be run on the cluster using an interactive SLURM job, or using sbatch (recommended). It is recommended to submit the job via sbatch when processing more than one subject. This is because each subject can take anywhere from 13 to 20 minutes each.
+
+You can view more examples in the [examples](https://github.com/neuroneural/nshor_docker/tree/master/examples) section of this repository. Look at [About the Examples](#about-the-examples) for more info on the purpose of each file, and additional helper files that show up in the examples section.
+
+Here's a simple example setup for submitting a large number of files to the cluster for processing.
 
 ### "Paths" input file
 The script expects an input text file of the follwing format, where order matters and lines with (OPTIONAL) at the end should only be included when their associated flags are utilized with the `pd_dockerParallelized.sh` script. **Given output directories should be unique & should already exist on the cluster.** See the [Preparing Output Directories](#preparing-output-directories) section for more info.
