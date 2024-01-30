@@ -95,7 +95,7 @@ You can view more examples in the [examples](https://github.com/neuroneural/nsho
 
 Here's a simple example setup for submitting a large number of files to the cluster for processing.
 
-### "Paths" input file
+### `paths.txt`
 The script expects an input text file of the follwing format, where order matters and lines with (OPTIONAL) at the end should only be included when their associated flags are utilized with the [`singularity exec`](#process-a-single-file) call. **Given output directories should be unique & should already exist on the cluster.** See the [Preparing Output Directories](#preparing-output-directories) section for more info.
 
 ```
@@ -156,7 +156,7 @@ sleep 5s
 
 module load singularity/3.10.2
 
-SUB_PATHS_FILE=FULL/PATH/TO/PATHS/FILE.txt
+SUB_PATHS_FILE=FULL/PATH/TO/paths.txt
 
 SIF_FILE=FULL/PATH/TO/SINGULARITY/CONTAINER.sif
 
