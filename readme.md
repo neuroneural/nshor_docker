@@ -96,7 +96,7 @@ You can view more examples in the [examples](https://github.com/neuroneural/nsho
 Here's a simple example setup for submitting a large number of files to the cluster for processing.
 
 ### "Paths" input file
-The script expects an input text file of the follwing format, where order matters and lines with (OPTIONAL) at the end should only be included when their associated flags are utilized with the `pd_dockerParallelized.sh` script. **Given output directories should be unique & should already exist on the cluster.** See the [Preparing Output Directories](#preparing-output-directories) section for more info.
+The script expects an input text file of the follwing format, where order matters and lines with (OPTIONAL) at the end should only be included when their associated flags are utilized with the [`singularity exec`](#process-a-single-file) call. **Given output directories should be unique & should already exist on the cluster.** See the [Preparing Output Directories](#preparing-output-directories) section for more info.
 
 ```
 full file path on the cluster to functional MRI file for 1st run
@@ -122,7 +122,7 @@ full file path on the cluster to anatomical MRI file for nth run
 full file path on the cluster to the subject's output directory to which processed files are to be written for nth run
 ```
 
-Where n is the number of runs that you wish to process. The user is responsible for generating such a file, which can be done using bash. There are some example scripts in each example project directory as part of this repository. For more information, see the [Repository Structure and Contents](#repository-structure-and-contents-informational) informational section above.
+Where n is the number of runs that you wish to process. The user is responsible for generating such a file, which can be done using bash. There are some example scripts in each example project directory as part of this repository. For more information, see the [About the Examples](#about-the-examples) informational section above.
 
 The simplest version of this file (with no optional flags provided) looks like:
 ```
@@ -213,13 +213,12 @@ After creating these files and filling out the paths, you would then run `bash s
 # Additional Information
 
 ## Running using an Interactive Session
-For more information, see the [`setvarstest.sh` script](#the-setvarstestsh-script) section and associated outer section, [Repository Structure and Contents](#repository-structure-and-contents-informational). For running this script in an interactive session on the cluster, it is not required to use GPU partitions. You can use an interactive session for processing one or more subjects in the following way: 
+For more information, see the [`setvarstest.sh` script](#the-setvarstestsh-script) section and associated outer section, [About the Examples](#about-the-examples). For running this script in an interactive session on the cluster, it is not required to use GPU partitions. You can use an interactive session for processing one or more subjects in the following way: 
 
 * allocate an interactive session on the cluster using `srun`
 * move into the project directory and source the `setvarstest.sh` file
   * or your own bash file which sets the required environment variables for the singularity exec call
-* run the `pd_dockerParallelized.sh` script inside the sif container using singularity exec
-  * see the above section for the singularity exec call
+* run the `pd_dockerParallelized.sh` script inside the sif container using [singularity exec](#process-a-single-file)
 * note, you need to adjust the `SLURM_ARRAY_TASK_ID` to control which run to process from your paths input file
   * setting `SLURM_ARRAY_TASK_ID=0` processes the first run from your paths input file
   * this only applies to interactive runs that use the `setvarstest.sh` scripts to set environment variables
