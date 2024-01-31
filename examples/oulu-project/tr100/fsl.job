@@ -5,8 +5,8 @@
 #SBATCH -p qTRDHM
 #SBATCH --time=20:00:00
 #SBATCH -J fsl
-#SBATCH -e ./jobs/error%A.err
-#SBATCH -o ./jobs/out%A.out
+#SBATCH -e ./jobs/error%A_%a.err
+#SBATCH -o ./jobs/out%A_%a.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jwardell1@student.gsu.edu
@@ -15,16 +15,32 @@
 sleep 5s
 
 
-cd /data/users2/jwardell1/nshor_docker/examples/oulu-project/test
 
-source ../setvarstest.sh 10
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/oulu-project/OULU/paths
+
+
+IFS=$'\n'
+paths_array=($(cat ${SUB_PATHS_FILE}))
+func_ix=$(( 3*$SLURM_ARRAY_TASK_ID ))
+anat_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 1 ))
+out_ix=$(( 3*$SLURM_ARRAY_TASK_ID + 2 ))
+
+func_filepath=${paths_array[${func_ix}]}
+anat_filepath=${paths_array[${anat_ix}]}
+output_dir=${paths_array[${out_ix}]}
+
+cd $output_dir
+mkdir processed
+cd processed
 
 module load fsl 
 module load afni
 
 echo `hostname`
+echo "SLURM_ARRAY_TASK_ID: $SLURM_ARRAY_TASK_ID"
 echo "func_filepath: $func_filepath"
 echo "anat_filepath: $anat_filepath"
+echo "pwd: `pwd`"
 
 #Mask/Resample Steps
 echo "begin mask and resample steps"
@@ -37,37 +53,44 @@ anat_filepath=anatbrain_3mm.nii.gz
 
 
 #resample template to func mask
-3dresample -master func_mask.nii.gz -prefix anatbrain_3mm.nii.gz -input $anat_filepath
+template=$FSLDIR/data/standard/MNI152_T1_2mm_brain.nii.gz
+ln -s $template template.nii.gz
+3dresample -master func_mask.nii.gz -prefix template_3mm.nii.gz -input template.nii.gz
 template=template_3mm.nii.gz
+
+template_mask=$FSLDIR/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
+ln -s $template_mask template_mask.nii.gz
+3dresample -master func_mask.nii.gz -prefix template_mask_3mm.nii.gz -input template_mask.nii.gz
+template=template_mask_3mm.nii.gz
 
 
 #High-pass filtering to remove low-frequency drifts.
 echo "begin filtering"
-fslmaths $func_filepath -bptf 0.008 -1 func_filtered.nii.gz
+#fslmaths $func_filepath -bptf 0.008 -1 func_filtered.nii.gz
 
 
 #motion correction
 echo "begin mcflirt"
-mcflirt -in "func_filtered.nii.gz" -o func_filtered_moco.nii.gz -plots -report &
+mcflirt -in $func_filepath -o func_moco.nii.gz -plots -report &
 MCFLIRT_PID=$!
 
 #brain extraction
 echo "begin brain extraction"
-bet $anat_filepath anat_brain -f 0.25 -g 0.22 -B -m -v -d &
+bet $anat_filepath anat_brain -f 0.25 -g 0.22 -B -m -v &
 SS_PID=$!
 
 #spatial smoothing
 wait $MCFLIRT_PID
 echo "begin spatial smoothing"
-fslmaths func_filtered_moco.nii.gz -s 1.698 func_filtered_moco_smoothed
+fslmaths func_moco.nii.gz -s 1.698 func_moco_smoothed
 
 
 #coregsitration 
 wait $SS_ID
 echo "begin coregistration"
 echo "compute coreg matrix"
-flirt -in func_filtered_moco_smoothed.nii.gz -ref anat_brain.nii.gz -out func2anat -omat func2anat.mat -dof 6 -cost normmi
-fslsplit func_filtered_moco_smoothed.nii.gz func2anatsplit -t
+flirt -in func_moco_smoothed.nii.gz -ref anat_brain.nii.gz -out func2anat -omat func2anat.mat -dof 6 -cost normmi
+fslsplit func_moco_smoothed.nii.gz func2anatsplit -t
 
 # Create an empty list to store the coregistered volumes
 coregistered_volumes=()
@@ -102,7 +125,7 @@ flirt -in func2anat_warped.nii.gz -ref $template -out func2mni -omat func2mni.ma
 flirt -in func2anat_warped.nii.gz -ref $template -out func2mni_warped -applyxfm -init func2mni.mat
 
 #apply brain mask
-3dcalc -a  func2mni_warped.nii.gz -b  func_mask.nii.gz -expr 'a*b' -prefix func2mni_masked.nii.gz
+3dcalc -a  func2mni_warped.nii.gz -b $template_mask -expr 'a*b' -prefix func2mni_masked.nii.gz
 
 echo "final preprocessed result is func2mni_masked.nii.gz"
 
