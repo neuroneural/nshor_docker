@@ -1,7 +1,7 @@
 #!/bin/bash
 
 project_dir=/data/users2/jwardell1/nshor_docker/examples/devcog-project
-paths_file=${project_dir}/DEVCOG/paths_remaining
+paths_file=${project_dir}/DEVCOG/paths
 
 num_lines=`wc -l <  $paths_file`
 num_total_runs=$(( $num_lines / 4 ))
