@@ -42,6 +42,23 @@ anat_file=`basename $anat_filepath`
 singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -o $out_bind &
 #singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out,${RUN_BIND_POINT}:/run $SIF_FILE /run/pd_dockerParallelized.sh -f $func_file -a $anat_file -o $out_bind &
 
+source /data/users2/jwardell1/nshor_docker/examples/fbirn-project/helper_scripts/is_preprocessing_done.sh
+
+preprocessing_done=$(is_preprocessing_done "fbirn")
+
+if [ "$preprocessing_done" == "true" ]; then
+    echo "Preprocessing is done for all subjects. Starting group mask calculation..."
+    # Calculate group mask
+    # Example:
+    # calculate_group_mask_command
+fi
+
+
+#if [ -z group_mask_exists && preprocessing_done ]; then
+        #launch python gigicar
+#
+
+
 wait
 
 sleep 10s
