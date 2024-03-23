@@ -1,6 +1,10 @@
 #!/bin/bash
 
-export SLURM_ARRAY_TASK_ID=0
+if [ -z $1 ]; then 
+	export SLURM_ARRAY_TASK_ID=0
+else
+	export SLURM_ARRAY_TASK_ID=$1
+fi
 module load singularity
 
 export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/hcp-project/HCP/paths
@@ -22,13 +26,21 @@ export params_ix=$(( 9*$SLURM_ARRAY_TASK_ID + 7 ))
 export out_ix=$(( 9*$SLURM_ARRAY_TASK_ID + 8 ))
 
 export func_filepath=${paths_array[${func_ix}]}
+echo "func_filepath - $func_filepath"
 export anat_filepath=${paths_array[${anat_ix}]}
+echo "anat_filepath - $anat_filepath"
 export spinlr_filepath=${paths_array[${spinlr_ix}]}
+echo "spinlr_filepath - $spinlr_filepath"
 export spinrl_filepath=${paths_array[${spinrl_ix}]}
+echo "spinrl_filepath - $spinrl_filepath"
 export biasch_filepath=${paths_array[${biasch_ix}]}
+echo "biasch_filepath - $biasch_filepath"
 export biasbc_filepath=${paths_array[${biasbc_ix}]}
+echo "biasbc_filepath - $biasbc_filepath"
 export sbref_filepath=${paths_array[${sbref_ix}]}
+echo "sbref_filepath - $sbref_filepath"
 export params_filepath=${paths_array[${params_ix}]}
+echo "params_filepath - $params_filepath"
 
 export out_bind=${paths_array[${out_ix}]}
 export func_bind=`dirname $func_filepath`

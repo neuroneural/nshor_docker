@@ -16,7 +16,9 @@ sleep 5s
 
 module load singularity/3.10.2
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/fbirn-project/FBIRN/paths
+PREP_DIR=/data/users2/jwardell1/nshor_docker/examples/fbirn-project
+
+SUB_PATHS_FILE=${PREP_DIR}/FBIRN/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc.sif
 #RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
@@ -41,6 +43,35 @@ anat_file=`basename $anat_filepath`
 
 singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -o $out_bind &
 #singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out,${RUN_BIND_POINT}:/run $SIF_FILE /run/pd_dockerParallelized.sh -f $func_file -a $anat_file -o $out_bind &
+
+source ${PREP_DIR}/helper_scripts/is_preprocessing_done.sh
+
+preprocessing_done=$(is_preprocessing_done "fbirn")
+
+if [ "$preprocessing_done" == "true" ]; then
+	echo "Preprocessing is done for all subjects. Starting group mask calculation..."
+	# Calculate group mask
+	bash ${PREP_DIR}/FBIRN/group_mean_masks/compute_group_mask.sh
+fi
+
+if [ -f ${PREP_DIR}/FBIRN/group_mean_masks/groupmeanmask.nii  ];then
+	group_mask_exists=true
+fi
+
+if [ "$group_mask_exists" == true ] && [ "$preprocessing_done" == true ]; then
+	GM_TEMPLATE=/data/users2/jwardell1/ica-torch-gica/sa_script_work/gica/group_level_analysis/Neuromark_fMRI_1.0.nii
+	
+	#resample mask to group maps template
+	module load afni
+	3dresample -master Neuromark_fMRI_1.0.nii -prefix mask_resampled.nii -input groupmeanmask.nii
+
+	#resample all preprocessed func files to template file
+	bash /data/users2/jwardell1/ica-torch-gica/sa_script_work/ica-r/matlab_work/datasets/fbirn-project/resample_to_template.sh $GM_TEMPLATE	
+	
+	#launch ICA-R
+	bash /data/users2/jwardell1/ica-torch-gica/sa_script_work/ica-r/matlab_work/datasets/fbirn-project/submit_fbirn.sh
+	
+fi
 
 wait
 
