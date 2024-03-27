@@ -5,8 +5,8 @@
 #SBATCH -p qTRDHM
 #SBATCH --time=20:00:00
 #SBATCH -J fsl
-#SBATCH -e ./jobs/error%A_%a.err
-#SBATCH -o ./jobs/out%A_%a.out
+#SBATCH -e /data/users2/jwardell1/nshor_docker/examples/oulu-project/jobs/error%A_%a.err
+#SBATCH -o /data/users2/jwardell1/nshor_docker/examples/oulu-project/jobs/out%A_%a.out
 #SBATCH -A psy53c17
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jwardell1@student.gsu.edu
@@ -16,7 +16,7 @@ sleep 5s
 
 
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/oulu-project/OULU/paths
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/oulu-project/tr100/paths
 
 
 IFS=$'\n'
@@ -30,7 +30,7 @@ anat_filepath=${paths_array[${anat_ix}]}
 output_dir=${paths_array[${out_ix}]}
 
 cd $output_dir
-mkdir processed
+mkdir -p  processed
 cd processed
 
 module load fsl 
@@ -58,10 +58,11 @@ ln -s $template template.nii.gz
 3dresample -master func_mask.nii.gz -prefix template_3mm.nii.gz -input template.nii.gz
 template=template_3mm.nii.gz
 
-template_mask=$FSLDIR/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
+#template_mask=$FSLDIR/data/standard/MNI152_T1_2mm_brain_mask.nii.gz
+template_mask=$FSLDIR/data/standard/MNI152_T1_2mm_brain_mask_dil.nii.gz
 ln -s $template_mask template_mask.nii.gz
 3dresample -master func_mask.nii.gz -prefix template_mask_3mm.nii.gz -input template_mask.nii.gz
-template=template_mask_3mm.nii.gz
+template_mask=template_mask_3mm.nii.gz
 
 
 #High-pass filtering to remove low-frequency drifts.
