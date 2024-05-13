@@ -16,7 +16,7 @@ sleep 5s
 
 module load singularity/3.10.2
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/devcog-project/DEVCOG/paths
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/devcog-project/DEVCOG-ss/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc.sif
 #RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
@@ -52,8 +52,11 @@ echo "json_filepath = $json_filepath"
 echo "out_bind = $out_bind"
 
 
-singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -j $json_file -o $out_bind &
-#singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out,${RUN_BIND_POINT}:/run $SIF_FILE /run/pd_dockerParallelized.sh -f $func_file -a $anat_file -o $out_bind &
+#singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -j $json_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -j $json_file -o $out_bind -n false &
+
+
+
 
 wait
 

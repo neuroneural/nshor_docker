@@ -1,22 +1,16 @@
 #!/bin/bash
 
-module load singularity/3.10.2
-
-#export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/devcog-project/DEVCOG/paths
-export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/devcog-project/DEVCOG-ss/paths
-
-export SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc.sif
-#export RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
-
 if [ -z $1 ]; then
-	export SLURM_ARRAY_TASK_ID=0
+	SLURM_ARRAY_TASK_ID=0
 else
-	export SLURM_ARRAY_TASK_ID=$1
+	SLURM_ARRAY_TASK_ID=$1
 fi
 
-echo "SLURM_ARRAY_TASK_ID- $SLURM_ARRAY_TASK_ID"
-hostname=`hostname`
-echo "hostname- $hostname"
+module load singularity/3.10.2
+
+export SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/ds001747-project/ds001747/paths
+
+export SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc.sif
 
 export IFS=$'\n'
 export paths_array=($(cat ${SUB_PATHS_FILE}))
@@ -37,9 +31,10 @@ export func_file=`basename $func_filepath`
 export anat_file=`basename $anat_filepath`
 export json_file=`basename $json_filepath`
 
-echo "func_ix = $func_ix"
-echo "func_filepath = $func_filepath"
-echo "anat_filepath = $anat_filepath"
-echo "json_filepath = $json_filepath"
-echo "out_bind = $out_bind"
+echo "func_file: $func_file"
+echo "anat_file: $anat_file"
+echo "json_file: $json_file"
+echo "out_bind: $out_bind"
+
+#singularity exec --writable-tmpfs --bind $RUN_BIND_POINT:/run,$func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -j $json_file -o $out_bind &
 

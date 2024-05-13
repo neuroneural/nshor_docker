@@ -2,24 +2,24 @@
 
 set -x
 
-subsfile=DEVCOG/subjects.txt
+subsfile=DEVCOG-ss/subjects.txt
 
 PROJECT_DIRECTORY="/data/users2/jwardell1/nshor_docker/examples/devcog-project"
 DATA_DIRECTORY="/data/brainforge/managed/mrn/jstephen/devcog_20908/triotim"
 
-cd ${PROJECT_DIRECTORY}/DEVCOG
+cd ${PROJECT_DIRECTORY}/DEVCOG-ss
 
-paths=${PROJECT_DIRECTORY}/DEVCOG/pathsremaining
+paths=${PROJECT_DIRECTORY}/DEVCOG-ss/pathsremaining
 touch $paths
 > $paths
 
 while IFS= read -r subjectID; do
-	cd ${PROJECT_DIRECTORY}/DEVCOG/$subjectID
+	cd ${PROJECT_DIRECTORY}/DEVCOG-ss/$subjectID
 	echo `pwd`
 	IFS=$'\n' sessions=(`ls`)
 	for session in "${sessions[@]}"
 	do
-		cd ${PROJECT_DIRECTORY}/DEVCOG/$subjectID/$session
+		cd ${PROJECT_DIRECTORY}/DEVCOG-ss/$subjectID/$session
 		session_processed=false
 		IFS=$'\n' files=(`ls`)
 		for file in "${files[@]}"
@@ -38,7 +38,7 @@ while IFS= read -r subjectID; do
 						echo "file $subfile is not ending in .nii.gz"
 					fi
 				done
-				cd ${PROJECT_DIRECTORY}/DEVCOG/$subjectID/$session
+				cd ${PROJECT_DIRECTORY}/DEVCOG-ss/$subjectID/$session
 			elif [[ "$file" == *"pathsremaining"* ]]; then
 				rm $file
 				continue
@@ -71,7 +71,7 @@ while IFS= read -r subjectID; do
 			fi
 			
 			anat_filepath=$(find "${t1_directory}" -type f -name 't1w_*.nii.gz' | sort -V | head -n 1)
-			output_dir=${PROJECT_DIRECTORY}/DEVCOG/$subjectID/$session
+			output_dir=${PROJECT_DIRECTORY}/DEVCOG-ss/$subjectID/$session
 			
 			echo $func_filepath >> $paths
 			echo $anat_filepath >> $paths
