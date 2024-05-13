@@ -16,7 +16,7 @@ sleep 5s
 
 module load singularity/3.10.2
 
-SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/devcog-project/DEVCOG/paths
+SUB_PATHS_FILE=/data/users2/jwardell1/nshor_docker/examples/devcog-project/DEVCOG-ss/paths
 
 SIF_FILE=/data/users2/jwardell1/nshor_docker/fmriproc.sif
 #RUN_BIND_POINT=/data/users2/jwardell1/nshor_docker
@@ -52,36 +52,11 @@ echo "json_filepath = $json_filepath"
 echo "out_bind = $out_bind"
 
 
-singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -j $json_file -o $out_bind &
-#singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out,${RUN_BIND_POINT}:/run $SIF_FILE /run/pd_dockerParallelized.sh -f $func_file -a $anat_file -o $out_bind &
-
-# echo "checking if preprocessing is done"
-#prepdir=`dirname $SUB_PATHS_FILE`
-#source preprocessing_done.sh
-#prep_done=`preprocessing_done $prep_dir`
-#if [ "$(prep_done)" == "true" ]; then
-#    echo "Preprocessing is done. Calculating group mask."
-#    bash submit_calculaute_groupmask.sh 
-#		this script should launch the parallel computation of the group mean mask
-#		will check if each sub's mask exists 
-#	 	this script should create the groupmeanmask dir in the prep dir and the calculated groupmask should exist there.
-#else
-#    echo "Preprocessing is not done. Finish preprocessing before calculating group mask."
-#fi
+#singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -j $json_file -o $out_bind &
+singularity exec --writable-tmpfs --bind $func_bind:/func,$anat_bind:/anat,$out_bind:/out $SIF_FILE /main.sh -f $func_file -a $anat_file -j $json_file -o $out_bind -n false &
 
 
 
-# echo "checking if groupmask is done"
-#source groupmask_done.sh 
-#gm_done=`groupmask_done $prep_dir`
-#if [ "$(prep_done)" == "true" && "$(gm_done)" == "true" ]; then
-#   echo "Preprocessing is done and group mask is done. This job will now launch ICAR for all subs."
-#   bash submit_icar.sh
-#      this script should launch the parallel computation of python icar for all subs
-#      preferrably in a multistage build docker container that works for python and preprocessing
-#else
-#   echo "Preprocessing and/or group mask is not done. Not ready for ICAR."
-#fi
 
 wait
 
